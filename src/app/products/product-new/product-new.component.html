@@ -1,7 +1,7 @@
 <div class="row justify-content-center">
   <div class="col-sm-12 col-xl-10">
     <h3 class="text-left mb-2">Ajouter un nouveau produit</h3>
-    <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+    <form (ngSubmit)="onSubmit()" #f="ngForm">
       <div class="row">
         <div class="col-sm-7 form-group">
           <label for="name" class="form-label">Nom*</label>
@@ -11,19 +11,21 @@
             id="name"
             name="name"
             placeholder="Nom du produit..."
-            ngModel
+            [(ngModel)]="nameInput"
             required
             #name="ngModel">
+          <small id="nameHelp" class="form-text text-muted"><em>{{ 100 - nameInput?.length }} caractères restants</em></small>
           <span class="help-block text-danger" *ngIf="!name.valid && name.touched">Entrez un nom de produit</span>
         </div>
         <div class="col-sm-5 form-group">
           <label for="category" class="form-label">Catégorie*</label>
+          <!--TODO check default select -->
           <select
             class="form-control"
             id="category"
             name="category"
             required
-            ngModel
+            [(ngModel)]="defaultCategory"
             #category="ngModel">
             <option *ngFor="let category of categories">{{category.name}}</option>
           </select>
@@ -35,12 +37,12 @@
             id="description"
             name="description"
             placeholder="Description du produit..."
-            [(ngModel)]="description"
+            [(ngModel)]="descriptionInput"
             maxlength = "255"
             class="form-control"
             aria-describedby="descriptionHelp"
             rows="2"></textarea>
-          <small id="descriptionHelp" class="form-text text-muted"><em>{{ 255 - description?.length }} caractères restants</em></small>
+          <small id="descriptionHelp" class="form-text text-muted"><em>{{ 255 - descriptionInput?.length }} caractères restants</em></small>
         </div>
         <div class="col-md-2 form-group">
             <label for="price" class="form-label">Prix en €*</label>
@@ -52,18 +54,17 @@
               name="price"
               placeholder="10.5"
               class="form-control"
-              oninput="validity.valid || (value='');"
               ngModel
               required
               #price="ngModel">
             <span class="help-block text-danger text-justify" *ngIf="!price.valid && price.touched">Entrez un prix au moins égal à 0</span>
         </div>
         <div class="col-md-3 form-group">
-          <label for="image" class="form-label">Url Photo</label>
+          <label for="imageUrl" class="form-label">Url Photo</label>
           <input
             type="text"
-            id="image"
-            name="image"
+            id="imageUrl"
+            name="imageUrl"
             placeholder="Insérez l'url"
             class="form-control"
             ngModel #image="ngModel">
@@ -88,7 +89,7 @@
     <p>Catégorie: {{newProduct?.category}}</p>
     <p>Description: {{newProduct?.description}}</p>
     <p>Prix: {{newProduct?.price}}€</p>
-    <p>Url: {{newProduct?.image}}</p>
+    <p>Url: {{newProduct?.imageUrl}}</p>
   </div>
 
 </div>

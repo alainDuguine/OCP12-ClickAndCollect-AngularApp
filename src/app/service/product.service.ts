@@ -14,4 +14,7 @@ export class ProductService {
     return this.httpClient.get(environment.api_url + resourceUri);
   }
 
+  postResource(resourceUri: string, object: any) {
+    return this.httpClient.post(environment.api_url + resourceUri, object);
+  }
 }

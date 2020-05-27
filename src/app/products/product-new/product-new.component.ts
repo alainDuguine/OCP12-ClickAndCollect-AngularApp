@@ -15,9 +15,12 @@ interface Category {
 export class ProductNewComponent implements OnInit {
 
   @ViewChild('f') productForm: NgForm;
+  idRestaurant = 1;
   categories: Category[];
+  defaultCategory = 'Entrée';
   newProduct: ProductModel;
-  description: string;
+  descriptionInput: string;
+  nameInput: string;
 
   constructor(private productService: ProductService) { }
 
@@ -26,7 +29,7 @@ export class ProductNewComponent implements OnInit {
   }
 
   private getCategories() {
-    this.productService.getResource('/products/categories').subscribe(
+    this.productService.getResource('/categories').subscribe(
       data => {
         this.categories = data;
       },
@@ -37,16 +40,23 @@ export class ProductNewComponent implements OnInit {
     );
   }
 
-  onSubmit(form: NgForm) {
-    console.log('Submitted');
-    console.log(this.productForm.value);
-    this.newProduct = form.value;
+  onSubmit() {
+    const url = '/restaurants/' + this.idRestaurant + '/products';
+    this.newProduct = this.productForm.value;
     console.log(this.newProduct);
+    this.productService.postResource(url, this.newProduct)
+      .subscribe(data => {
+        console.log('Product saved !');
+        console.log(data);
+        this.onClear();
+      });
   }
 
   onClear() {
     console.log('resetting');
+    console.log(this.productForm);
     this.productForm.reset();
+    this.productForm.controls.category.patchValue('Entrée');
   }
 
 }
