@@ -2,17 +2,19 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {ProductModel} from '../../model/ProductModel';
 import {ProductService} from '../../service/product.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {faTimesCircle} from '@fortawesome/free-regular-svg-icons';
 
 interface Category {
   name: string;
 }
 
 @Component({
-  selector: 'app-product-new',
-  templateUrl: './product-new.component.html',
-  styleUrls: ['./product-new.component.css']
+  selector: 'app-product-edit',
+  templateUrl: './product-edit.component.html',
+  styleUrls: ['./product-edit.component.css']
 })
-export class ProductNewComponent implements OnInit {
+export class ProductEditComponent implements OnInit {
 
   @ViewChild('f') productForm: NgForm;
   idRestaurant = 1;
@@ -21,8 +23,9 @@ export class ProductNewComponent implements OnInit {
   newProduct: ProductModel;
   descriptionInput: string;
   nameInput: string;
+  faClose = faTimesCircle;
 
-  constructor(private productService: ProductService) { }
+  constructor(private router: Router, private route: ActivatedRoute, private productService: ProductService) { }
 
   ngOnInit(): void {
     this.getCategories();
@@ -59,4 +62,7 @@ export class ProductNewComponent implements OnInit {
     this.productForm.controls.category.patchValue('Entrée');
   }
 
+  onClose() {
+    this.router.navigate(['../'], {relativeTo: this.route});
+  }
 }

@@ -5,4 +5,5 @@ export interface ProductModel {
   price: number;
   imageUrl: string;
   category: string;
+  restaurantId: number;
 }

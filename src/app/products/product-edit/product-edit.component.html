@@ -1,6 +1,10 @@
 <div class="row justify-content-center">
   <div class="col-sm-12 col-xl-10">
-    <h3 class="text-left mb-2">Ajouter un nouveau produit</h3>
+    <div class="row justify-content-between align-items-center m-1">
+      <h3 class="text-left">Ajouter un nouveau produit</h3>
+      <fa-icon style="cursor: pointer;" (click)="onClose()" [icon]="faClose" size="lg"></fa-icon>
+    </div>
+    <hr>
     <form (ngSubmit)="onSubmit()" #f="ngForm">
       <div class="row">
         <div class="col-sm-7 form-group">
@@ -19,7 +23,6 @@
         </div>
         <div class="col-sm-5 form-group">
           <label for="category" class="form-label">Catégorie*</label>
-          <!--TODO check default select -->
           <select
             class="form-control"
             id="category"
@@ -44,7 +47,7 @@
             rows="2"></textarea>
           <small id="descriptionHelp" class="form-text text-muted"><em>{{ 255 - descriptionInput?.length }} caractères restants</em></small>
         </div>
-        <div class="col-md-2 form-group">
+        <div class="col-md-3 form-group">
             <label for="price" class="form-label">Prix en €*</label>
             <input
               type="number"
@@ -69,7 +72,7 @@
             class="form-control"
             ngModel #image="ngModel">
         </div>
-        <div class="col-md-7 form-group">
+        <div class="col-md-6 form-group flex-grow-1">
           <img *ngIf="image.value"
                [src]="image.value"
                alt="Image produit"
@@ -80,16 +83,4 @@
       <button class="btn btn-danger" type="button" (click)="onClear()">Clear</button>
     </form>
   </div>
-</div>
-<hr>
-<div class="row" *ngIf="newProduct">
-  <div class="col-md-10 col-xs-12">
-    <h3 class="text-left">Mes Produits</h3>
-    <p>Nom: {{newProduct?.name}}</p>
-    <p>Catégorie: {{newProduct?.category}}</p>
-    <p>Description: {{newProduct?.description}}</p>
-    <p>Prix: {{newProduct?.price}}€</p>
-    <p>Url: {{newProduct?.imageUrl}}</p>
-  </div>
-
 </div>

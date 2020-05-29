@@ -2,3 +2,11 @@
 .form-label{
   font-weight: 600;
 }
+
+fa-icon{
+  color: rgb(106, 115, 125);
+}
+
+fa-icon:hover{
+  color: rgb(3, 102, 214);
+}
