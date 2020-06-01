@@ -8,9 +8,10 @@
 </div>
 <div class="collapse mb-2" id="collapseProducts{{category}}">
   <app-product-item
-    *ngFor="let product of products; let i = index"
+    *ngFor="let product of products; index as i; last as isLast"
     [product]="product"
-    [index]="i">
+    [index]="i"
+    [ngClass]="{'last-child' : isLast}">
   </app-product-item>
 </div>
 
