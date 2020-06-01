@@ -2,7 +2,7 @@
   border-bottom: 0;
 }
 
-.last-child>.list-group-item{
-  border-bottom: 1px solid black;
+.last-child{
+  border-bottom: 1px solid rgba(0,0,0,0.125);
 }
 

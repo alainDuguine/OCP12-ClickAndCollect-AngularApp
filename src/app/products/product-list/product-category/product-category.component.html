@@ -11,7 +11,7 @@
     *ngFor="let product of products; index as i; last as isLast"
     [product]="product"
     [index]="i"
-    [ngClass]="{'last-child' : isLast}">
+    [lastChild]="isLast">
   </app-product-item>
 </div>
 
