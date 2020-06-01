@@ -1,0 +1,22 @@
+<div
+  [routerLink]="[index + 1]"
+  routerLinkActive="active"
+  (click)="onSelect()"
+  class="list-group-item list-group-item-action flex-column align-items-lg-start"
+  style="cursor: pointer">
+  <div class="d-flex justify-content-between">
+    <h5 class="mb-1 flex-grow-1">{{product.name}} - {{product.price | currency:"EUR"}}</h5>
+    <fa-icon (click)="onEdit()" class="p-1" [icon]="faEdit"></fa-icon>
+    <fa-icon class="p-1" (click)="onDelete()" [icon]="faDelete"></fa-icon>
+  </div>
+  <div class="d-flex justify-content-between">
+    <p *ngIf="product.description" class="text-justify">{{product.description}}</p>
+    <span class="m-1">
+        <img *ngIf="product.imageUrl" [src]="product.imageUrl"
+             alt="{{product.name}}"
+             class="img-responsive"
+             style="max-height: 75px;"/>
+      </span>
+  </div>
+</div>
+
