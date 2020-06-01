@@ -20,9 +20,11 @@ export class ProductService {
   }
 
   addProduct(resourceUri: string, product: ProductModel) {
-    this.postResource(resourceUri, product).subscribe();
-    this.products.push(product);
-    this.productsChange.next(this.products.slice());
+    this.postProduct(resourceUri, product).subscribe(
+      result => {
+        this.products.push(result);
+        this.productsChange.next(this.products.slice());
+      });
   }
 
   getResource(resourceUri: string): Observable<any> {
@@ -31,6 +33,10 @@ export class ProductService {
 
   postResource(resourceUri: string, object: any) {
     return this.httpClient.post(environment.api_url + resourceUri, object);
+  }
+
+  postProduct(resourceUri: string, product: ProductModel) {
+    return this.httpClient.post<ProductModel>(environment.api_url + resourceUri, product);
   }
 
   getProducts(id: number) {
