@@ -1,0 +1,32 @@
+.categoryTitle {
+  display: inline;
+  color: #212529;
+  font-weight: 400;
+}
+
+.categoryTitle:hover{
+  text-decoration: none;
+}
+
+.categoryContainer {
+  margin-bottom: 2px;
+  width: 250px;
+}
+
+.categoryContainer:hover, .dropped {
+  background: #F8F9FA;
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)
+}
+
+.categoryContainer a{
+  flex: 1;
+  padding: 1rem;
+}
+
+.categoryContainer a:hover{
+  text-decoration: none;
+}
+
+fa-icon{
+  pointer-events: none;
+}

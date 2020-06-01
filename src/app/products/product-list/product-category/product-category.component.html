@@ -1,0 +1,17 @@
+<div class="categoryContainer" [class.dropped]="dropped">
+  <a data-toggle="collapse" href="#collapseProducts{{category}}"
+     role="button" aria-expanded="false" aria-controls="collapseProducts"
+     (click)="swapIcon()" class="d-flex justify-content-between">
+    <h5 class="categoryTitle mr-2">{{category | titlecase}} <span class="badge badge-light">{{products.length}}</span></h5>
+    <fa-icon class="fa-xs" [icon]="faCollapse"></fa-icon>
+  </a>
+</div>
+<div class="collapse mb-2" id="collapseProducts{{category}}">
+  <app-product-item
+    *ngFor="let product of products; let i = index"
+    [product]="product"
+    [index]="i">
+  </app-product-item>
+</div>
+
+

@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Observable, Subject} from 'rxjs';
 import {ProductModel} from '../model/ProductModel';
-import {map, tap} from 'rxjs/operators';
+import {tap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -40,21 +40,9 @@ export class ProductService {
   }
 
   getProducts(id: number) {
-    console.log('Fetching products');
-    return this.httpClient.get(environment.api_url + '/restaurants/' + id + '/products')
+    return this.httpClient.get<ProductModel[]>(environment.api_url + '/restaurants/' + id + '/products')
       .pipe(
-        map ( response => {
-          const products: ProductModel[] = [];
-          for (const key in response) {
-            if (response.hasOwnProperty(key)) {
-              products.push({...response[key]});
-            }
-          }
-          console.log(products.length);
-          return products;
-        }),
         tap(products => {
-          console.log('Populating product list');
           this.setProducts(products);
         })
       );

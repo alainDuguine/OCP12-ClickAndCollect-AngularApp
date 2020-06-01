@@ -46,14 +46,11 @@ export class ProductEditComponent implements OnInit {
   onSubmit() {
     const url = '/restaurants/' + this.idRestaurant + '/products';
     this.newProduct = this.productForm.value;
-    console.log(this.newProduct);
     this.productService.addProduct(url, this.newProduct);
     this.onClose();
   }
 
   onClear() {
-    console.log('resetting');
-    console.log(this.productForm);
     this.productForm.reset();
     this.productForm.controls.category.patchValue('Entrée');
   }

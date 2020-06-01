@@ -12,6 +12,7 @@ export class ProductItemComponent implements OnInit {
   @Input() index: number;
   faEdit = faEdit;
   faDelete = faTrashAlt;
+
   constructor() { }
 
   ngOnInit(): void {

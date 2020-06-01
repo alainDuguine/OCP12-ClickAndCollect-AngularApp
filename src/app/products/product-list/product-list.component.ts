@@ -3,6 +3,7 @@ import {ProductService} from '../../service/product.service';
 import {ProductModel} from '../../model/ProductModel';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
+import {faPlusCircle} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-product-list',
@@ -13,7 +14,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
   @Input() idRestaurant = 1;
   private productListSubscription: Subscription;
   products: ProductModel[];
-  mapProducts: Map<string, ProductModel[]> = new Map();
+  mapProducts = new Map<string, ProductModel[]>();
+  faAdd = faPlusCircle;
 
   constructor(private productService: ProductService,
               private router: Router,
@@ -22,20 +24,22 @@ export class ProductListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // TODO check quand on ajoute une entrée, on met à jour la liste et on relance le tri de la map
     this.productListSubscription = this.productService.productsChange
-      .subscribe(
-        (products: ProductModel[]) => {
-          this.products = products;
-          this.groupByCategory(this.products);
-          console.log(this.mapProducts);
-        }
-  );
-    this.getProductsByCategory();
+      .subscribe(products => {
+        this.products = products;
+        this.groupByCategory(this.products);
+      });
+    this.productService.getProducts(this.idRestaurant)
+      .subscribe(products => this.groupByCategory(products)
+      );
   }
 
-  private getProductsByCategory() {
-    this.productService.getProducts(this.idRestaurant)
-      .subscribe(products => this.groupByCategory(products));
-    console.log(this.mapProducts);
+  groupByCategory(products: ProductModel[]) {
+    this.mapProducts = new Map<string, ProductModel[]>();
+    products.forEach(product => {
+      if (!this.mapProducts.has(product.category)) {
+        this.mapProducts.set(product.category, products.filter(data => data.category === product.category));
+      }
+    });
   }
 
   onNewProduct() {
@@ -46,13 +50,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.productListSubscription.unsubscribe();
   }
 
-  groupByCategory(products: ProductModel[]) {
-    this.mapProducts = new Map();
-    products.forEach(product => {
-      if (!this.mapProducts.has(product.category)) {
-        this.mapProducts.set(product.category, this.products.filter(data => data.category === product.category ));
-      }
-    });
+  get productGroups(): {[key: string]: ProductModel[]} {
+    return this.mapProducts as unknown as {[key: string]: ProductModel[]} || {};
   }
 
 }

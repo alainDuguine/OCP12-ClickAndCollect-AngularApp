@@ -8,6 +8,7 @@ import {ProductItemComponent} from './product-list/product-item/product-item.com
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {ProductCategoryComponent} from './product-list/product-category/product-category.component';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
     ProductEditComponent,
     ProductListComponent,
     ProductItemComponent,
+    ProductCategoryComponent,
   ],
     imports: [
         RouterModule,

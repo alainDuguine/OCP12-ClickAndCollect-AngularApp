@@ -2,16 +2,19 @@
   <div class="col-xs-12">
     <h3>Mes Produits</h3>
     <hr>
-    <button class="btn btn-success" (click)="onNewProduct()">Nouveau Produit</button>
+    <button class="btn btn-outline-dark" (click)="onNewProduct()">
+      <fa-icon [icon]="faAdd"></fa-icon> Nouveau Produit
+    </button>
   </div>
 </div>
 <br>
 <div class="row">
-  <div class="list-group">
-    <app-product-item
-      *ngFor="let product of products; let i = index"
-      [product]="product"
-      [index]="i"></app-product-item>
+  <div>
+    <app-product-category
+      *ngFor="let groupOfProduct of productGroups | keyvalue"
+      [category]="groupOfProduct.key"
+      [products]="groupOfProduct.value">
+    </app-product-category>
   </div>
 </div>
 
