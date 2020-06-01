@@ -10,8 +10,8 @@
     <fa-icon class="p-1" (click)="onDelete()" [icon]="faDelete"></fa-icon>
   </div>
   <div class="d-flex justify-content-between">
-    <p *ngIf="product.description" class="mb-1">{{product.description}}</p>
-    <span>
+    <p *ngIf="product.description" class="text-justify">{{product.description}}</p>
+    <span class="m-1">
         <img *ngIf="product.imageUrl" [src]="product.imageUrl"
              alt="{{product.name}}"
              class="img-responsive"

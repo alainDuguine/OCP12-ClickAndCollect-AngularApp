@@ -1,15 +1,17 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ProductService} from '../../service/product.service';
 import {ProductModel} from '../../model/ProductModel';
 import {ActivatedRoute, Router} from '@angular/router';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css']
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent implements OnInit, OnDestroy {
   @Input() idRestaurant = 1;
+  private productListSubscription: Subscription;
   products: ProductModel[];
 
   constructor(private productService: ProductService,
@@ -17,24 +19,18 @@ export class ProductListComponent implements OnInit {
               private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.getProducts();
-  }
-
-  private getProducts() {
-    this.productService.getProducts(this.idRestaurant).subscribe(
-      data => {
-        this.products = data;
-        console.log(typeof this.products);
-        console.log(data);
-      },
-      error => {
-        console.log(error);
-        this.products = [];
-      }
-    );
+    this.productListSubscription = this.productService.productsChange
+      .subscribe(
+        (products: ProductModel[]) => this.products = products
+      );
+    this.productService.getProducts(this.idRestaurant).subscribe();
   }
 
   onNewProduct() {
     this.router.navigate(['new'], {relativeTo: this.route});
+  }
+
+  ngOnDestroy(): void {
+    this.productListSubscription.unsubscribe();
   }
 }

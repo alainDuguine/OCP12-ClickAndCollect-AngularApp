@@ -47,12 +47,8 @@ export class ProductEditComponent implements OnInit {
     const url = '/restaurants/' + this.idRestaurant + '/products';
     this.newProduct = this.productForm.value;
     console.log(this.newProduct);
-    this.productService.postResource(url, this.newProduct)
-      .subscribe(data => {
-        console.log('Product saved !');
-        console.log(data);
-        this.onClear();
-      });
+    this.productService.addProduct(url, this.newProduct);
+    this.onClose();
   }
 
   onClear() {
