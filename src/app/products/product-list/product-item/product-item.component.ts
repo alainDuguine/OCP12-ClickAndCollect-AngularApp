@@ -10,22 +10,24 @@ import {faEdit, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 export class ProductItemComponent implements OnInit {
   @Input() product: ProductModel;
   @Input() index: number;
+  @Input() lastChild: boolean;
   faEdit = faEdit;
   faDelete = faTrashAlt;
+
   constructor() { }
 
   ngOnInit(): void {
   }
 
   onEdit() {
-    alert('Edit');
+    // alert('Edit');
   }
 
   onDelete() {
-    alert('Delete');
+    // alert('Delete');
   }
 
   onSelect() {
-    alert('Select');
+    // product detail
   }
 }

@@ -1,8 +1,9 @@
 <div
-  [routerLink]="[index + 1]"
+  [routerLink]="[product.id]"
   routerLinkActive="active"
   (click)="onSelect()"
   class="list-group-item list-group-item-action flex-column align-items-lg-start"
+  [ngClass]="{'last-child': lastChild}"
   style="cursor: pointer">
   <div class="d-flex justify-content-between">
     <h5 class="mb-1 flex-grow-1">{{product.name}} - {{product.price | currency:"EUR"}}</h5>
