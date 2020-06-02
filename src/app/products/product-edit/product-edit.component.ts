@@ -4,7 +4,6 @@ import {ProductModel} from '../../model/ProductModel';
 import {ProductService} from '../../service/product.service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {faTimesCircle} from '@fortawesome/free-regular-svg-icons';
-import {Subscription} from 'rxjs';
 
 interface Category {
   name: string;
@@ -25,9 +24,10 @@ export class ProductEditComponent implements OnInit {
   idProduct: number;
   descriptionInput: string;
   nameInput: string;
-  faClose = faTimesCircle;
   editMode = false;
-  editSubscription: Subscription;
+  buttonSubmitLabel = 'Enregistrer';
+  buttonResetLabel = 'Réinitialiser';
+  faClose = faTimesCircle;
 
   constructor(private router: Router, private route: ActivatedRoute, private productService: ProductService) { }
 
@@ -35,9 +35,7 @@ export class ProductEditComponent implements OnInit {
     this.getCategories();
     this.route.params.subscribe((params: Params) => {
       this.idProduct = +params.idProduct;
-      console.log(this.idProduct);
       this.editMode = params.idProduct != null;
-      console.log(this.editMode);
       if (this.editMode) {
         this.initForm();
       }
@@ -57,15 +55,27 @@ export class ProductEditComponent implements OnInit {
   }
 
   onSubmit() {
-    const url = '/restaurants/' + this.idRestaurant + '/products';
     this.product = this.productForm.value;
-    this.productService.addProduct(url, this.product);
-    this.onClose();
+    if (this.editMode) {
+      this.product.id = this.idProduct;
+      this.productService.updateProduct(this.idRestaurant, this.product);
+      this.onClose();
+    } else {
+      console.log('Adding product');
+      this.productService.addProduct(this.idRestaurant, this.product);
+      this.onClose();
+    }
+
   }
 
   onClear() {
-    this.productForm.reset();
-    this.productForm.controls.category.patchValue('Entrée');
+    if (this.editMode) {
+      this.initForm();
+    } else {
+      this.productForm.reset();
+      this.productForm.controls.category.patchValue('Entrée');
+    }
+
   }
 
   onClose() {
@@ -74,7 +84,9 @@ export class ProductEditComponent implements OnInit {
 
   private initForm() {
     if (this.editMode) {
-      this.productService.getProduct(this.idProduct)
+      this.buttonSubmitLabel = 'Modifier';
+      this.buttonResetLabel = 'Annuler';
+      this.productService.fetchProduct(this.idProduct)
         .subscribe(result => {
           this.product = result;
           setTimeout(
@@ -87,7 +99,6 @@ export class ProductEditComponent implements OnInit {
                 imageUrl: this.product?.imageUrl
               });
               this.productForm.form.markAsPristine();
-              console.log(this.productForm);
             });
         });
     }

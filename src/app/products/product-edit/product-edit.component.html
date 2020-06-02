@@ -79,8 +79,8 @@
                class="img-thumbnail img-rounded">
         </div>
       </div>
-      <button class="btn btn-success mr-1" type="submit" [disabled]="!f.valid || f.pristine">Enregistrer</button>
-      <button class="btn btn-danger" type="button" (click)="onClear()">Clear</button>
+      <button class="btn btn-success mr-1" type="submit" [disabled]="!f.valid || f.pristine">{{buttonSubmitLabel}}</button>
+      <button class="btn btn-danger" type="button" (click)="onClear()" [disabled]="f.pristine">{{buttonResetLabel}}</button>
     </form>
   </div>
 </div>

@@ -9,6 +9,8 @@ import {tap} from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ProductService {
+  restaurantURI = '/restaurants/';
+  productURI = '/products/';
   productsChange = new Subject<ProductModel[]>();
   private products: ProductModel[] = [];
 
@@ -19,41 +21,60 @@ export class ProductService {
     this.productsChange.next(this.products.slice());
   }
 
-  addProduct(resourceUri: string, product: ProductModel) {
-    this.postProduct(resourceUri, product).subscribe(
+  addProduct(idRestaurant: number, product: ProductModel) {
+    this.postProduct(idRestaurant, product).subscribe(
       result => {
         this.products.push(result);
         this.productsChange.next(this.products.slice());
       });
   }
 
-  getResource(resourceUri: string): Observable<any> {
-    return this.httpClient.get(environment.api_url + resourceUri);
+  fetchProduct(idProduct: number) {
+    if (this.products.length === 0) {
+      return this.getProduct(1, idProduct);
+    } else {
+      return of(this.products[idProduct - 1]);
+    }
   }
 
-  postProduct(resourceUri: string, product: ProductModel) {
-    return this.httpClient.post<ProductModel>(environment.api_url + resourceUri, product);
+  updateProduct(idRestaurant: number, product: ProductModel) {
+    this.putProduct(idRestaurant, product).subscribe(
+      result => {
+        this.products[product.id - 1] = result;
+        this.productsChange.next(this.products.slice());
+      }
+    );
   }
 
-  fetchProduct(idRestaurant: number, idProduct: number) {
-    return this.httpClient.get<ProductModel>(environment.api_url + '/restaurants/' + idRestaurant + '/products/' + idProduct);
+  putProduct(idRestaurant: number, product: ProductModel) {
+    return this.httpClient.put<ProductModel>(
+      environment.api_url + this.restaurantURI + idRestaurant + this.productURI + product.id,
+      product);
   }
 
-  fetchProducts(id: number) {
-    return this.httpClient.get<ProductModel[]>(environment.api_url + '/restaurants/' + id + '/products')
-      .pipe(
+  postProduct(idRestaurant: number, product: ProductModel) {
+    return this.httpClient.post<ProductModel>(
+      environment.api_url + this.restaurantURI + idRestaurant, product
+    );
+  }
+
+  getProduct(idRestaurant: number, idProduct: number) {
+    return this.httpClient.get<ProductModel>(
+      environment.api_url + this.restaurantURI + idRestaurant + this.productURI + idProduct
+    );
+  }
+
+  getProducts(id: number) {
+    return this.httpClient.get<ProductModel[]>(
+      environment.api_url + this.restaurantURI + id + this.productURI
+    ).pipe(
         tap(products => {
           this.setProducts(products);
         })
       );
   }
 
-  getProduct(idProduct: number) {
-    if (this.products.length === 0) {
-      console.log('Fetching product' + idProduct);
-      return this.fetchProduct(1, idProduct);
-    } else {
-      return of(this.products[idProduct - 1]);
-    }
+  getResource(resourceUri: string): Observable<any> {
+    return this.httpClient.get(environment.api_url + resourceUri);
   }
 }

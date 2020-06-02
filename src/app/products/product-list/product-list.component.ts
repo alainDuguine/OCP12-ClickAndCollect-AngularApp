@@ -22,13 +22,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    // TODO check quand on ajoute une entrée, on met à jour la liste et on relance le tri de la map
     this.productListSubscription = this.productService.productsChange
       .subscribe(products => {
         this.products = products;
         this.groupByCategory(this.products);
       });
-    this.productService.fetchProducts(this.idRestaurant)
+    this.productService.getProducts(this.idRestaurant)
       .subscribe(products => this.groupByCategory(products)
       );
   }
