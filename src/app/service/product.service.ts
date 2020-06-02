@@ -4,6 +4,7 @@ import {environment} from '../../environments/environment';
 import {Observable, of, Subject} from 'rxjs';
 import {ProductModel} from '../model/ProductModel';
 import {tap} from 'rxjs/operators';
+import {CategoryModel} from '../model/CategoryModel';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ import {tap} from 'rxjs/operators';
 export class ProductService {
   restaurantURI = '/restaurants/';
   productURI = '/products/';
+  categoryURI = '/categories/';
   productsChange = new Subject<ProductModel[]>();
   private products: ProductModel[] = [];
 
@@ -33,7 +35,7 @@ export class ProductService {
     if (this.products.length === 0) {
       return this.getProduct(1, idProduct);
     } else {
-      return of(this.products[idProduct - 1]);
+      return of(this.products.find(el => el.id === idProduct));
     }
   }
 
@@ -54,7 +56,7 @@ export class ProductService {
 
   postProduct(idRestaurant: number, product: ProductModel) {
     return this.httpClient.post<ProductModel>(
-      environment.api_url + this.restaurantURI + idRestaurant, product
+      environment.api_url + this.restaurantURI + idRestaurant + this.productURI, product
     );
   }
 
@@ -74,7 +76,18 @@ export class ProductService {
       );
   }
 
-  getResource(resourceUri: string): Observable<any> {
-    return this.httpClient.get(environment.api_url + resourceUri);
+  deleteProduct(idRestaurant: number, product: ProductModel) {
+    const index = this.products.indexOf(product);
+    return this.httpClient.delete(
+      environment.api_url + this.restaurantURI + idRestaurant + this.productURI + product.id)
+        .subscribe( () => {
+          this.products.splice(index, 1);
+          this.productsChange.next(this.products.slice());
+          return true;
+        }, () => false);
+  }
+
+  getCategories(): Observable<any> {
+    return this.httpClient.get<CategoryModel[]>(environment.api_url + this.categoryURI);
   }
 }

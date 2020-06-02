@@ -4,10 +4,7 @@ import {ProductModel} from '../../model/ProductModel';
 import {ProductService} from '../../service/product.service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {faTimesCircle} from '@fortawesome/free-regular-svg-icons';
-
-interface Category {
-  name: string;
-}
+import {CategoryModel} from '../../model/CategoryModel';
 
 @Component({
   selector: 'app-product-edit',
@@ -18,7 +15,7 @@ export class ProductEditComponent implements OnInit {
 
   @ViewChild('f') productForm: NgForm;
   product: ProductModel;
-  categories: Category[];
+  categories: CategoryModel[];
   defaultCategory = 'Entrée';
   idRestaurant = 1;
   idProduct: number;
@@ -43,7 +40,7 @@ export class ProductEditComponent implements OnInit {
   }
 
   private getCategories() {
-    this.productService.getResource('/categories').subscribe(
+    this.productService.getCategories().subscribe(
       data => {
         this.categories = data;
       },
