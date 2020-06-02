@@ -28,7 +28,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
         this.products = products;
         this.groupByCategory(this.products);
       });
-    this.productService.getProducts(this.idRestaurant)
+    this.productService.fetchProducts(this.idRestaurant)
       .subscribe(products => this.groupByCategory(products)
       );
   }

@@ -20,14 +20,14 @@ export class ProductItemComponent implements OnInit {
   }
 
   onEdit() {
-    alert('Edit');
+    // alert('Edit');
   }
 
   onDelete() {
-    alert('Delete');
+    // alert('Delete');
   }
 
   onSelect() {
-    alert('Select');
+    // product detail
   }
 }

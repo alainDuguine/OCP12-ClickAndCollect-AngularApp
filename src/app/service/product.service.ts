@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
-import {Observable, Subject} from 'rxjs';
+import {Observable, of, Subject} from 'rxjs';
 import {ProductModel} from '../model/ProductModel';
 import {tap} from 'rxjs/operators';
 
@@ -31,20 +31,29 @@ export class ProductService {
     return this.httpClient.get(environment.api_url + resourceUri);
   }
 
-  postResource(resourceUri: string, object: any) {
-    return this.httpClient.post(environment.api_url + resourceUri, object);
-  }
-
   postProduct(resourceUri: string, product: ProductModel) {
     return this.httpClient.post<ProductModel>(environment.api_url + resourceUri, product);
   }
 
-  getProducts(id: number) {
+  fetchProduct(idRestaurant: number, idProduct: number) {
+    return this.httpClient.get<ProductModel>(environment.api_url + '/restaurants/' + idRestaurant + '/products/' + idProduct);
+  }
+
+  fetchProducts(id: number) {
     return this.httpClient.get<ProductModel[]>(environment.api_url + '/restaurants/' + id + '/products')
       .pipe(
         tap(products => {
           this.setProducts(products);
         })
       );
+  }
+
+  getProduct(idProduct: number) {
+    if (this.products.length === 0) {
+      console.log('Fetching product' + idProduct);
+      return this.fetchProduct(1, idProduct);
+    } else {
+      return of(this.products[idProduct - 1]);
+    }
   }
 }
