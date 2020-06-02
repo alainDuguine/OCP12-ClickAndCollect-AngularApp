@@ -6,3 +6,11 @@
   border-bottom: 1px solid rgba(0,0,0,0.125);
 }
 
+.list-group-item.active, .list-group-item:focus {
+  border: 1px solid rgba(0,0,0,0.500);
+  border-radius: 2px;
+}
+
+fa-icon:hover {
+  color : red;
+}
