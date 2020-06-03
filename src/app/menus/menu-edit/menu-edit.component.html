@@ -1,0 +1,91 @@
+<div class="row justify-content-center">
+  <div class="col-sm-12 col-xl-10">
+    <div class="row justify-content-between align-items-center m-1">
+      <h3 class="text-left">Ajouter un nouveau menu</h3>
+      <fa-icon style="cursor: pointer;" (click)="onClose()" [icon]="faClose" size="lg"></fa-icon>
+    </div>
+    <hr>
+    <form (ngSubmit)="onSubmit()" #f="ngForm">
+      <div class="row">
+        <div class="col-sm-7 form-group">
+          <label for="name" class="form-label">Nom*</label>
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            name="name"
+            placeholder="Nom du menu..."
+            [(ngModel)]="nameInput"
+            required
+            #name="ngModel">
+          <small id="nameHelp" class="form-text text-muted"><em>{{ 100 - nameInput?.length }} caractères restants</em></small>
+          <span class="help-block text-danger" *ngIf="!name.valid && name.touched">Entrez un nom de menu</span>
+        </div>
+
+        <div class="col-xl-12 form-group">
+          <label for="description" class="form-label">Description</label>
+          <textarea
+            id="description"
+            name="description"
+            placeholder="Description du menu..."
+            [(ngModel)]="descriptionInput"
+            maxlength = "255"
+            class="form-control"
+            aria-describedby="descriptionHelp"
+            rows="2"></textarea>
+          <small id="descriptionHelp" class="form-text text-muted"><em>{{ 255 - descriptionInput?.length }} caractères restants</em></small>
+        </div>
+
+        <div class="col-md-3 form-group">
+          <label for="price" class="form-label">Prix en €*</label>
+          <input
+            type="number"
+            step="0.01"
+            min="0"
+            id="price"
+            name="price"
+            placeholder="10.5"
+            class="form-control"
+            ngModel
+            required
+            #price="ngModel">
+          <span class="help-block text-danger text-justify" *ngIf="!price.valid && price.touched">Entrez un prix au moins égal à 0</span>
+        </div>
+
+      </div>
+      <button class="btn btn-success mr-1" type="submit" [disabled]="!f.valid || f.pristine">{{buttonSubmitLabel}}</button>
+      <button class="btn btn-danger" type="button" (click)="onClear()" [disabled]="f.pristine">{{buttonResetLabel}}</button>
+    </form>
+  </div>
+</div>
+
+<!--<div class="col-sm-5 form-group">-->
+<!--  <label for="category" class="form-label">Catégorie*</label>-->
+<!--  <select-->
+<!--    class="form-control"-->
+<!--    id="category"-->
+<!--    name="category"-->
+<!--    required-->
+<!--    [(ngModel)]="defaultCategory"-->
+<!--    #category="ngModel">-->
+<!--    <option *ngFor="let category of categories">{{category.name}}</option>-->
+<!--  </select>-->
+<!--  <span class="help-block text-danger" *ngIf="!category.valid && category.touched">Choisissez une catégorie</span>-->
+<!--</div>-->
+
+<!--<div class="col-md-3 form-group">-->
+<!--  <label for="imageUrl" class="form-label">Url Photo</label>-->
+<!--  <input-->
+<!--    type="text"-->
+<!--    id="imageUrl"-->
+<!--    name="imageUrl"-->
+<!--    placeholder="Insérez l'url"-->
+<!--    class="form-control"-->
+<!--    ngModel #image="ngModel">-->
+<!--</div>-->
+<!--<div class="col-md-6 form-group flex-grow-1">-->
+<!--  <img *ngIf="image.value"-->
+<!--    [src]="image.value"-->
+<!--    alt="Image produit"-->
+<!--    class="img-thumbnail img-rounded">-->
+<!--</div>-->

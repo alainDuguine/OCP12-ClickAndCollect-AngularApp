@@ -42,7 +42,9 @@ export class ProductService {
   updateProduct(idRestaurant: number, product: ProductModel) {
     this.putProduct(idRestaurant, product).subscribe(
       result => {
-        this.products[product.id - 1] = result;
+        const productInArray = this.products.find(el => el.id === product.id);
+        const index = this.products.indexOf(productInArray);
+        this.products[index] = result;
         this.productsChange.next(this.products.slice());
       }
     );

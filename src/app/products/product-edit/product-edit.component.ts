@@ -26,7 +26,9 @@ export class ProductEditComponent implements OnInit {
   buttonResetLabel = 'Réinitialiser';
   faClose = faTimesCircle;
 
-  constructor(private router: Router, private route: ActivatedRoute, private productService: ProductService) { }
+  constructor(private router: Router,
+              private route: ActivatedRoute,
+              private productService: ProductService) { }
 
   ngOnInit(): void {
     this.getCategories();
@@ -58,7 +60,6 @@ export class ProductEditComponent implements OnInit {
       this.productService.updateProduct(this.idRestaurant, this.product);
       this.onClose();
     } else {
-      console.log('Adding product');
       this.productService.addProduct(this.idRestaurant, this.product);
       this.onClose();
     }
@@ -72,7 +73,6 @@ export class ProductEditComponent implements OnInit {
       this.productForm.reset();
       this.productForm.controls.category.patchValue('Entrée');
     }
-
   }
 
   onClose() {
