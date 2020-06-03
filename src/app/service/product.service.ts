@@ -68,9 +68,9 @@ export class ProductService {
     );
   }
 
-  getProducts(id: number) {
+  getProducts(idRestaurant: number) {
     return this.httpClient.get<ProductModel[]>(
-      environment.api_url + this.restaurantURI + id + this.productURI
+      environment.api_url + this.restaurantURI + idRestaurant + this.productURI
     ).pipe(
         tap(products => {
           this.setProducts(products);

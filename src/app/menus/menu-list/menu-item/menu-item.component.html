@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="card flex-grow-1">
+    <div class="card-header">
+      <div class="d-flex justify-content-between">
+          <a data-toggle="collapse" href="#collapseMenu{{menu.id}}"
+             role="button" aria-expanded="false" aria-controls="collapseMenu"
+            (click)="swapIcon()"
+             style="cursor: pointer"
+             class="display-block flex-grow-1 text-truncate">
+          <fa-icon class="fa-xs" [icon]="faCollapse"></fa-icon>
+          <b> {{menu.name}} - {{menu.price | currency:"EUR"}}</b>
+          -
+          <em>{{menu.description}}</em>
+          </a>
+        <fa-icon class="p-1" (click)="onUpdate()" [icon]="faUpdate"></fa-icon>
+        <fa-icon class="p-1" (click)="onDelete()" [icon]="faDelete"></fa-icon>
+      </div>
+    </div>
+    <div class="card-body collapse" id="collapseMenu{{menu.id}}">
+      <p class="p-1">Description formule avec les produits</p>
+    </div>
+  </div>
+
+</div>

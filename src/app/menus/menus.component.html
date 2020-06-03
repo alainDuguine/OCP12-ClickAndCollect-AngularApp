@@ -1,8 +1,34 @@
-<div class="row">
-  <div class="col-md-5">
-    <app-menu-list></app-menu-list>
+<div class="container">
+
+  <div class="row justify-content-center">
+    <h3>Mes Menus</h3>
   </div>
-  <div class="col-md-7">
-    <router-outlet></router-outlet>
+
+  <hr>
+
+  <div class="row justify-content-start">
+    <div class="col-md-10">
+      <button class="btn btn-outline-dark" (click)="onNewMenu()">
+        <fa-icon [icon]="faAdd"></fa-icon> Nouveau
+      </button>
+    </div>
+  </div>
+
+  <div>
+    <div class="row justify-content-center">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row justify-content-center">
+    <app-menu-list class="container-fluid"></app-menu-list>
   </div>
 </div>
+
+
+
+
+
+
