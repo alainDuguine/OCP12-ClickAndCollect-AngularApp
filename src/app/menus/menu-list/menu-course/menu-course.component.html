@@ -1,0 +1,24 @@
+<div class="courseContainer" [class.dropped]="dropped">
+  <a data-toggle="collapse" href="#collapseCourse{{menuId}}{{course.category.name}}"
+     role="button" aria-expanded="false" aria-controls="collapseCourse"
+    (click)="swapIcon()" class="d-flex justify-content-between">
+    <h5 class="courseTitle mr-2">{{course.category.name | titlecase}} <span class="badge badge-light">{{course.products.length}}</span></h5>
+    <fa-icon class="fa-xs" [icon]="faCollapse"></fa-icon>
+  </a>
+</div>
+<div class="collapse mb-2" id="collapseCourse{{menuId}}{{course.category.name}}">
+  <ul class="list-group list-group-flush">
+    <li *ngFor="let product of course.products"
+      class="list-group-item d-flex justify-content-between">
+      <span class="text-truncate">
+        <b>{{product.product.name}}<span *ngIf="product.extraCost != 0"> - Supp: {{product.extraCost | currency:"EUR"}}</span></b>
+        <em *ngIf="product.product.description"> - {{product.product.description}}</em>
+      </span>
+      <img *ngIf="product.product.imageUrl"
+        [src]="product.product.imageUrl"
+        alt="{{product.product.name}}"
+        class="img-responsive"
+        style="max-height: 2rem;">
+    </li>
+  </ul>
+</div>

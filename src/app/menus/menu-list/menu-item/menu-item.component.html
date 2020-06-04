@@ -17,7 +17,13 @@
       </div>
     </div>
     <div class="card-body collapse" id="collapseMenu{{menu.id}}">
-      <p class="p-1">Description formule avec les produits</p>
+      <div>
+        <app-menu-course
+          *ngFor="let course of menu.courses"
+          [course]="course"
+          [menuId]="menu.id">
+        </app-menu-course>
+      </div>
     </div>
   </div>
 

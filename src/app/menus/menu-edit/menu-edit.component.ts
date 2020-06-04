@@ -36,9 +36,11 @@ export class MenuEditComponent implements OnInit {
     this.menu = this.menuForm.value;
     if (this.editMode) {
       console.log('update menu');
+      this.onClose();
     } else {
       console.log('Adding menu');
       this.menuService.addMenu(this.idRestaurant, this.menu);
+      this.onClose();
     }
   }
 

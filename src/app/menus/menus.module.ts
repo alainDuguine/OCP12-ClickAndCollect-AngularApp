@@ -8,6 +8,7 @@ import {MenusComponent} from './menus.component';
 import {MenuListComponent} from './menu-list/menu-list.component';
 import {MenuEditComponent} from './menu-edit/menu-edit.component';
 import {MenuItemComponent} from './menu-list/menu-item/menu-item.component';
+import {MenuCourseComponent} from './menu-list/menu-course/menu-course.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import {MenuItemComponent} from './menu-list/menu-item/menu-item.component';
     MenuListComponent,
     MenuEditComponent,
     MenuItemComponent,
+    MenuCourseComponent,
   ],
   imports: [
     RouterModule,

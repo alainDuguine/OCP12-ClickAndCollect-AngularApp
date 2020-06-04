@@ -1,0 +1,32 @@
+.courseTitle {
+  display: inline;
+  color: #212529;
+  font-weight: 400;
+}
+
+.courseTitle:hover{
+  text-decoration: none;
+}
+
+.courseContainer {
+  margin-bottom: 2px;
+  /*width: 250px;*/
+}
+
+.courseContainer:hover, .dropped {
+  background: #F8F9FA;
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)
+}
+
+.courseContainer a{
+  flex: 1;
+  padding: 1rem;
+}
+
+.courseContainer a:hover{
+  text-decoration: none;
+}
+
+fa-icon{
+  pointer-events: none;
+}

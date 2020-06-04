@@ -22,11 +22,11 @@ a {
 }
 
 a:hover {
-  text-decoration: none;
+  text-decoration: underline;
 }
 
-.card:hover{
+.card-header:hover{
   background: #F8F9FA;
-  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.125);
 }
 

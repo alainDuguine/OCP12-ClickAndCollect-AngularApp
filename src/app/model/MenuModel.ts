@@ -1,7 +1,7 @@
 import {CategoryModel} from './CategoryModel';
 import {ProductModel} from './ProductModel';
 
-class ProductInMenu {
+export class ProductInMenuModel {
   public product: ProductModel;
   public extraCost: number;
 
@@ -11,11 +11,11 @@ class ProductInMenu {
   }
 }
 
-class Course {
+export class CourseModel {
   public category: CategoryModel;
-  public products: ProductInMenu[];
+  public products: ProductInMenuModel[];
 
-  constructor(category: CategoryModel, products: ProductInMenu[]) {
+  constructor(category: CategoryModel, products: ProductInMenuModel[]) {
     this.category = category;
     this.products = products;
   }
@@ -27,9 +27,9 @@ export class MenuModel {
   public description: string;
   public price: number;
   public restaurantId: number;
-  public courses: Course[];
+  public courses: CourseModel[];
 
-  constructor(id: number, name: string, description: string, price: number, restaurantId: number, courses: Course[]) {
+  constructor(id: number, name: string, description: string, price: number, restaurantId: number, courses: CourseModel[]) {
     this.id = id;
     this.name = name;
     this.description = description;
