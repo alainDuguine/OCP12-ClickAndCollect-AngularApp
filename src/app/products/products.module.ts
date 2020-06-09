@@ -20,11 +20,11 @@ import {ProductCategoryComponent} from './product-list/product-category/product-
     ProductCategoryComponent,
   ],
     imports: [
-        RouterModule,
-        ProductsRoutingModule,
-        CommonModule,
-        FormsModule,
-        FontAwesomeModule
+      RouterModule,
+      ProductsRoutingModule,
+      CommonModule,
+      FormsModule,
+      FontAwesomeModule
     ]
 })
 export class ProductsModule { }

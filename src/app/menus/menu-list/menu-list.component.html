@@ -1,0 +1,7 @@
+<div class="container col-10">
+  <app-menu-item
+    *ngFor="let menu of menus; first as isFirst"
+    [menu]="menu"
+    [firstChild]="isFirst">
+  </app-menu-item>
+</div>

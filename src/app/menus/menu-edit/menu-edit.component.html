@@ -1,0 +1,94 @@
+<div class="justify-content-center">
+  <div class="col-sm-12">
+    <div class="row justify-content-between align-items-center m-1">
+      <h3 class="text-left">Ajouter un nouveau menu</h3>
+      <fa-icon style="cursor: pointer;" (click)="onClose()" [icon]="faClose" size="lg"></fa-icon>
+    </div>
+    <hr>
+    <form [formGroup]="menuForm" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col-sm-7 form-group">
+          <label for="name" class="form-label">Nom*</label>
+          <input
+            id="name"
+            class="form-control"
+            formControlName="name"
+            type="text"
+            placeholder="Nom du menu...">
+          <small id="nameHelp" class="form-text text-muted"><em>{{ 100 - menuForm.get('name').value.length }} caractères restants</em></small>
+          <span class="help-block text-danger" *ngIf="!menuForm.get('name').valid && menuForm.get('name').touched">Entrez un nom de menu</span>
+        </div>
+
+        <div class="col-md-12 form-group">
+          <label for="description" class="form-label">Description</label>
+          <textarea
+            id="description"
+            class="form-control"
+            formControlName="description"
+            placeholder="Description du menu..."
+            aria-describedby="descriptionHelp"
+            rows="2"></textarea>
+          <small id="descriptionHelp" class="form-text text-muted"><em>{{ 255 - menuForm.get('description').value.length }} caractères restants</em></small>
+        </div>
+
+        <div class="col-md-3 form-group">
+          <label for="price" class="form-label">Prix en €*</label>
+          <input
+            id="price"
+            class="form-control"
+            formControlName="price"
+            type="number"
+            step="0.01"
+            min="0"
+            placeholder="10.5">
+          <span class="help-block text-danger text-justify" *ngIf="!menuForm.get('price').valid && menuForm.get('price').touched">Entrez un prix au moins égal à 0</span>
+        </div>
+      </div>
+
+      <div class="row col-12">
+        <button class="btn btn-outline-dark" type="button" (click)="onAddCourse()">
+          <fa-icon [icon]="faAdd"></fa-icon> Ajouter une catégorie
+        </button>
+      </div>
+
+      <div formArrayName="courses">
+        <div class="courseMenu"
+            *ngFor="let course of getCourses(menuForm); let i = index"
+            [formGroupName]="i">
+          <div class="mt-1 form-group">
+            <label for="course{{i}}" class="form-label">Catégorie*</label>
+            <fa-icon class="float-right" style="cursor: pointer;" (click)="onRemoveCourse(i)" [icon]="faClose"></fa-icon>
+            <select
+              class="col-md-5 form-control"
+              id="course{{i}}"
+              formControlName="courseName"
+              [value]="course"
+              [ngClass]="{'ng-invalid' : !productSelectionValid[i] && course.touched}"
+              (change)="onLoadProducts(course, i)">
+              <option selected [ngValue]="null">Choisir...</option>
+              <option *ngFor="let category of categories" [value]="category.name">{{category.name}}</option>
+            </select>
+            <div formArrayName="products">
+              <div class="mt-1 form-check"
+                   *ngFor="let product of getProducts(course); let j = index" [formGroupName]="j">
+                <input class="form-check-input" type="checkbox" id="product{{i}}-{{j}}"
+                  [value]="product.value.product.added" (change)="onSelectProduct(product, i)"/>
+                <label class="col-4 form-check-label" for="product{{i}}-{{j}}">{{product.value.product.name}}</label>
+              </div>
+            </div>
+            <span class="help-block text-danger text-justify" *ngIf="!productSelectionValid[i] && course.touched">Sélectionnez au moins un produit</span>
+          </div>
+        </div>
+      </div>
+
+      <br>
+      <div class="row col-md-12">
+        <button class="btn btn-success mr-1" type="submit" [disabled]="!menuForm.valid">{{buttonSubmitLabel}}</button>
+        <button class="btn btn-danger" type="button" (click)="onClear()" [disabled]="!menuForm.dirty">{{buttonResetLabel}}</button>
+      </div>
+    </form>
+  </div>
+  <pre class="col-12" style="word-wrap: break-word">{{menuForm.value | json}}</pre>
+</div>
+
+

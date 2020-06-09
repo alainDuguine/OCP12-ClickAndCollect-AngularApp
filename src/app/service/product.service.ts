@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Observable, of, Subject} from 'rxjs';
 import {ProductModel} from '../model/ProductModel';
@@ -42,7 +42,9 @@ export class ProductService {
   updateProduct(idRestaurant: number, product: ProductModel) {
     this.putProduct(idRestaurant, product).subscribe(
       result => {
-        this.products[product.id - 1] = result;
+        const productInArray = this.products.find(el => el.id === product.id);
+        const index = this.products.indexOf(productInArray);
+        this.products[index] = result;
         this.productsChange.next(this.products.slice());
       }
     );
@@ -66,14 +68,22 @@ export class ProductService {
     );
   }
 
-  getProducts(id: number) {
+  getProducts(idRestaurant: number) {
     return this.httpClient.get<ProductModel[]>(
-      environment.api_url + this.restaurantURI + id + this.productURI
+      environment.api_url + this.restaurantURI + idRestaurant + this.productURI
     ).pipe(
         tap(products => {
           this.setProducts(products);
         })
       );
+  }
+
+  getProductsByCategory(idRestaurant: number, category: string) {
+    const params = category ? {params: new HttpParams().set('category', category)} : {};
+    return this.httpClient.get<ProductModel[]>(
+      environment.api_url + this.restaurantURI + idRestaurant + this.productURI,
+      params
+    );
   }
 
   deleteProduct(idRestaurant: number, product: ProductModel) {

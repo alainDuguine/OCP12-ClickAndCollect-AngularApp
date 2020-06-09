@@ -1,0 +1,23 @@
+.card-body{
+  padding: 0;
+
+}
+
+.card {
+  margin-bottom:5px;
+}
+
+a {
+  color: rgb(73,80,87);
+  flex: 1;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.card-header:hover{
+  background: #F8F9FA;
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.125);
+}
+

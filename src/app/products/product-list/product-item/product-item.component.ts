@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ProductModel} from '../../../model/ProductModel';
 import {faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 import {ProductService} from '../../../service/product.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-product-item',
@@ -15,7 +16,9 @@ export class ProductItemComponent implements OnInit {
   @Input() lastChild: boolean;
   faDelete = faTrashAlt;
 
-  constructor(private productService: ProductService) { }
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private productService: ProductService) { }
 
   ngOnInit(): void {
   }
@@ -25,8 +28,11 @@ export class ProductItemComponent implements OnInit {
     if (confirm('Vous allez supprimer le produit "' + this.product.name + '"\nde manière irréversible.\nVeuillez confirmer votre choix')) {
       if (this.productService.deleteProduct(this.restaurantId, this.product)) {
         alert('Suppression effectuée');
+        if (this.route.snapshot.paramMap) {
+          this.router.navigate(['./'], {relativeTo: this.route});
+        }
       } else {
-        alert('La suppression échouée');
+        alert('La suppression a échouée');
       }
     }
   }
