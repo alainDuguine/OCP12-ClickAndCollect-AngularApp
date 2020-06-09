@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Observable, of, Subject} from 'rxjs';
 import {ProductModel} from '../model/ProductModel';
@@ -76,6 +76,14 @@ export class ProductService {
           this.setProducts(products);
         })
       );
+  }
+
+  getProductsByCategory(idRestaurant: number, category: string) {
+    const params = category ? {params: new HttpParams().set('category', category)} : {};
+    return this.httpClient.get<ProductModel[]>(
+      environment.api_url + this.restaurantURI + idRestaurant + this.productURI,
+      params
+    );
   }
 
   deleteProduct(idRestaurant: number, product: ProductModel) {

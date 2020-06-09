@@ -24,7 +24,6 @@ export class MenuListComponent implements OnInit, OnDestroy {
       });
     this.menuService.getMenus(this.idRestaurant)
       .subscribe(menus => this.menus = menus);
-    console.log(this.menus);
   }
 
   ngOnDestroy(): void {

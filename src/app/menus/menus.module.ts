@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
 import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {MenusRoutingModule} from './menus-routing.module';
 import {MenusComponent} from './menus.component';
@@ -23,7 +23,8 @@ import {MenuCourseComponent} from './menu-list/menu-course/menu-course.component
     MenusRoutingModule,
     CommonModule,
     FormsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    ReactiveFormsModule
   ]
 })
 export class MenusModule { }
