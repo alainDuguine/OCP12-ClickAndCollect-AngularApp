@@ -19,7 +19,7 @@
     <div class="card-body collapse" id="collapseMenu{{menu.id}}">
       <div>
         <app-menu-course
-          *ngFor="let course of menu.courses"
+          *ngFor="let course of menu.menuCourses"
           [course]="course"
           [menuId]="menu.id">
         </app-menu-course>

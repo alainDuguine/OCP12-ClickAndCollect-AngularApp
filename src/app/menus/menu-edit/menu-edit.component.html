@@ -51,7 +51,7 @@
         </button>
       </div>
 
-      <div formArrayName="courses">
+      <div formArrayName="menuCourses">
         <div class="courseMenu"
             *ngFor="let course of getCourses(menuForm); let i = index"
             [formGroupName]="i">
@@ -61,14 +61,14 @@
             <select
               class="col-md-5 form-control"
               id="course{{i}}"
-              formControlName="courseName"
+              formControlName="category"
               [value]="course"
               [ngClass]="{'ng-invalid' : !productSelectionValid[i] && course.touched}"
               (change)="onLoadProducts(course, i)">
               <option selected [ngValue]="null">Choisir...</option>
               <option *ngFor="let category of categories" [value]="category.name">{{category.name}}</option>
             </select>
-            <div formArrayName="products">
+            <div formArrayName="productsInCourse">
               <div class="mt-1 form-check"
                    *ngFor="let product of getProducts(course); let j = index" [formGroupName]="j">
                 <input class="form-check-input" type="checkbox" id="product{{i}}-{{j}}"
@@ -88,7 +88,6 @@
       </div>
     </form>
   </div>
-  <pre class="col-12" style="word-wrap: break-word">{{menuForm.value | json}}</pre>
 </div>
 
 

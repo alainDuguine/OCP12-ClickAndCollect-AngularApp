@@ -7,6 +7,7 @@ import {MenuModel} from '../../model/MenuModel';
 import {CategoryModel} from '../../model/CategoryModel';
 import {faSearchengin} from '@fortawesome/free-brands-svg-icons';
 import {ProductModel} from '../../model/ProductModel';
+import {MenuService} from '../../service/menu.service';
 
 @Component({
   selector: 'app-menu-edit',
@@ -30,7 +31,8 @@ export class MenuEditComponent implements OnInit {
 
   constructor(private router: Router,
               private route: ActivatedRoute,
-              private productService: ProductService) { }
+              private productService: ProductService,
+              private menuService: MenuService) { }
 
   ngOnInit(): void {
     this.productService.getCategories().subscribe(
@@ -67,7 +69,7 @@ export class MenuEditComponent implements OnInit {
       name: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       description: new FormControl('', Validators.maxLength(255)),
       price: new FormControl('', [Validators.required, Validators.min(0)]),
-      courses: new FormArray([
+      menuCourses: new FormArray([
         this.initCourse(),
       ])
     });
@@ -75,8 +77,8 @@ export class MenuEditComponent implements OnInit {
 
   initCourse() {
     return new FormGroup({
-      courseName: new FormControl(),
-      products: new FormArray([])
+      category: new FormControl(),
+      productsInCourse: new FormArray([])
     });
   }
 
@@ -87,16 +89,16 @@ export class MenuEditComponent implements OnInit {
   }
 
   onAddCourse() {
-    const control = this.menuForm.get('courses') as FormArray;
+    const control = this.menuForm.get('menuCourses') as FormArray;
     control.push(this.initCourse());
     console.log(control.length);
     this.productSelectionValid[control.length - 1] = false;
   }
 
   onLoadProducts(form: FormArray, i: number) {
-    const courseControl = this.menuForm.get('courses') as FormArray;
-    const course = courseControl.at(i).get('courseName').value;
-    const control = courseControl.at(i).get('products') as FormArray;
+    const courseControl = this.menuForm.get('menuCourses') as FormArray;
+    const course = courseControl.at(i).get('category').value;
+    const control = courseControl.at(i).get('productsInCourse') as FormArray;
     control.clear();
     if (course) {
       this.productService.getProductsByCategory(this.idRestaurant, course)
@@ -111,13 +113,12 @@ export class MenuEditComponent implements OnInit {
                 }
               );
             }
-          }
-        );
+          });
     }
   }
 
   onRemoveCourse(i: number) {
-    const controls = this.menuForm.get('courses') as FormArray;
+    const controls = this.menuForm.get('menuCourses') as FormArray;
     console.log(controls.length);
     if (controls.length > 1) {
       controls.removeAt(i);
@@ -125,7 +126,11 @@ export class MenuEditComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.menuForm);
+    const menu: MenuModel = this.menuForm.value;
+    console.log(menu);
+    this.menuService.addMenu(this.idRestaurant, menu);
+    alert('Menu ajouté');
+    this.onClose();
   }
 
   onClose() {
@@ -137,19 +142,16 @@ export class MenuEditComponent implements OnInit {
   }
 
   getCourses(form) {
-    return form.get('courses').controls;
+    return form.get('menuCourses').controls;
   }
 
   getProducts(form) {
-    return form.get('products').controls;
+    return form.get('productsInCourse').controls;
   }
 
   onSelectProduct(product, courseNumber: number) {
     product.value.product.added = !product.value.product.added;
-    const products = (this.menuForm.get('courses')as FormArray).at(courseNumber).value.products;
+    const products = (this.menuForm.get('menuCourses')as FormArray).at(courseNumber).value.productsInCourse;
     this.productSelectionValid[courseNumber] = products.some(el => el.product.added);
-    if (!this.productSelectionValid[courseNumber]) {
-      // this.menuForm
-    }
   }
 }
