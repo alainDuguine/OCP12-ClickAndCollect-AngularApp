@@ -16,14 +16,15 @@ export class ProductEditComponent implements OnInit {
   @ViewChild('f') productForm: NgForm;
   product: ProductModel;
   categories: CategoryModel[];
-  defaultCategory = 'Entrée';
-  idRestaurant = 1;
-  idProduct: number;
+  defaultCategory = '';
+  restaurantId = 1;
+  productId: number;
   descriptionInput: string;
   nameInput: string;
   editMode = false;
   buttonSubmitLabel = 'Enregistrer';
   buttonResetLabel = 'Réinitialiser';
+  titleProductForm = 'Ajouter un nouveau produit';
   faClose = faTimesCircle;
 
   constructor(private router: Router,
@@ -33,7 +34,7 @@ export class ProductEditComponent implements OnInit {
   ngOnInit(): void {
     this.getCategories();
     this.route.params.subscribe((params: Params) => {
-      this.idProduct = +params.idProduct;
+      this.productId = +params.idProduct;
       this.editMode = params.idProduct != null;
       if (this.editMode) {
         this.initForm();
@@ -56,11 +57,10 @@ export class ProductEditComponent implements OnInit {
   onSubmit() {
     this.product = this.productForm.value;
     if (this.editMode) {
-      this.product.id = this.idProduct;
-      this.productService.updateProduct(this.idRestaurant, this.product);
+      this.productService.updateProduct(this.restaurantId, this.productId, this.product);
       this.onClose();
     } else {
-      this.productService.addProduct(this.idRestaurant, this.product);
+      this.productService.addProduct(this.restaurantId, this.product);
       this.onClose();
     }
 
@@ -71,7 +71,7 @@ export class ProductEditComponent implements OnInit {
       this.initForm();
     } else {
       this.productForm.reset();
-      this.productForm.controls.category.patchValue('Entrée');
+      this.productForm.controls.category.patchValue('');
     }
   }
 
@@ -81,9 +81,10 @@ export class ProductEditComponent implements OnInit {
 
   private initForm() {
     if (this.editMode) {
+      this.titleProductForm = 'Modifier un produit';
       this.buttonSubmitLabel = 'Modifier';
       this.buttonResetLabel = 'Annuler';
-      this.productService.fetchProduct(this.idProduct)
+      this.productService.fetchProduct(this.restaurantId, this.productId)
         .subscribe(result => {
           this.product = result;
           setTimeout(

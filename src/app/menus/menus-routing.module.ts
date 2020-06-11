@@ -8,6 +8,7 @@ const routes: Routes = [
     component: MenusComponent,
     children: [
       {path: 'new', component: MenuEditComponent},
+      {path: ':menuId', component: MenuEditComponent},
     ]
   }
 ];

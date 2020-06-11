@@ -31,18 +31,18 @@ export class ProductService {
       });
   }
 
-  fetchProduct(idProduct: number) {
+  fetchProduct(restaurantId: number, productId: number) {
     if (this.products.length === 0) {
-      return this.getProduct(1, idProduct);
+      return this.getProduct(restaurantId, productId);
     } else {
-      return of(this.products.find(el => el.id === idProduct));
+      return of(this.products.find(el => el.id === productId));
     }
   }
 
-  updateProduct(restaurantId: number, product: ProductModel) {
-    this.putProduct(restaurantId, product).subscribe(
+  updateProduct(restaurantId: number, productId: number, product: ProductModel) {
+    this.putProduct(restaurantId, productId, product).subscribe(
       result => {
-        const productInArray = this.products.find(el => el.id === product.id);
+        const productInArray = this.products.find(el => el.id === productId);
         const index = this.products.indexOf(productInArray);
         this.products[index] = result;
         this.productsChange.next(this.products.slice());
@@ -50,9 +50,9 @@ export class ProductService {
     );
   }
 
-  putProduct(restaurantId: number, product: ProductModel) {
+  putProduct(restaurantId: number, productId: number, product: ProductModel) {
     return this.httpClient.put<ProductModel>(
-      environment.api_url + this.restaurantURI + restaurantId + this.productURI + product.id,
+      environment.api_url + this.restaurantURI + restaurantId + this.productURI + productId,
       product);
   }
 
@@ -62,9 +62,9 @@ export class ProductService {
     );
   }
 
-  getProduct(restaurantId: number, idProduct: number) {
+  getProduct(restaurantId: number, productId: number) {
     return this.httpClient.get<ProductModel>(
-      environment.api_url + this.restaurantURI + restaurantId + this.productURI + idProduct
+      environment.api_url + this.restaurantURI + restaurantId + this.productURI + productId
     );
   }
 

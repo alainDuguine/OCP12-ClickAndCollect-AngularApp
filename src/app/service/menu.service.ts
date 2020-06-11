@@ -248,10 +248,28 @@ export class MenuService {
 
   constructor(private httpClient: HttpClient) { }
 
-
   private setMenus(menus: MenuModel[]) {
     this.menus = menus;
     this.menusChange.next(this.menus.slice());
+  }
+
+  fetchMenu(restaurantId: number, menuId: number) {
+    if (this.menus.length === 0) {
+      let menu: MenuModel;
+      this.getMenu(restaurantId, menuId)
+        .subscribe(result => {
+          menu = result;
+          return menu;
+        });
+    } else {
+      return this.menus.find(el => el.id === menuId);
+    }
+  }
+
+  private getMenu(restaurantId: number, menuId: number) {
+    return this.httpClient.get<MenuModel>(
+      environment.api_url + this.restaurantURI + restaurantId + this.menuURI + menuId
+    );
   }
 
   getMenus(restaurantId: number) {
@@ -278,6 +296,24 @@ export class MenuService {
     return this.httpClient.post<MenuModel>(
       environment.api_url + this.restaurantURI + restaurantId + this.menuURI, menu
     );
+  }
+
+  updateMenu(restaurantId: number, menuId: number, menu: MenuModel) {
+    const menuForm = this.formatMenu(menu);
+    this.putMenu(restaurantId, menuId, menuForm).subscribe(
+      result => {
+        const menuInArray = this.menus.find(el => el.id === menuId);
+        const index = this.menus.indexOf(menuInArray);
+        this.menus[index] = result;
+        this.menusChange.next(this.menus.slice());
+      }
+    );
+  }
+
+  private putMenu(restaurantId: number, menuId: number, menu: MenuForm) {
+    return this.httpClient.put<MenuModel>(
+      environment.api_url + this.restaurantURI + restaurantId + this.menuURI + menuId,
+      menu);
   }
 
   deleteMenu(restaurantId: number, menu: MenuModel) {
@@ -316,5 +352,4 @@ export class MenuService {
     });
     return menuForm;
   }
-
 }
