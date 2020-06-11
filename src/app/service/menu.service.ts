@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
 import {CourseModel, MenuModel, ProductInCourseModel} from '../model/MenuModel';
-import {of, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
 import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {ProductModel} from '../model/ProductModel';
 import {CourseForm, MenuForm, ProductInCourseForm} from '../model/MenuForm';
+import {tap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -247,34 +248,47 @@ export class MenuService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getMenus(idRestaurant: number) {
-    // return this.httpClient.get<MenuModel[]>(
-    //   environment.api_url + this.restaurantURI + idRestaurant + this.menuURI
-    // ).pipe(
-    //   tap(menus => {
-    //     this.setMenus(menus);
-    //   })
-    // );
-    return of(this.menus);
-  }
-
-  addMenu(idRestaurant: number, menu: MenuModel) {
-    const menuForm = this.formatMenu(menu);
-    console.log(menuForm);
-    this.postMenu(idRestaurant, menuForm).subscribe(
-      result => console.log(result)
-    );
-  }
-
-  postMenu(idRestaurant: number, menu: MenuForm) {
-    return this.httpClient.post<MenuModel>(
-      environment.api_url + this.restaurantURI + idRestaurant + this.menuURI, menu
-    );
-  }
 
   private setMenus(menus: MenuModel[]) {
     this.menus = menus;
     this.menusChange.next(this.menus.slice());
+  }
+
+  getMenus(restaurantId: number) {
+    return this.httpClient.get<MenuModel[]>(
+      environment.api_url + this.restaurantURI + restaurantId + this.menuURI
+    ).pipe(
+      tap(menus => {
+        this.setMenus(menus);
+      })
+    );
+  }
+
+  addMenu(restaurantId: number, menu: MenuModel) {
+    const menuForm = this.formatMenu(menu);
+    this.postMenu(restaurantId, menuForm).subscribe(
+      result => {
+        this.menus.push(result);
+        this.menusChange.next(this.menus.slice());
+      }
+    );
+  }
+
+  postMenu(restaurantId: number, menu: MenuForm) {
+    return this.httpClient.post<MenuModel>(
+      environment.api_url + this.restaurantURI + restaurantId + this.menuURI, menu
+    );
+  }
+
+  deleteMenu(restaurantId: number, menu: MenuModel) {
+    const index = this.menus.indexOf(menu);
+    return this.httpClient.delete(
+      environment.api_url + this.restaurantURI + restaurantId + this.menuURI + menu.id)
+      .subscribe(() => {
+        this.menus.splice(index, 1);
+        this.menusChange.next(this.menus.slice());
+        return true;
+      }, () => false);
   }
 
   private formatMenu(menu: MenuModel) {
@@ -302,4 +316,5 @@ export class MenuService {
     });
     return menuForm;
   }
+
 }

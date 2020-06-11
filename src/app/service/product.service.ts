@@ -23,8 +23,8 @@ export class ProductService {
     this.productsChange.next(this.products.slice());
   }
 
-  addProduct(idRestaurant: number, product: ProductModel) {
-    this.postProduct(idRestaurant, product).subscribe(
+  addProduct(restaurantId: number, product: ProductModel) {
+    this.postProduct(restaurantId, product).subscribe(
       result => {
         this.products.push(result);
         this.productsChange.next(this.products.slice());
@@ -39,8 +39,8 @@ export class ProductService {
     }
   }
 
-  updateProduct(idRestaurant: number, product: ProductModel) {
-    this.putProduct(idRestaurant, product).subscribe(
+  updateProduct(restaurantId: number, product: ProductModel) {
+    this.putProduct(restaurantId, product).subscribe(
       result => {
         const productInArray = this.products.find(el => el.id === product.id);
         const index = this.products.indexOf(productInArray);
@@ -50,27 +50,27 @@ export class ProductService {
     );
   }
 
-  putProduct(idRestaurant: number, product: ProductModel) {
+  putProduct(restaurantId: number, product: ProductModel) {
     return this.httpClient.put<ProductModel>(
-      environment.api_url + this.restaurantURI + idRestaurant + this.productURI + product.id,
+      environment.api_url + this.restaurantURI + restaurantId + this.productURI + product.id,
       product);
   }
 
-  postProduct(idRestaurant: number, product: ProductModel) {
+  postProduct(restaurantId: number, product: ProductModel) {
     return this.httpClient.post<ProductModel>(
-      environment.api_url + this.restaurantURI + idRestaurant + this.productURI, product
+      environment.api_url + this.restaurantURI + restaurantId + this.productURI, product
     );
   }
 
-  getProduct(idRestaurant: number, idProduct: number) {
+  getProduct(restaurantId: number, idProduct: number) {
     return this.httpClient.get<ProductModel>(
-      environment.api_url + this.restaurantURI + idRestaurant + this.productURI + idProduct
+      environment.api_url + this.restaurantURI + restaurantId + this.productURI + idProduct
     );
   }
 
-  getProducts(idRestaurant: number) {
+  getProducts(restaurantId: number) {
     return this.httpClient.get<ProductModel[]>(
-      environment.api_url + this.restaurantURI + idRestaurant + this.productURI
+      environment.api_url + this.restaurantURI + restaurantId + this.productURI
     ).pipe(
         tap(products => {
           this.setProducts(products);
@@ -78,18 +78,18 @@ export class ProductService {
       );
   }
 
-  getProductsByCategory(idRestaurant: number, category: string) {
+  getProductsByCategory(restaurantId: number, category: string) {
     const params = category ? {params: new HttpParams().set('category', category)} : {};
     return this.httpClient.get<ProductModel[]>(
-      environment.api_url + this.restaurantURI + idRestaurant + this.productURI,
+      environment.api_url + this.restaurantURI + restaurantId + this.productURI,
       params
     );
   }
 
-  deleteProduct(idRestaurant: number, product: ProductModel) {
+  deleteProduct(restaurantId: number, product: ProductModel) {
     const index = this.products.indexOf(product);
     return this.httpClient.delete(
-      environment.api_url + this.restaurantURI + idRestaurant + this.productURI + product.id)
+      environment.api_url + this.restaurantURI + restaurantId + this.productURI + product.id)
         .subscribe( () => {
           this.products.splice(index, 1);
           this.productsChange.next(this.products.slice());

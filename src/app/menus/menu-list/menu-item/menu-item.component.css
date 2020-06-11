@@ -1,6 +1,5 @@
 .card-body{
   padding: 0;
-
 }
 
 .card {
@@ -21,3 +20,6 @@ a:hover {
   box-shadow: 0 .125rem .25rem rgba(0,0,0,.125);
 }
 
+.delete:hover {
+  color : red;
+}

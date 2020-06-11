@@ -11,7 +11,7 @@
     <li *ngFor="let product of course.productsInCourse"
       class="list-group-item d-flex justify-content-between">
       <span class="text-truncate">
-        <b>{{product.product.name}}<span *ngIf="product.extraCost != 0"> - Supp: {{product.extraCost | currency:"EUR"}}</span></b>
+        <b>{{product.product.name}}<span *ngIf="product.extraCost"> - Supp: {{product.extraCost | currency:"EUR"}}</span></b>
         <em *ngIf="product.product.description"> - {{product.product.description}}</em>
       </span>
       <img *ngIf="product.product.imageUrl"
