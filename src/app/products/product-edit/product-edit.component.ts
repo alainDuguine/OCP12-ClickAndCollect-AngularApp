@@ -34,12 +34,32 @@ export class ProductEditComponent implements OnInit {
   ngOnInit(): void {
     this.getCategories();
     this.route.params.subscribe((params: Params) => {
-      this.productId = +params.idProduct;
-      this.editMode = params.idProduct != null;
+      this.productId = +params.productId;
+      this.editMode = params.productId != null;
       if (this.editMode) {
-        this.initForm();
+        this.initFormEdit();
       }
     });
+  }
+
+  private initFormEdit() {
+    this.titleProductForm = 'Modifier un produit';
+    this.buttonSubmitLabel = 'Modifier';
+    this.buttonResetLabel = 'Annuler';
+    this.product = this.productService.fetchProduct(this.restaurantId, this.productId);
+    const description = this.product.description ? this.product.description : '';
+    const imageUrl = this.product.imageUrl ? this.product.imageUrl : '';
+    setTimeout(
+      () => {
+        this.productForm.setValue({
+          name: this.product.name,
+          category: this.product.category,
+          description,
+          price: this.product.price,
+          imageUrl
+        });
+        this.productForm.form.markAsPristine();
+      });
   }
 
   private getCategories() {
@@ -68,10 +88,9 @@ export class ProductEditComponent implements OnInit {
 
   onClear() {
     if (this.editMode) {
-      this.initForm();
+      this.initFormEdit();
     } else {
       this.productForm.reset();
-      this.productForm.controls.category.patchValue('');
     }
   }
 
@@ -79,26 +98,4 @@ export class ProductEditComponent implements OnInit {
     this.router.navigate(['../'], {relativeTo: this.route});
   }
 
-  private initForm() {
-    if (this.editMode) {
-      this.titleProductForm = 'Modifier un produit';
-      this.buttonSubmitLabel = 'Modifier';
-      this.buttonResetLabel = 'Annuler';
-      this.productService.fetchProduct(this.restaurantId, this.productId)
-        .subscribe(result => {
-          this.product = result;
-          setTimeout(
-            () => {
-              this.productForm.setValue({
-                name: this.product.name,
-                category: this.product.category,
-                description: this.product?.description,
-                price: this.product.price,
-                imageUrl: this.product?.imageUrl
-              });
-              this.productForm.form.markAsPristine();
-            });
-        });
-    }
-  }
 }

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../environments/environment';
-import {Observable, of, Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {ProductModel} from '../model/ProductModel';
 import {tap} from 'rxjs/operators';
 import {CategoryModel} from '../model/CategoryModel';
@@ -32,10 +32,16 @@ export class ProductService {
   }
 
   fetchProduct(restaurantId: number, productId: number) {
+    console.log(this.products);
     if (this.products.length === 0) {
-      return this.getProduct(restaurantId, productId);
+      let product: ProductModel;
+      this.getProduct(restaurantId, productId)
+        .subscribe(result => {
+          product = result;
+          return product;
+        });
     } else {
-      return of(this.products.find(el => el.id === productId));
+      return this.products.find(el => el.id === productId);
     }
   }
 

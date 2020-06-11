@@ -28,7 +28,7 @@
             id="category"
             name="category"
             required
-            [(ngModel)]="defaultCategory"
+            ngModel
             #category="ngModel">
             <option selected [ngValue]="null">Choisir...</option>
             <option *ngFor="let category of categories">{{category.name}}</option>
