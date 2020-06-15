@@ -257,8 +257,9 @@ export class MenuService {
   fetchMenu(restaurantId: number, menuId: number) {
     if (this.menus.length === 0) {
       let menu: MenuModel;
-      this.dataManagement.getResource<MenuModel>(this.restaurantURI + restaurantId + this.menuURI + menuId)
-        .subscribe(result => {
+      this.dataManagement.getResource<MenuModel>(
+        this.restaurantURI + restaurantId + this.menuURI + menuId
+      ).subscribe(result => {
           menu = result;
           return menu;
         });
@@ -267,20 +268,7 @@ export class MenuService {
     }
   }
 
-  // private getMenu(restaurantId: number, menuId: number) {
-  //   return this.httpClient.get<MenuModel>(
-  //     environment.api_url + this.restaurantURI + restaurantId + this.menuURI + menuId
-  //   );
-  // }
-
   getMenus(restaurantId: number) {
-    // return this.httpClient.get<MenuModel[]>(
-    //   environment.api_url + this.restaurantURI + restaurantId + this.menuURI
-    // ).pipe(
-    //   tap(menus => {
-    //     this.setMenus(menus);
-    //   })
-    // );
     return this.dataManagement.getResource<MenuModel[]>(
       this.restaurantURI + restaurantId + this.menuURI
     ).pipe(
@@ -292,15 +280,10 @@ export class MenuService {
 
   addMenu(restaurantId: number, menu: MenuModel) {
     const menuForm = this.formatMenu(menu);
-    // this.postMenu(restaurantId, menuForm).subscribe(
-    //   result => {
-    //     this.menus.push(result);
-    //     this.menusChange.next(this.menus.slice());
-    //   }
-    // );
     this.dataManagement.postResource<MenuForm>(
       this.restaurantURI + restaurantId + this.menuURI,
-      menuForm).subscribe(
+      menuForm
+    ).subscribe(
       result => {
         this.menus.push(result);
         this.menusChange.next(this.menus.slice());
@@ -308,25 +291,12 @@ export class MenuService {
     );
   }
 
-  // postMenu(restaurantId: number, menu: MenuForm) {
-  //   return this.httpClient.post<MenuModel>(
-  //     environment.api_url + this.restaurantURI + restaurantId + this.menuURI, menu
-  //   );
-  // }
-
   updateMenu(restaurantId: number, menuId: number, menu: MenuModel) {
     const menuForm = this.formatMenu(menu);
-    // this.putMenu(restaurantId, menuId, menuForm).subscribe(
-    //   result => {
-    //     const menuInArray = this.menus.find(el => el.id === menuId);
-    //     const index = this.menus.indexOf(menuInArray);
-    //     this.menus[index] = result;
-    //     this.menusChange.next(this.menus.slice());
-    //   }
-    // );
     this.dataManagement.putResource<MenuForm>(
       this.restaurantURI + restaurantId + this.menuURI + menuId,
-      menuForm).subscribe(
+      menuForm
+    ).subscribe(
       result => {
         const menuInArray = this.menus.find(el => el.id === menuId);
         const index = this.menus.indexOf(menuInArray);
@@ -336,21 +306,8 @@ export class MenuService {
     );
   }
 
-  // private putMenu(restaurantId: number, menuId: number, menu: MenuForm) {
-  //   return this.httpClient.put<MenuModel>(
-  //     environment.api_url + this.restaurantURI + restaurantId + this.menuURI + menuId,
-  //     menu);
-  // }
-
   deleteMenu(restaurantId: number, menu: MenuModel) {
     const index = this.menus.indexOf(menu);
-    // return this.httpClient.delete(
-    //   environment.api_url + this.restaurantURI + restaurantId + this.menuURI + menu.id)
-    //   .subscribe(() => {
-    //     this.menus.splice(index, 1);
-    //     this.menusChange.next(this.menus.slice());
-    //     return true;
-    //   }, () => false);
     return this.dataManagement.deleteResource<MenuModel>(
       this.restaurantURI + restaurantId + this.menuURI + menu.id)
       .subscribe(() => {

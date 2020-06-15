@@ -51,17 +51,14 @@ export class ProductEditComponent implements OnInit {
     this.buttonSubmitLabel = 'Modifier';
     this.buttonResetLabel = 'Annuler';
     this.product = this.productService.fetchProduct(this.restaurantId, this.productId);
-    const description = this.product.description ? this.product.description : '';
-    const imageUrl = this.product.imageUrl ? this.product.imageUrl : '';
     setTimeout(
       () => {
-        this.productForm.setValue({
+        this.productForm.form.patchValue({
           name: this.product.name,
           category: this.product.category,
-          description,
           price: this.product.price,
-          imageUrl
-        });
+          description: this.product.description,
+          imageUrl: this.product.imageUrl});
         this.productForm.form.markAsPristine();
       });
   }
