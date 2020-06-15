@@ -32,14 +32,18 @@ export class ProductEditComponent implements OnInit {
               private productService: ProductService) { }
 
   ngOnInit(): void {
-    this.getCategories();
-    this.route.params.subscribe((params: Params) => {
-      this.productId = +params.productId;
-      this.editMode = params.productId != null;
-      if (this.editMode) {
-        this.initFormEdit();
+    this.productService.getCategories().subscribe(
+      data => {
+        this.categories = data;
+        this.route.params.subscribe((params: Params) => {
+          this.productId = +params.productId;
+          this.editMode = params.productId != null;
+          if (this.editMode) {
+            this.initFormEdit();
+          }
+        });
       }
-    });
+    );
   }
 
   private initFormEdit() {
@@ -60,18 +64,6 @@ export class ProductEditComponent implements OnInit {
         });
         this.productForm.form.markAsPristine();
       });
-  }
-
-  private getCategories() {
-    this.productService.getCategories().subscribe(
-      data => {
-        this.categories = data;
-      },
-      error => {
-        console.log(error);
-        this.categories = [];
-      }
-    );
   }
 
   onSubmit() {

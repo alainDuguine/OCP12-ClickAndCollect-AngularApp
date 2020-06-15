@@ -134,7 +134,6 @@ export class MenuEditComponent implements OnInit {
   onAddCourse() {
     const control = this.menuForm.get('menuCourses') as FormArray;
     control.push(this.initCourse());
-    console.log(control.length);
     this.productSelectionValid[control.length - 1] = false;
   }
 

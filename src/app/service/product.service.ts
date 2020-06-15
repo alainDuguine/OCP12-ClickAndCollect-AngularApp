@@ -23,12 +23,10 @@ export class ProductService {
     this.productsChange.next(this.products.slice());
   }
 
-  addProduct(restaurantId: number, product: ProductModel) {
-    this.postProduct(restaurantId, product).subscribe(
-      result => {
-        this.products.push(result);
-        this.productsChange.next(this.products.slice());
-      });
+  getProduct(restaurantId: number, productId: number) {
+    return this.httpClient.get<ProductModel>(
+      environment.api_url + this.restaurantURI + restaurantId + this.productURI + productId
+    );
   }
 
   fetchProduct(restaurantId: number, productId: number) {
@@ -43,6 +41,33 @@ export class ProductService {
     } else {
       return this.products.find(el => el.id === productId);
     }
+  }
+
+  getProducts(restaurantId: number) {
+    return this.httpClient.get<ProductModel[]>(
+      environment.api_url + this.restaurantURI + restaurantId + this.productURI
+    ).pipe(
+      tap(products => {
+        this.setProducts(products);
+      })
+    );
+  }
+
+  getProductsByCategory(restaurantId: number, category: string) {
+    const params = category ? {params: new HttpParams().set('category', category)} : {};
+    return this.httpClient.get<ProductModel[]>(
+      environment.api_url + this.restaurantURI + restaurantId + this.productURI,
+      params
+    );
+  }
+
+
+  addProduct(restaurantId: number, product: ProductModel) {
+    this.postProduct(restaurantId, product).subscribe(
+      result => {
+        this.products.push(result);
+        this.productsChange.next(this.products.slice());
+      });
   }
 
   updateProduct(restaurantId: number, productId: number, product: ProductModel) {
@@ -65,30 +90,6 @@ export class ProductService {
   postProduct(restaurantId: number, product: ProductModel) {
     return this.httpClient.post<ProductModel>(
       environment.api_url + this.restaurantURI + restaurantId + this.productURI, product
-    );
-  }
-
-  getProduct(restaurantId: number, productId: number) {
-    return this.httpClient.get<ProductModel>(
-      environment.api_url + this.restaurantURI + restaurantId + this.productURI + productId
-    );
-  }
-
-  getProducts(restaurantId: number) {
-    return this.httpClient.get<ProductModel[]>(
-      environment.api_url + this.restaurantURI + restaurantId + this.productURI
-    ).pipe(
-        tap(products => {
-          this.setProducts(products);
-        })
-      );
-  }
-
-  getProductsByCategory(restaurantId: number, category: string) {
-    const params = category ? {params: new HttpParams().set('category', category)} : {};
-    return this.httpClient.get<ProductModel[]>(
-      environment.api_url + this.restaurantURI + restaurantId + this.productURI,
-      params
     );
   }
 
