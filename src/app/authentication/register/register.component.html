@@ -25,7 +25,7 @@
            [ngClass]="{ 'is-invalid': registerForm.get('email').touched && registerForm.get('email').errors }" />
     <div *ngIf="registerForm.get('email').touched && registerForm.get('email').errors" class="help-block text-danger">
       <div *ngIf="registerForm.get('email').errors.required">Entrez un nom d'utilisateur</div>
-      <div *ngIf="registerForm.get('email').errors.uniqueEmail">Cet email existe déjà</div>
+      <div *ngIf="registerForm.get('email').errors.uniqueEmail">Cet email est déjà pris !</div>
     </div>
   </div>
 

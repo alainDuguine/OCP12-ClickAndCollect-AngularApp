@@ -8,8 +8,8 @@ export class AuthService {
 
   constructor() { }
 
-  isEmailTaken(email: string): Observable<boolean> {
-    console.log(email);
+  public isEmailTaken(email: string): Observable<boolean> {
     return of(true);
   }
+
 }
