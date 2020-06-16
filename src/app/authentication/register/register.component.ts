@@ -1,7 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ConfirmedValidator} from './validators/ConfirmedValidator';
-import {UniqueEmailValidator} from './validators/UniqueEmailValidator';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -11,26 +9,30 @@ import {UniqueEmailValidator} from './validators/UniqueEmailValidator';
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   loading = false;
-  submitted = false;
 
   constructor(
-    private formBuilder: FormBuilder
   ) { }
 
   ngOnInit(): void {
-    this.registerForm = this.formBuilder.group({
-      restaurantName: ['', Validators.required],
-      email: ['', Validators.email, UniqueEmailValidator],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required]
-    }, {
-      validator: ConfirmedValidator('password', 'confirmPassword')
+    console.log('Init form');
+    this.registerForm = new FormGroup({
+      restaurantName: new FormControl('', Validators.required),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      confirmPassword: new FormControl('', Validators.required)
     });
+    // }, {
+    //   validator: ConfirmedValidator('password', 'confirmPassword')
+    // });
   }
 
   onSubmit() {
-
+    console.log(this.registerForm);
   }
 
   get f() { return this.registerForm.controls; }
+
+  onClear() {
+    this.ngOnInit();
+  }
 }
