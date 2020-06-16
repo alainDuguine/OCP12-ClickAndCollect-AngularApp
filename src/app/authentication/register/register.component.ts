@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {ConfirmedPasswordValidator} from './validators/confirmed-password-validator.directive';
 
 @Component({
   selector: 'app-register',
@@ -20,19 +21,17 @@ export class RegisterComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required, Validators.minLength(6)]),
       confirmPassword: new FormControl('', Validators.required)
+    }, {
+      validators: ConfirmedPasswordValidator
     });
-    // }, {
-    //   validator: ConfirmedValidator('password', 'confirmPassword')
-    // });
   }
 
   onSubmit() {
     console.log(this.registerForm);
   }
 
-  get f() { return this.registerForm.controls; }
-
   onClear() {
     this.ngOnInit();
   }
+
 }
