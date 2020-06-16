@@ -1,0 +1,62 @@
+<h2>Register</h2>
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="form-group">
+      <label for="restaurantName" class="form-label">Nom du restaurant*</label>
+      <input
+        id="restaurantName"
+        class="form-control"
+        formControlName="restaurantName"
+        type="text"
+        placeholder="Nom du restaurant..."/>
+      <span class="help-block text-danger" *ngIf="!f.restaurantName.valid && f.restaurantName.touched">
+        Entrez un nom de restaurant
+      </span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="email">Email*</label>
+    <input id="email"
+           type="email"
+           formControlName="email"
+           class="form-control"
+           [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+    <div *ngIf="f.username.touched && f.username.errors" class="help-block text-danger">
+      <div *ngIf="f.username.errors.required">Entrez un nom d'utilisateur</div>
+      <div *ngIf="f.username.errors.uniqueEmail">Cet email existe déjà</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="password">Mot de passe</label>
+    <input id="password"
+           type="password"
+           formControlName="password"
+           class="form-control"
+           [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+    <div *ngIf="f.password.touched && f.password.errors" class="invalid-feedback">
+      <div *ngIf="f.password.errors.required">Entrez un mot de passe</div>
+      <div *ngIf="f.password.errors.minlength">Le mot de passe doit être d'au moins 6 caractères</div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="confirmPassword">Confirmer le mot de passe</label>
+    <input id="confirmPassword"
+           type="password"
+           formControlName="confirmPassword"
+           class="form-control"
+           [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+    <div *ngIf="f.confirmPassword.touched && f.confirmPassword.errors" class="invalid-feedback">
+      <div *ngIf="f.confirmPassword.errors.confirmedValidator">Le mot de passe et la confirmation ne correspondent pas</div>
+    </div>
+
+  </div>
+  <div class="form-group">
+    <button [disabled]="loading" class="btn btn-primary">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+      Register
+    </button>
+    <a routerLink="/login" class="btn btn-link">Cancel</a>
+  </div>
+</form>
