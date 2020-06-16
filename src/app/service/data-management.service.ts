@@ -12,12 +12,6 @@ export class DataManagementService {
 
   constructor(private httpClient: HttpClient) { }
 
-  // public getResource<T>(url: string) {
-  //   console.log('Sending GET request to server :');
-  //   console.log(this.baseUrl + url);
-  //   return this.httpClient.get<T>(this.baseUrl + url);
-  // }
-
   public getResource<T>(url: string, paramMap?: Map<string, string>) {
     let params;
     if (paramMap) {
