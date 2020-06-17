@@ -3,6 +3,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {confirmedPasswordValidator} from './validators/confirmed-password-validator.directive';
 import {AuthService} from '../../service/auth.service';
 import {uniqueEmailValidator} from './validators/unique-email-validator.directive';
+import {RegistrationFormModel} from '../../model/RegistrationFormModel';
 
 @Component({
   selector: 'app-register',
@@ -11,6 +12,7 @@ import {uniqueEmailValidator} from './validators/unique-email-validator.directiv
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
+  registrationModel: RegistrationFormModel;
   loading = false;
 
   constructor(private authService: AuthService) { }
@@ -27,7 +29,14 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.registerForm);
+    const form = this.registerForm.value;
+    this.registrationModel = new RegistrationFormModel(
+      form.restaurantName,
+      form.email,
+      form.password);
+    console.log(this.registrationModel);
+    this.authService.registerRestaurant(this.registrationModel);
+    this.onClear();
   }
 
   onClear() {
