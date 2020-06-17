@@ -1,15 +1,34 @@
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
+import {DataManagementService} from './data-management.service';
+import {map} from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  authURI = '/auth';
+  registerURI = '/register';
 
-  constructor() { }
+  constructor(private dataManagementService: DataManagementService) { }
 
   public isEmailTaken(email: string): Observable<boolean> {
-    return of(true);
+    const params = new Map();
+    params.set('email', email);
+    return this.dataManagementService.headResource(
+      this.authURI + this.registerURI,
+      params
+    ).pipe(
+      map(
+      () => {
+        console.log('success');
+        return true;
+      },
+      () => {
+        console.log('error');
+        return false;
+      }
+    ));
   }
-
 }

@@ -17,6 +17,7 @@
             placeholder="Nom du produit..."
             [(ngModel)]="nameInput"
             required
+            maxlength="100"
             #name="ngModel">
           <small id="nameHelp" class="form-text text-muted"><em>{{ 100 - nameInput?.length }} caractères restants</em></small>
           <span class="help-block text-danger" *ngIf="!name.valid && name.touched">Entrez un nom de produit</span>

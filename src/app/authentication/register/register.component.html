@@ -10,9 +10,11 @@
       id="restaurantName"
       class="form-control"
       formControlName="restaurantName"
+      maxlength="100"
       type="text"/>
+    <small id="restaurantNameHelp" class="form-text text-muted"><em>{{ 100 - registerForm.get('restaurantName').value.length }} caractères restants</em></small>
     <div class="help-block text-danger" *ngIf="!registerForm.get('restaurantName').valid && registerForm.get('restaurantName').touched">
-      Entrez un nom de restaurant
+      Entrez un nom de restaurant d'au moins 3 caractères
     </div>
   </div>
 
@@ -25,6 +27,7 @@
            [ngClass]="{ 'is-invalid': registerForm.get('email').touched && registerForm.get('email').errors }" />
     <div *ngIf="registerForm.get('email').touched && registerForm.get('email').errors" class="help-block text-danger">
       <div *ngIf="registerForm.get('email').errors.required">Entrez un nom d'utilisateur</div>
+      <div *ngIf="registerForm.get('email').errors.email">Entrez un email valide</div>
       <div *ngIf="registerForm.get('email').errors.uniqueEmail">Cet email est déjà pris !</div>
     </div>
   </div>

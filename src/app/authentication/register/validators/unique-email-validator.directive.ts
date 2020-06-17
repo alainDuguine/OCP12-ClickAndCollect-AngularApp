@@ -8,6 +8,7 @@ export const uniqueEmailValidator = (authService: AuthService, time: number = 50
     return timer(time).pipe(
       switchMap(() => authService.isEmailTaken(input.value)),
       map(isTaken => {
+        console.log(isTaken);
         return isTaken ? { uniqueEmail: true } : null;
       })
     );

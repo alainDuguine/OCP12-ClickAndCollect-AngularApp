@@ -13,20 +13,27 @@ export class DataManagementService {
   constructor(private httpClient: HttpClient) { }
 
   public getResource<T>(url: string, paramMap?: Map<string, string>) {
-    let params;
-    if (paramMap) {
-      for (const [key, value] of paramMap.entries()) {
-        params = new HttpParams().set(key, value);
-      }
-    }
+    const params = this.getHttpParams(paramMap);
+    console.log('Sending GET request to server :');
+    console.log(this.baseUrl + url);
     return this.httpClient.get<T>(
       this.baseUrl + url,
       {params}
     );
   }
 
+  public headResource(url: string, paramMap?: Map<string, string>): Observable<any> {
+    const params = this.getHttpParams(paramMap);
+    console.log('Sending HEAD request to server :');
+    console.log(this.baseUrl + url);
+    return this.httpClient.head(
+      this.baseUrl + url,
+      {params}
+    );
+  }
+
   public postResource<T>(url: string, object: T): Observable<any> {
-    console.log('Sending GET request to server :');
+    console.log('Sending POST request to server :');
     console.log(this.baseUrl + url);
     return this.httpClient.post<T>(
       this.baseUrl + url,
@@ -35,7 +42,7 @@ export class DataManagementService {
   }
 
   public putResource<T>(url: string, object: T): Observable<any> {
-    console.log('Sending GET request to server :');
+    console.log('Sending PUT request to server :');
     console.log(this.baseUrl + url);
     return this.httpClient.put<T>(
       this.baseUrl + url,
@@ -49,6 +56,16 @@ export class DataManagementService {
     return this.httpClient.delete(
       this.baseUrl + url
     );
+  }
+
+  public getHttpParams(paramMap: Map<string, string>): any{
+    let params;
+    if (paramMap) {
+      for (const [key, value] of paramMap.entries()) {
+        params = new HttpParams().set(key, value);
+      }
+    }
+    return params;
   }
 }
 

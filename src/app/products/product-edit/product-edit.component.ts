@@ -16,7 +16,6 @@ export class ProductEditComponent implements OnInit {
   @ViewChild('f') productForm: NgForm;
   product: ProductModel;
   categories: CategoryModel[];
-  defaultCategory = '';
   restaurantId = 1;
   productId: number;
   descriptionInput: string;

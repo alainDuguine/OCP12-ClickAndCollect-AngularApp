@@ -14,6 +14,7 @@
             class="form-control"
             formControlName="name"
             type="text"
+            maxlength="100"
             placeholder="Nom du menu...">
           <small id="nameHelp" class="form-text text-muted"><em>{{ 100 - menuForm.get('name').value.length }} caractères restants</em></small>
           <span class="help-block text-danger" *ngIf="!menuForm.get('name').valid && menuForm.get('name').touched">Entrez un nom de menu</span>
@@ -27,6 +28,7 @@
             formControlName="description"
             placeholder="Description du menu..."
             aria-describedby="descriptionHelp"
+            maxlength="255"
             rows="2"></textarea>
           <small id="descriptionHelp" class="form-text text-muted"><em>{{ 255 - menuForm.get('description').value.length }} caractères restants</em></small>
         </div>
