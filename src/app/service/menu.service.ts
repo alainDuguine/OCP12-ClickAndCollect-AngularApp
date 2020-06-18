@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {MenuModel} from '../model/MenuModel';
 import {Subject} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
 import {CourseForm, MenuForm, ProductInCourseForm} from '../model/MenuForm';
 import {tap} from 'rxjs/operators';
 import {DataManagementService} from './data-management.service';
@@ -16,8 +15,7 @@ export class MenuService {
   menusChange = new Subject<MenuModel[]>();
   private menus: MenuModel[] = [];
 
-  constructor(private httpClient: HttpClient,
-              private dataManagement: DataManagementService) { }
+  constructor(private dataManagement: DataManagementService) { }
 
   private setMenus(menus: MenuModel[]) {
     this.menus = menus;

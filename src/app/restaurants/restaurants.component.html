@@ -1,26 +1,16 @@
-<form autocomplete="off" novalidate>
-  <div class="ng-autocomplete">
-    <ng-autocomplete
-      [data]="addresses"
-      [searchKeyword]="keyword"
-      (selected)='selectEvent($event)'
-      (inputChanged)='getServerResponse($event)'
-      (inputCleared)="searchCleared()"
-      [debounceTime]="300"
-      [isLoading]="isLoadingResult"
-      [minQueryLength]="3"
-      [itemTemplate]="itemTemplate"
-      [notFoundTemplate]="notFoundTemplate"
-      placeHolder="Rechercher une adresse...">
-    </ng-autocomplete>
+<div class="container">
 
-    <ng-template #itemTemplate let-item>
-      <a [innerHTML]="item.label"></a>
-    </ng-template>
-
-    <ng-template #notFoundTemplate let-notFound>
-      Aucun résultat !
-    </ng-template>
+  <div class="row justify-content-center">
+    <h3>Mon Restaurant</h3>
   </div>
-</form>
 
+  <hr>
+
+  <div>
+    <div class="row justify-content-center">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+  <hr>
+</div>

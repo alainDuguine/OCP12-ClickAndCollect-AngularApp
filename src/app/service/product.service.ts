@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
 import {Observable, Subject} from 'rxjs';
 import {ProductModel} from '../model/ProductModel';
 import {tap} from 'rxjs/operators';
@@ -16,8 +15,7 @@ export class ProductService {
   productsChange = new Subject<ProductModel[]>();
   private products: ProductModel[] = [];
 
-  constructor(private httpClient: HttpClient,
-              private dataManagement: DataManagementService) { }
+  constructor(private dataManagement: DataManagementService) { }
 
   setProducts(products: ProductModel[]) {
     this.products = products;

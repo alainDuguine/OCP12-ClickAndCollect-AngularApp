@@ -6,13 +6,11 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-import {RestaurantsComponent} from './restaurants/restaurants.component';
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 
 @NgModule({
   declarations: [
     AppComponent,
-    RestaurantsComponent,
   ],
   imports: [
     BrowserModule,

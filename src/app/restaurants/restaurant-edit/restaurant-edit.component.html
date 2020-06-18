@@ -1,0 +1,88 @@
+<div class="justify-content-center">
+  <div class="col-sm-12">
+    <form [formGroup]="restaurantForm" (ngSubmit)="onSubmit()" autocomplete="off" novalidate>
+      <div class="row">
+        <div class="col-sm-7 form-group">
+          <label for="name" class="form-label">Nom :</label>
+          <input
+            id="name"
+            class="form-control"
+            formControlName="name"
+            type="text"
+            maxlength="100"
+            placeholder="Nom du restaurant...">
+          <small id="nameHelp" class="form-text text-muted"><em>{{ 100 - restaurantForm.get('name').value.length }} caractères restants</em></small>
+          <span class="help-block text-danger" *ngIf="!restaurantForm.get('name').valid && restaurantForm.get('name').touched">Entrez un nom de restaurant</span>
+        </div>
+
+        <div class="col-sm-7 form-group">
+          <label for="email" class="form-label">Email :</label>
+          <input
+            id="email"
+            class="form-control"
+            formControlName="email"
+            type="text">
+        </div>
+
+        <div class="col-sm-7 form-group">
+          <label class="form-label"><fa-icon [icon]="faAdd"></fa-icon>Votre adresse :</label>
+          <div class="ng-autocomplete" >
+            <ng-autocomplete
+              formControlName="address"
+              [data]="addresses"
+              [searchKeyword]="keyword"
+              (selected)='selectEvent($event)'
+              (inputChanged)='getServerResponse($event)'
+              (inputCleared)="searchCleared()"
+              [debounceTime]="300"
+              [isLoading]="isLoadingResult"
+              [minQueryLength]="3"
+              [itemTemplate]="itemTemplate"
+              [notFoundTemplate]="notFoundTemplate"
+              placeHolder="Rechercher une adresse...">
+            </ng-autocomplete>
+
+            <ng-template #itemTemplate let-item>
+              <a [innerHTML]="item.label"></a>
+            </ng-template>
+
+            <ng-template #notFoundTemplate let-notFound>
+              Aucun résultat !
+            </ng-template>
+          </div>
+        </div>
+
+        <div class="col-md-12 form-group">
+          <label for="description" class="form-label">Description :</label>
+          <textarea
+            id="description"
+            class="form-control"
+            formControlName="description"
+            placeholder="Description du restaurant..."
+            aria-describedby="descriptionHelp"
+            maxlength="255"
+            rows="2"></textarea>
+          <small id="descriptionHelp" class="form-text text-muted"><em>{{ 255 - restaurantForm.get('description').value.length }} caractères restants</em></small>
+        </div>
+
+        <div class="col-sm-7 form-group">
+          <label for="typeCuisine" class="form-label">Type de cuisine :</label>
+          <input
+            id="typeCuisine"
+            class="form-control"
+            formControlName="typeCuisine"
+            type="text"
+            maxlength="100"
+            placeholder="Type de cuisine...">
+          <small id="typeHelp" class="form-text text-muted"><em>{{ 100 - restaurantForm.get('typeCuisine').value.length }} caractères restants</em></small>
+        </div>
+      </div>
+
+      <div class="row col-md-12">
+        <button class="btn btn-success mr-1" type="submit" [disabled]="!restaurantForm.valid || restaurantForm.pristine">Enregistrer</button>
+        <button class="btn btn-danger" type="button" (click)="onClear()" [disabled]="restaurantForm.pristine">Réinitialiser</button>
+      </div>
+    </form>
+  </div>
+</div>
+
