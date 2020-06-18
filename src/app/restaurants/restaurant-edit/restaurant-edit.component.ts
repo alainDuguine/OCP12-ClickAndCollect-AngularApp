@@ -47,10 +47,15 @@ export class RestaurantEditComponent implements OnInit {
 
     this.restaurantForm = new FormGroup({
       name: new FormControl(this.restaurant.name, [Validators.required, Validators.maxLength(100)]),
-      email: new FormControl(this.restaurant.email, Validators.email),
+      email: new FormControl({value: this.restaurant.email, disabled: true}),
       address: new FormControl(address, Validators.required),
       description: new FormControl(''),
       typeCuisine: new FormControl('')
+    });
+
+    this.restaurantForm.patchValue({
+      description: this.restaurant.description,
+      typeCuisine: this.restaurant.typeCuisine
     });
   }
 
@@ -71,12 +76,11 @@ export class RestaurantEditComponent implements OnInit {
   selectEvent(event: any) {
     const formattedAddress = [event.name, event.postal_code, event.locality, event.region].filter(Boolean).join(', ');
 
-    this.address = new AddressModel(
-      event.latitude,
-      event.longitude,
-      formattedAddress
-    );
+    this.restaurant.formattedAddress = formattedAddress;
+    this.restaurant.latitude = event.latitude;
+    this.restaurant.longitude = event.longitude;
 
+    console.log(this.restaurant);
     this.restaurantForm.controls.address.setValue(formattedAddress);
   }
 
@@ -85,10 +89,20 @@ export class RestaurantEditComponent implements OnInit {
   }
 
   onSubmit() {
-
+    this.restaurant.name = this.restaurantForm.value.name;
+    this.restaurant.description = this.restaurantForm.value.description;
+    this.restaurant.typeCuisine = this.restaurantForm.value.typeCuisine;
+    console.log(this.restaurant);
+    this.restaurantService.updateRestaurant(this.restaurantId, this.restaurant)
+      .subscribe((result: RestaurantModel) => {
+          this.restaurant = result;
+          alert('Le restaurant a été modifié');
+          console.log(this.restaurant);
+        }
+      );
   }
 
   onClear() {
-
+    this.initForm();
   }
 }

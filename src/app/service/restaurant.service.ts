@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {DataManagementService} from './data-management.service';
 import {RestaurantModel} from '../model/RestaurantModel';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -23,13 +23,18 @@ export class RestaurantService {
 
   restaurantURI = '/restaurants/';
 
-  constructor(private dataManagement: DataManagementService) {
-  }
+  constructor(private dataManagement: DataManagementService) {}
 
   getRestaurant(restaurantId: number): Observable<RestaurantModel> {
-    return of(this.restaurant);
-    // return this.dataManagement.getResource<RestaurantModel>(
-    //   this.restaurantURI + restaurantId
-    // );
+    return this.dataManagement.getResource<RestaurantModel>(
+      this.restaurantURI + restaurantId
+    );
+  }
+
+  updateRestaurant(restaurantId: number, restaurant: RestaurantModel) {
+    return this.dataManagement.putResource<RestaurantModel>(
+      this.restaurantURI + restaurantId,
+      restaurant
+    );
   }
 }
