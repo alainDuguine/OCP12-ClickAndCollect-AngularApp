@@ -66,7 +66,7 @@ export class MenuEditComponent implements OnInit {
     this.titleMenuForm = 'Modifier un menu';
     this.menu = this.menuService.fetchMenu(this.restaurantId, this.menuId);
     name = this.menu.name;
-    description = this.menu.description;
+    description = this.menu.description || '';
     price = this.menu.price;
     // initialize menuCourses and products
     if (this.menu.menuCourses) {

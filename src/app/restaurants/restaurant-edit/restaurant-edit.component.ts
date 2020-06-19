@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {AddressModel} from '../../model/AddressModel';
-import {RestaurantModel} from '../../model/RestaurantModel';
+import {BusinessHour, RestaurantModel} from '../../model/RestaurantModel';
 import {MapService} from '../../service/map.service';
 import {RestaurantService} from '../../service/restaurant.service';
 import {ActivatedRoute, Params} from '@angular/router';
-import {faSearchLocation} from '@fortawesome/free-solid-svg-icons';
+import {faPlusCircle, faSearchLocation} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-restaurant-edit',
@@ -15,48 +14,67 @@ import {faSearchLocation} from '@fortawesome/free-solid-svg-icons';
 export class RestaurantEditComponent implements OnInit {
 
   restaurantForm: FormGroup;
-  address: AddressModel;
   restaurant: RestaurantModel;
   addresses: any;
   keyword = 'label';
   isLoadingResult: boolean;
   restaurantId: number;
-  faAdd = faSearchLocation;
+  faSearch = faSearchLocation;
+  faAdd = faPlusCircle;
+  daysOfWeek = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+  hours = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12',
+    '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
+  minutes = ['00', '15', '30', '45'];
 
   constructor(private mapService: MapService,
               private restaurantService: RestaurantService,
               private route: ActivatedRoute) {
+    this.initForm();
   }
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
       this.restaurantId = params.restaurantId;
-      console.log(this.restaurantId);
       this.restaurantService.getRestaurant(this.restaurantId).subscribe(
         data => {
           this.restaurant = data;
-          this.initForm();
+          this.populateForm();
         }
       );
     });
   }
 
   private initForm() {
-    const address = this.restaurant.formattedAddress || '';
-    console.log(address);
-
     this.restaurantForm = new FormGroup({
-      name: new FormControl(this.restaurant.name, [Validators.required, Validators.maxLength(100)]),
-      email: new FormControl({value: this.restaurant.email, disabled: true}),
-      address: new FormControl(address, Validators.required),
+      name: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      email: new FormControl({value: '', disabled: true}),
+      address: new FormControl('', Validators.required),
       description: new FormControl(''),
-      typeCuisine: new FormControl('')
+      typeCuisine: new FormControl(''),
+      businessHour: this.initBusinessHour()
     });
+  }
 
+  initBusinessHour() {
+    return new FormGroup({
+      startDay: new FormControl(null, Validators.required),
+      endDay: new FormControl(null, Validators.required),
+      startTimeHour: new FormControl(null, Validators.required),
+      startTimeMinute: new FormControl(null, Validators.required),
+      endTimeHour: new FormControl(null, Validators.required),
+      endTimeMinute: new FormControl(null, Validators.required)}
+    );
+  }
+
+  private populateForm() {
     this.restaurantForm.patchValue({
+      name: this.restaurant.name,
+      email: this.restaurant.email,
+      address: this.restaurant.formattedAddress,
       description: this.restaurant.description,
-      typeCuisine: this.restaurant.typeCuisine
+      typeCuisine: this.restaurant.typeCuisine,
     });
+    this.restaurantForm.get('businessHour').reset();
   }
 
   getServerResponse(event) {
@@ -96,13 +114,29 @@ export class RestaurantEditComponent implements OnInit {
     this.restaurantService.updateRestaurant(this.restaurantId, this.restaurant)
       .subscribe((result: RestaurantModel) => {
           this.restaurant = result;
-          alert('Le restaurant a été modifié');
+          alert('Les informations ont été enregistrées');
           console.log(this.restaurant);
         }
       );
   }
 
   onClear() {
-    this.initForm();
+    this.populateForm();
+  }
+
+  onAddBusinessHour() {
+    console.log(this.restaurantForm.get('businessHour').value);
+    const businessHours = this.restaurantForm.get('businessHour').value;
+    const businessHour = new BusinessHour();
+    businessHour.startDay = this.daysOfWeek.indexOf(businessHours.startDay) + 1;
+    businessHour.endDay = this.daysOfWeek.indexOf(businessHours.endDay) + 1;
+    businessHour.startTime = businessHours.startTimeHour + ':' + businessHours.startTimeMinute;
+    businessHour.endTime = businessHours.endTimeHour + ':' + businessHours.endTimeMinute;
+    console.log(businessHour);
+    if (!this.restaurant.businessHours) { this.restaurant.businessHours = []; }
+    this.restaurant.businessHours.push(businessHour);
+    this.restaurantForm.get('businessHour').reset();
   }
 }
+
+

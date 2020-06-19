@@ -18,7 +18,7 @@ export class RestaurantService {
     imageUrl: null,
     latitude: null,
     longitude: null,
-    openingHours: null
+    businessHours: null
   };
 
   restaurantURI = '/restaurants/';

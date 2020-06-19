@@ -1,4 +1,8 @@
-class OpeningHour {
+export class BusinessHour {
+  startDay: number;
+  endDay: number;
+  startTime: string;
+  endTime: string;
 }
 
 export class RestaurantModel {
@@ -11,5 +15,5 @@ export class RestaurantModel {
   formattedAddress: string;
   latitude: string;
   longitude: string;
-  openingHours: OpeningHour[];
+  businessHours: BusinessHour[];
 }

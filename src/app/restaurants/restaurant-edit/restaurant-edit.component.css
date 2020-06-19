@@ -1,0 +1,16 @@
+.ng-autocomplete {
+ width: 36rem;
+}
+
+.faAdd {
+ color: #28a745;
+}
+
+.btnAdd:hover .faAdd {
+ color: white;
+}
+
+.btnAdd[disabled]:hover .faAdd{
+  color: #28a745;
+  cursor: default;
+}
