@@ -162,7 +162,6 @@ export class MenuEditComponent implements OnInit {
 
   onRemoveCourse(i: number) {
     const controls = this.menuForm.get('menuCourses') as FormArray;
-    console.log(controls.length);
     if (controls.length > 1) {
       controls.removeAt(i);
     }

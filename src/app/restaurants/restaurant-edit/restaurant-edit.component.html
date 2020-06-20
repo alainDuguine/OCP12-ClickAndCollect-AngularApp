@@ -79,77 +79,87 @@
 
         <div class="col-12 form-group">
           <label class="form-label">Horaires d'ouvertures :</label>
+          <br>
+          <button class="btn btn-outline-dark" type="button" (click)="onAddBusinessHour()">
+            <fa-icon [icon]="faAdd"></fa-icon> Ajouter un horaire
+          </button>
 
-          <div *ngIf="restaurant?.businessHours">
-            <span *ngFor="let hour of restaurant.businessHours" class="d-block">
-              Du {{daysOfWeek[hour.startDay-1]}} au {{daysOfWeek[hour.endDay-1]}} de {{hour.startTime}} à {{hour.endTime}}
-            </span>
-          </div>
-
-          <div formGroupName="businessHour">
-            <div class="my-2">
+          <div formArrayName="businessHours">
+            <div class="my-2" *ngFor="let businessHour of getBusinessHours(restaurantForm); let i = index"
+              [formGroupName]="i">
               <div class="form-inline">
-                <label for="startDay" class="form-label">Du : </label>
+                <label for="startDay{{i}}" class="form-label">Du : </label>
                 <select
                   class="form-control mx-1"
-                  id="startDay"
+                  id="startDay{{i}}"
                   formControlName="startDay"
-                  [value]="restaurantForm.get('businessHour.startDay')">
+                  [value]="businessHour.value.startDay"
+                  [ngClass]="{ 'ng-invalid': businessHour.errors?.validDay && businessHour.touched }">
                   <option selected [ngValue]="null">Choisir...</option>
                   <option *ngFor="let day of daysOfWeek">{{day}}</option>
                 </select>
-                <label for="endDay" class="form-label">Au : </label>
+                <label for="endDay{{i}}" class="form-label">Au : </label>
                 <select
                   class="form-control mx-1"
-                  id="endDay"
+                  id="endDay{{i}}"
                   formControlName="endDay"
-                  [value]="restaurantForm.get('businessHour.endDay')">
+                  [value]="businessHour.value.endDay"
+                  [ngClass]="{ 'ng-invalid': businessHour.errors?.validDay && businessHour.touched }">
                   <option selected [ngValue]="null">Choisir...</option>
                   <option *ngFor="let day of daysOfWeek" [value]="day">{{day}}</option>
                 </select>
-                <label for="startTimeHour" class="form-label">, De : </label>
+                <label for="startTimeHour{{i}}" class="form-label">, De : </label>
                 <select
                   class="form-control mx-1"
-                  id="startTimeHour"
+                  id="startTimeHour{{i}}"
                   formControlName="startTimeHour"
-                  [value]="restaurantForm.get('businessHour.startTimeHour')">
+                  [value]="businessHour.value.startTimeHour"
+                  [ngClass]="{ 'ng-invalid': businessHour.errors?.validHour && businessHour.touched }">
                   <option selected [ngValue]="null">Choisir...</option>
                   <option *ngFor="let hour of hours" [value]="hour">{{hour}}</option>
                 </select>
-                <label for="startTimeMinute"> : </label>
+                <label for="startTimeMinute{{i}}"> : </label>
                 <select
-                  id="startTimeMinute"
+                  id="startTimeMinute{{i}}"
                   class="form-control mx-1"
                   formControlName="startTimeMinute"
-                  [value]="restaurantForm.get('businessHour.startTimeMinute')">
+                  [value]="businessHour.value.startTimeMinute"
+                  [ngClass]="{ 'ng-invalid': businessHour.errors?.validHour && businessHour.touched }">
                 <option selected [ngValue]="null">Choisir...</option>
                 <option *ngFor="let minute of minutes" [value]="minute">{{minute}}</option>
                 </select>
 
-                <label for="endTimeHour" class="form-label">A : </label>
+                <label for="endTimeHour{{i}}" class="form-label">A : </label>
                 <select
                   class="form-control mx-1"
-                  id="endTimeHour"
+                  id="endTimeHour{{i}}"
                   formControlName="endTimeHour"
-                  [value]="restaurantForm.get('businessHour.endTimeHour')">
+                  [value]="businessHour.value.endTimeHour"
+                  [ngClass]="{ 'ng-invalid': businessHour.errors?.validHour && businessHour.touched }">
                   <option selected [ngValue]="null">Choisir...</option>
                   <option *ngFor="let hour of hours" [value]="hour">{{hour}}</option>
                 </select>
-                <label for="endTimeMinute"> : </label>
+                <label for="endTimeMinute{{i}}"> : </label>
                 <select
-                  id="endTimeMinute"
+                  id="endTimeMinute{{i}}"
                   class="form-control mx-1"
                   formControlName="endTimeMinute"
-                  [value]="restaurantForm.get('businessHour.endTimeMinute')">
+                  [value]="businessHour.value.endTimeMinute"
+                  (change)="onChange(businessHour)"
+                  [ngClass]="{ 'ng-invalid': businessHour.errors?.validHour && businessHour.touched }">
                   <option selected [ngValue]="null">Choisir...</option>
                   <option *ngFor="let minute of minutes" [value]="minute">{{minute}}</option>
                 </select>
-                <button class="btnAdd btn btn-outline-success" type="button" [disabled]="restaurantForm.get('businessHour').invalid" (click)="onAddBusinessHour()">
-                  <fa-icon class="faAdd" [icon]="faAdd"></fa-icon> Ajouter
-                </button>
+                <fa-icon style="cursor: pointer;" (click)="onDeleteHour(i)" [icon]="faClose" size="sm"></fa-icon>
               </div>
-              <span class="help-block text-danger text-justify" *ngIf="restaurantForm.get('businessHour').invalid && restaurantForm.get('businessHour').touched">
-                Veuillez sélectionner chaque champ de l'horaire
+              <span class="help-block text-danger text-justify" *ngIf="businessHour.errors?.validDay && businessHour.touched">
+                Le jour de départ est postérieur au jour de fin
+              </span>
+              <span class="help-block text-danger text-justify" *ngIf="businessHour.errors?.validHour && businessHour.touched">
+                L'horaire de départ est postérieur à l'horaire de fin
+              </span>
+              <span class="help-block text-danger text-justify" *ngIf="businessHour.errors?.validBusinessHour && businessHour.touched">
+                Veuillez valoriser tous les champs de l'horaire
               </span>
             </div>
           </div>
@@ -157,7 +167,7 @@
       </div>
 
       <div class="row col-md-12">
-        <button class="btn btn-success mr-1" type="submit" [disabled]="!restaurantForm.valid || restaurantForm.pristine">Enregistrer</button>
+        <button class="btn btn-success mr-1" type="submit" [disabled]="!restaurantForm.valid || (restaurantForm.pristine && !this.newHour)">Enregistrer</button>
         <button class="btn btn-danger" type="button" (click)="onClear()" [disabled]="restaurantForm.pristine">Réinitialiser</button>
       </div>
     </form>
