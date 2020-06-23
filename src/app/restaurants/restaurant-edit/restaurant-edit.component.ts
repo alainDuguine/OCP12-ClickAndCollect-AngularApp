@@ -71,15 +71,37 @@ export class RestaurantEditComponent implements OnInit {
     );
   }
 
-  private populateForm() {
+  populateForm() {
     this.restaurantForm.patchValue({
       name: this.restaurant.name,
       email: this.restaurant.email,
       address: this.restaurant.formattedAddress,
       description: this.restaurant.description,
-      typeCuisine: this.restaurant.typeCuisine,
+      typeCuisine: this.restaurant.typeCuisine
     });
-    // this.restaurantForm.get('businessHour').reset();
+
+    if (this.restaurant.businessHours) {
+      for (const hour of this.restaurant.businessHours) {
+        const startDay = this.daysOfWeek[hour.startDay - 1];
+        const endDay = this.daysOfWeek[hour.endDay - 1];
+        const startTimeHour = hour.startTime.split(':')[0];
+        const startTimeMinute = hour.startTime.split(':')[1];
+        const endTimeHour = hour.endTime.split(':')[0];
+        const endTimeMinute = hour.endTime.split(':')[1];
+        (this.restaurantForm.get('businessHours') as FormArray).push(new FormGroup({
+          startDay: new FormControl(startDay, Validators.required),
+          endDay: new FormControl(endDay, Validators.required),
+          startTimeHour: new FormControl(startTimeHour, Validators.required),
+          startTimeMinute: new FormControl(startTimeMinute, Validators.required),
+          endTimeHour: new FormControl(endTimeHour, Validators.required),
+          endTimeMinute: new FormControl(endTimeMinute, Validators.required)}, {
+            validators: businessHourValidator
+          })
+        );
+      }
+    } else {
+      this.initBusinessHour();
+    }
   }
 
   getServerResponse(event) {
@@ -128,7 +150,6 @@ export class RestaurantEditComponent implements OnInit {
         this.restaurant.businessHours.push(newBusinessHour);
     });
 
-    console.log(this.restaurant);
     this.restaurantService.updateRestaurant(this.restaurantId, this.restaurant)
       .subscribe((result: RestaurantModel) => {
           this.restaurant = result;
@@ -138,14 +159,9 @@ export class RestaurantEditComponent implements OnInit {
       );
   }
 
-  onClear() {
-    this.populateForm();
-  }
-
   onAddBusinessHour() {
     const control = this.restaurantForm.get('businessHours') as FormArray;
     control.push(this.initBusinessHour());
-    console.log(this.restaurantForm);
   }
 
   onDeleteHour(i: number) {
@@ -154,12 +170,14 @@ export class RestaurantEditComponent implements OnInit {
     this.restaurantForm.markAsDirty();
   }
 
-  getBusinessHours(restaurantForm) {
-    return restaurantForm.get('businessHours').controls;
+  onClear() {
+    const arr = this.restaurantForm.controls.businessHours as FormArray;
+    arr.controls = [];
+    this.populateForm();
   }
 
-  onChange(businessHour: any) {
-    console.log(businessHour);
+  getBusinessHours(restaurantForm) {
+    return restaurantForm.get('businessHours').controls;
   }
 }
 

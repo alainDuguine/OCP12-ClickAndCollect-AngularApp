@@ -34,7 +34,7 @@
               (selected)='selectEvent($event)'
               (inputChanged)='getServerResponse($event)'
               (inputCleared)="searchCleared()"
-              [debounceTime]="300"
+              [debounceTime]="400"
               [isLoading]="isLoadingResult"
               [minQueryLength]="3"
               [itemTemplate]="itemTemplate"
@@ -87,7 +87,9 @@
           <div formArrayName="businessHours">
             <div class="my-2" *ngFor="let businessHour of getBusinessHours(restaurantForm); let i = index"
               [formGroupName]="i">
+
               <div class="form-inline">
+
                 <label for="startDay{{i}}" class="form-label">Du : </label>
                 <select
                   class="form-control mx-1"
@@ -96,8 +98,9 @@
                   [value]="businessHour.value.startDay"
                   [ngClass]="{ 'ng-invalid': businessHour.errors?.validDay && businessHour.touched }">
                   <option selected [ngValue]="null">Choisir...</option>
-                  <option *ngFor="let day of daysOfWeek">{{day}}</option>
+                  <option *ngFor="let day of daysOfWeek" [value]="day">{{day}}</option>
                 </select>
+
                 <label for="endDay{{i}}" class="form-label">Au : </label>
                 <select
                   class="form-control mx-1"
@@ -108,6 +111,7 @@
                   <option selected [ngValue]="null">Choisir...</option>
                   <option *ngFor="let day of daysOfWeek" [value]="day">{{day}}</option>
                 </select>
+
                 <label for="startTimeHour{{i}}" class="form-label">, De : </label>
                 <select
                   class="form-control mx-1"
@@ -118,6 +122,7 @@
                   <option selected [ngValue]="null">Choisir...</option>
                   <option *ngFor="let hour of hours" [value]="hour">{{hour}}</option>
                 </select>
+
                 <label for="startTimeMinute{{i}}"> : </label>
                 <select
                   id="startTimeMinute{{i}}"
@@ -139,17 +144,18 @@
                   <option selected [ngValue]="null">Choisir...</option>
                   <option *ngFor="let hour of hours" [value]="hour">{{hour}}</option>
                 </select>
+
                 <label for="endTimeMinute{{i}}"> : </label>
                 <select
                   id="endTimeMinute{{i}}"
                   class="form-control mx-1"
                   formControlName="endTimeMinute"
                   [value]="businessHour.value.endTimeMinute"
-                  (change)="onChange(businessHour)"
                   [ngClass]="{ 'ng-invalid': businessHour.errors?.validHour && businessHour.touched }">
                   <option selected [ngValue]="null">Choisir...</option>
                   <option *ngFor="let minute of minutes" [value]="minute">{{minute}}</option>
                 </select>
+
                 <fa-icon style="cursor: pointer;" (click)="onDeleteHour(i)" [icon]="faClose" size="sm"></fa-icon>
               </div>
               <span class="help-block text-danger text-justify" *ngIf="businessHour.errors?.validDay && businessHour.touched">
