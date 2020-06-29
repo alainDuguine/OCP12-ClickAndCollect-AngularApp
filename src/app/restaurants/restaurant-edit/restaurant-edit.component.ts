@@ -209,7 +209,7 @@ export class RestaurantEditComponent implements OnInit {
     this.restaurantService.uploadPhoto(this.restaurantId, formData).subscribe(
       data => {
         console.log(data);
-        this.photoUrl = this.sanitizer.bypassSecurityTrustUrl(' http://127.0.0.1:8081' + data.photo.split(':')[1]);
+        this.photoUrl = this.sanitizer.bypassSecurityTrustUrl(' http://127.0.0.1:8081' + data.photo.split(':')[1] + '?' + Date.now());
       }
     );
   }
