@@ -4,7 +4,7 @@ import {BusinessHour, RestaurantModel} from '../../model/RestaurantModel';
 import {MapService} from '../../service/map.service';
 import {RestaurantService} from '../../service/restaurant.service';
 import {ActivatedRoute, Params} from '@angular/router';
-import {faPlusCircle, faSearchLocation, faTimesCircle} from '@fortawesome/free-solid-svg-icons';
+import {faCheckCircle, faPlusCircle, faSearchLocation, faTimesCircle} from '@fortawesome/free-solid-svg-icons';
 import {businessHourValidator} from './validators/business-hour-validator.directive';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
@@ -32,6 +32,8 @@ export class RestaurantEditComponent implements OnInit {
   photo: File;
   photoUrl: SafeUrl;
   imageError: string;
+  faUpload;
+  upload: boolean;
 
   constructor(private mapService: MapService,
               private restaurantService: RestaurantService,
@@ -139,8 +141,6 @@ export class RestaurantEditComponent implements OnInit {
     this.restaurant.formattedAddress = formattedAddress;
     this.restaurant.latitude = event.latitude;
     this.restaurant.longitude = event.longitude;
-
-    console.log(this.restaurant);
     this.restaurantForm.controls.address.setValue(formattedAddress);
   }
 
@@ -171,7 +171,6 @@ export class RestaurantEditComponent implements OnInit {
       .subscribe((result: RestaurantModel) => {
           this.restaurant = result;
           alert('Les informations ont été enregistrées');
-          console.log(this.restaurant);
         }
       );
   }
@@ -201,8 +200,12 @@ export class RestaurantEditComponent implements OnInit {
     this.photo = event.target.files[0];
     if (this.photo.size > 3145728) {
       this.imageError = 'Le poids de l\'image doit être inférieur à 3Mo';
+      this.faUpload = faTimesCircle;
+      this.upload = false;
     } else if (!['image/png', 'image/jpeg'].includes(this.photo.type)) {
       this.imageError = 'L\'image doit être au format jpg ou png';
+      this.faUpload = faTimesCircle;
+      this.upload = false;
     } else {
       this.imageError = '';
       this.photoUpload();
@@ -214,8 +217,13 @@ export class RestaurantEditComponent implements OnInit {
     formData.append('photo', this.photo);
     this.restaurantService.uploadPhoto(this.restaurantId, formData).subscribe(
       data => {
-        console.log(data);
         this.photoUrl = this.sanitizer.bypassSecurityTrustUrl(' http://127.0.0.1:8081' + data.photo.split(':')[1] + '?' + Date.now());
+        this.faUpload = faCheckCircle;
+        this.upload = true;
+      }, error => {
+        console.log(error);
+        this.faUpload = faTimesCircle;
+        this.upload = false;
       }
     );
   }

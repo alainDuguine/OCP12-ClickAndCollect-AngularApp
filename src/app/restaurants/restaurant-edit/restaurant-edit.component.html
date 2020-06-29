@@ -175,15 +175,17 @@
 
       <div class="row col-12 form-group">
         <label for="photoUpload" class="form-label">Importer une photo : <em style="font-weight: normal; font-size: smaller">format jpg ou png inférieur à 3Mo</em></label>
-        <input id="photoUpload" class="form-control-file" type="file" (change)="onFileChanged($event)" #fileInput>
+        <input id="photoUpload" class="form-control-file col-6" type="file" (change)="onFileChanged($event)">
+        <fa-icon class="col-6" [ngClass]="upload ? 'greenIcon':'redIcon'" [icon]="faUpload" size="lg"></fa-icon>
         <span class="help-block text-danger text-justify" *ngIf="this.imageError">
         {{this.imageError}}</span>
-        <div class="col-md-6 mt-1 form-group flex-grow-1">
-          <img *ngIf="photoUrl && !this.imageError"
-               [src]="photoUrl"
-               alt="Image Restaurant"
-               class="img-thumbnail img-rounded">
-        </div>
+      </div>
+      <div class="col-12 form-group">
+        <img *ngIf="photoUrl && !this.imageError"
+             [src]="photoUrl"
+             alt="Image Restaurant"
+             class="img-thumbnail img-rounded"
+             style="max-height: 300px;">
       </div>
 
       <div class="row col-md-12">
