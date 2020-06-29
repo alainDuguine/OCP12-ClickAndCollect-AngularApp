@@ -2,6 +2,7 @@
   <div class="col-sm-12">
     <form [formGroup]="restaurantForm" (ngSubmit)="onSubmit()" autocomplete="off">
       <div class="row">
+
         <div class="col-sm-7 form-group">
           <label for="name" class="form-label">Nom :</label>
           <input
@@ -169,6 +170,17 @@
               </span>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div class="row col-12 form-group">
+        <label for="photoUpload" class="form-label">Importer une photo : </label>
+        <input id="photoUpload" class="form-control-file" type="file" (change)="onFileChanged($event)" #fileInput>
+        <div class="col-md-6 mt-1 form-group flex-grow-1">
+          <img *ngIf="photoUrl"
+               [src]="photoUrl"
+               alt="Image Restaurant"
+               class="img-thumbnail img-rounded">
         </div>
       </div>
 

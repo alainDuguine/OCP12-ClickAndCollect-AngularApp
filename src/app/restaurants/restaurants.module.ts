@@ -8,7 +8,6 @@ import {RouterModule} from '@angular/router';
 import {RestaurantsRoutingModule} from './restaurants-routing.module';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 
-
 @NgModule({
   declarations: [
     RestaurantsComponent,

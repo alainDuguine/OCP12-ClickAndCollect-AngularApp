@@ -4,8 +4,9 @@ import {BusinessHour, RestaurantModel} from '../../model/RestaurantModel';
 import {MapService} from '../../service/map.service';
 import {RestaurantService} from '../../service/restaurant.service';
 import {ActivatedRoute, Params} from '@angular/router';
-import {faPlusCircle, faSearchLocation, faTimesCircle} from '@fortawesome/free-solid-svg-icons';
+import {faPlusCircle, faSearchLocation, faTimesCircle, faUpload} from '@fortawesome/free-solid-svg-icons';
 import {businessHourValidator} from './validators/business-hour-validator.directive';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-restaurant-edit',
@@ -28,10 +29,14 @@ export class RestaurantEditComponent implements OnInit {
     '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
   minutes = ['00', '15', '30', '45'];
   newHour = false;
+  faUpload = faUpload;
+  photo: File;
+  photoUrl: SafeUrl;
 
   constructor(private mapService: MapService,
               private restaurantService: RestaurantService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private sanitizer: DomSanitizer) {
     this.initForm();
   }
 
@@ -41,6 +46,10 @@ export class RestaurantEditComponent implements OnInit {
       this.restaurantService.getRestaurant(this.restaurantId).subscribe(
         data => {
           this.restaurant = data;
+          console.log(this.restaurant);
+          if (this.restaurant.photo) {
+            this.photoUrl = this.sanitizer.bypassSecurityTrustUrl(' http://127.0.0.1:8081' + this.restaurant.photo.split(':')[1]);
+          }
           this.populateForm();
         }
       );
@@ -56,28 +65,33 @@ export class RestaurantEditComponent implements OnInit {
       typeCuisine: new FormControl(''),
       businessHours: new FormArray([])
     });
+
   }
 
   initBusinessHour() {
     return new FormGroup({
-      startDay: new FormControl(null, Validators.required),
-      endDay: new FormControl(null, Validators.required),
-      startTimeHour: new FormControl(null, Validators.required),
-      startTimeMinute: new FormControl(null, Validators.required),
-      endTimeHour: new FormControl(null, Validators.required),
-      endTimeMinute: new FormControl(null, Validators.required)}, {
-       validators: businessHourValidator
+        startDay: new FormControl(null, Validators.required),
+        endDay: new FormControl(null, Validators.required),
+        startTimeHour: new FormControl(null, Validators.required),
+        startTimeMinute: new FormControl(null, Validators.required),
+        endTimeHour: new FormControl(null, Validators.required),
+        endTimeMinute: new FormControl(null, Validators.required)
+      }, {
+        validators: businessHourValidator
       }
     );
   }
 
   populateForm() {
+    const description = this.restaurant.description ? this.restaurant.description : '';
+    const typeCuisine = this.restaurant.typeCuisine ? this.restaurant.typeCuisine : '';
+
     this.restaurantForm.patchValue({
       name: this.restaurant.name,
       email: this.restaurant.email,
       address: this.restaurant.formattedAddress,
-      description: this.restaurant.description,
-      typeCuisine: this.restaurant.typeCuisine
+      description,
+      typeCuisine
     });
 
     if (this.restaurant.businessHours) {
@@ -89,12 +103,13 @@ export class RestaurantEditComponent implements OnInit {
         const endTimeHour = hour.endTime.split(':')[0];
         const endTimeMinute = hour.endTime.split(':')[1];
         (this.restaurantForm.get('businessHours') as FormArray).push(new FormGroup({
-          startDay: new FormControl(startDay, Validators.required),
-          endDay: new FormControl(endDay, Validators.required),
-          startTimeHour: new FormControl(startTimeHour, Validators.required),
-          startTimeMinute: new FormControl(startTimeMinute, Validators.required),
-          endTimeHour: new FormControl(endTimeHour, Validators.required),
-          endTimeMinute: new FormControl(endTimeMinute, Validators.required)}, {
+            startDay: new FormControl(startDay, Validators.required),
+            endDay: new FormControl(endDay, Validators.required),
+            startTimeHour: new FormControl(startTimeHour, Validators.required),
+            startTimeMinute: new FormControl(startTimeMinute, Validators.required),
+            endTimeHour: new FormControl(endTimeHour, Validators.required),
+            endTimeMinute: new FormControl(endTimeMinute, Validators.required)
+          }, {
             validators: businessHourValidator
           })
         );
@@ -140,14 +155,16 @@ export class RestaurantEditComponent implements OnInit {
     this.restaurant.businessHours = [];
 
     const businessHours = this.restaurantForm.get('businessHours').value;
-    businessHours.forEach( businessHour => {
-        const newBusinessHour = new BusinessHour();
-        newBusinessHour.startDay = this.daysOfWeek.indexOf(businessHour.startDay) + 1;
-        newBusinessHour.endDay = this.daysOfWeek.indexOf(businessHour.endDay) + 1;
-        newBusinessHour.startTime = businessHour.startTimeHour + ':' + businessHour.startTimeMinute;
-        newBusinessHour.endTime = businessHour.endTimeHour + ':' + businessHour.endTimeMinute;
-        if (!this.restaurant.businessHours) { this.restaurant.businessHours = []; }
-        this.restaurant.businessHours.push(newBusinessHour);
+    businessHours.forEach(businessHour => {
+      const newBusinessHour = new BusinessHour();
+      newBusinessHour.startDay = this.daysOfWeek.indexOf(businessHour.startDay) + 1;
+      newBusinessHour.endDay = this.daysOfWeek.indexOf(businessHour.endDay) + 1;
+      newBusinessHour.startTime = businessHour.startTimeHour + ':' + businessHour.startTimeMinute;
+      newBusinessHour.endTime = businessHour.endTimeHour + ':' + businessHour.endTimeMinute;
+      if (!this.restaurant.businessHours) {
+        this.restaurant.businessHours = [];
+      }
+      this.restaurant.businessHours.push(newBusinessHour);
     });
 
     this.restaurantService.updateRestaurant(this.restaurantId, this.restaurant)
@@ -178,6 +195,23 @@ export class RestaurantEditComponent implements OnInit {
 
   getBusinessHours(restaurantForm) {
     return restaurantForm.get('businessHours').controls;
+  }
+
+  onFileChanged(event) {
+    this.photo = event.target.files[0];
+    console.log(this.photo);
+    this.photoUpload();
+  }
+
+  photoUpload() {
+    const formData = new FormData();
+    formData.append('photo', this.photo);
+    this.restaurantService.uploadPhoto(this.restaurantId, formData).subscribe(
+      data => {
+        console.log(data);
+        this.photoUrl = this.sanitizer.bypassSecurityTrustUrl(' http://127.0.0.1:8081' + data.photo.split(':')[1]);
+      }
+    );
   }
 }
 
