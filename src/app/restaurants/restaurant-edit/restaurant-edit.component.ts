@@ -4,7 +4,7 @@ import {BusinessHour, RestaurantModel} from '../../model/RestaurantModel';
 import {MapService} from '../../service/map.service';
 import {RestaurantService} from '../../service/restaurant.service';
 import {ActivatedRoute, Params} from '@angular/router';
-import {faPlusCircle, faSearchLocation, faTimesCircle, faUpload} from '@fortawesome/free-solid-svg-icons';
+import {faPlusCircle, faSearchLocation, faTimesCircle} from '@fortawesome/free-solid-svg-icons';
 import {businessHourValidator} from './validators/business-hour-validator.directive';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
@@ -29,9 +29,9 @@ export class RestaurantEditComponent implements OnInit {
     '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
   minutes = ['00', '15', '30', '45'];
   newHour = false;
-  faUpload = faUpload;
   photo: File;
   photoUrl: SafeUrl;
+  imageError: string;
 
   constructor(private mapService: MapService,
               private restaurantService: RestaurantService,
@@ -199,8 +199,14 @@ export class RestaurantEditComponent implements OnInit {
 
   onFileChanged(event) {
     this.photo = event.target.files[0];
-    console.log(this.photo);
-    this.photoUpload();
+    if (this.photo.size > 3145728) {
+      this.imageError = 'Le poids de l\'image doit être inférieur à 3Mo';
+    } else if (!['image/png', 'image/jpeg'].includes(this.photo.type)) {
+      this.imageError = 'L\'image doit être au format jpg ou png';
+    } else {
+      this.imageError = '';
+      this.photoUpload();
+    }
   }
 
   photoUpload() {
