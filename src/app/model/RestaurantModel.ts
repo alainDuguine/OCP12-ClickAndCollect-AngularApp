@@ -11,7 +11,6 @@ export class RestaurantModel {
   name: string;
   typeCuisine: string;
   description: string;
-  imageUrl: string;
   formattedAddress: string;
   latitude: string;
   longitude: string;
