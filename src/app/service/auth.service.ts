@@ -1,8 +1,10 @@
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {DataManagementService} from './data-management.service';
 import {RegistrationFormModel} from '../model/RegistrationFormModel';
 import {catchError, map} from 'rxjs/operators';
+import {LoginFormModel} from '../model/loginFormModel';
+import {CurrentUserModel} from '../model/CurrentUserModel';
 
 
 @Injectable({
@@ -11,8 +13,16 @@ import {catchError, map} from 'rxjs/operators';
 export class AuthService {
   authURI = '/auth';
   registerURI = '/register';
+  loginURI = '/login';
+  private currentUserSubject: BehaviorSubject<CurrentUserModel>;
+  currentUser: Observable<CurrentUserModel>;
 
-  constructor(private dataManagementService: DataManagementService) { }
+  constructor(private dataManagementService: DataManagementService) {
+    this.currentUserSubject = new BehaviorSubject<CurrentUserModel>(
+      JSON.parse(localStorage.getItem('currentUser'))
+    );
+    this.currentUser = this.currentUserSubject.asObservable();
+  }
 
   public isEmailTaken(email: string): Observable<boolean> {
     const params = new Map();
@@ -46,5 +56,21 @@ export class AuthService {
         console.log(error);
       }
     );
+  }
+
+  public login(loginForm: LoginFormModel) {
+    return this.dataManagementService.postResource<LoginFormModel>(
+      this.authURI + this.loginURI,
+      loginForm
+    ).pipe(map(user => {
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      this.currentUserSubject.next(user);
+      return user;
+    }));
+  }
+
+  public logout() {
+    localStorage.removeItem('currentUser');
+    this.currentUserSubject.next(null);
   }
 }

@@ -1,4 +1,6 @@
 import {Component} from '@angular/core';
+import {AuthService} from '../service/auth.service';
+import {CurrentUserModel} from '../model/CurrentUserModel';
 
 
 @Component({
@@ -8,6 +10,11 @@ import {Component} from '@angular/core';
 })
 export class RestaurantsComponent {
 
-  constructor() {
+  currentRestaurant: CurrentUserModel;
+
+  constructor(private authService: AuthService) {
+    this.authService.currentUser.subscribe(
+      restaurant => this.currentRestaurant = restaurant
+    );
   }
 }

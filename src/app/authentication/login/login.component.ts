@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../service/auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {first} from 'rxjs/operators';
+import {LoginFormModel} from '../../model/loginFormModel';
 
 @Component({
   selector: 'app-login',
@@ -28,17 +30,17 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     this.loading = true;
-    console.log(this.loginForm.get('email').value);
-    console.log(this.loginForm.get('password').value);
-    // this.authService.login(this.loginForm.get('username').value, this.loginForm.get('password').value)
-    //   .pipe(first())
-    //   .subscribe(
-    //     data => {
-    //       this.router.navigate([this.returnUrl]);
-    //     },
-    //     error => {
-    //       this.error = error;
-    //       this.loading = false;
-    //     });
+    const loginForm = new LoginFormModel(this.loginForm.get('username').value, this.loginForm.get('password').value);
+    this.authService.login(loginForm)
+      .pipe(first())
+      .subscribe(
+        data => {
+          console.log(data);
+          this.router.navigate(['/restaurants/']);
+        },
+        error => {
+          this.error = error;
+          this.loading = false;
+        });
   }
 }
