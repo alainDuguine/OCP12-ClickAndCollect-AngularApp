@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {environment} from '../../environments/environment';
-import {Observable, of, Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {ProductModel} from '../model/ProductModel';
 import {tap} from 'rxjs/operators';
 import {CategoryModel} from '../model/CategoryModel';
+import {DataManagementService} from './data-management.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,33 +15,67 @@ export class ProductService {
   productsChange = new Subject<ProductModel[]>();
   private products: ProductModel[] = [];
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private dataManagement: DataManagementService) { }
 
   setProducts(products: ProductModel[]) {
     this.products = products;
     this.productsChange.next(this.products.slice());
   }
 
-  addProduct(idRestaurant: number, product: ProductModel) {
-    this.postProduct(idRestaurant, product).subscribe(
+  fetchProduct(restaurantId: number, productId: number) {
+    if (this.products.length === 0) {
+      let product: ProductModel;
+      this.dataManagement.getResource<ProductModel>(
+        this.restaurantURI + restaurantId + this.productURI + productId
+      ).subscribe(result => {
+          product = result;
+          return product;
+        });
+    } else {
+      return this.products.find(el => el.id === productId);
+    }
+  }
+
+  getProducts(restaurantId: number) {
+    return this.dataManagement.getResource<ProductModel[]>(
+      this.restaurantURI + restaurantId + this.productURI
+    ).pipe(
+      tap(products => {
+        this.setProducts(products);
+      })
+    );
+  }
+
+  getProductsByCategory(restaurantId: number, category: string) {
+    const params = new Map();
+    params.set('category', category);
+    return this.dataManagement.getResource<ProductModel[]>(
+      this.restaurantURI + restaurantId + this.productURI,
+      params
+    );
+  }
+
+  getCategories(): Observable<any> {
+    return this.dataManagement.getResource<CategoryModel[]>(this.categoryURI);
+  }
+
+  addProduct(restaurantId: number, product: ProductModel) {
+    this.dataManagement.postResource<ProductModel>(
+      this.restaurantURI + restaurantId + this.productURI, product
+    ).subscribe(
       result => {
         this.products.push(result);
         this.productsChange.next(this.products.slice());
       });
   }
 
-  fetchProduct(idProduct: number) {
-    if (this.products.length === 0) {
-      return this.getProduct(1, idProduct);
-    } else {
-      return of(this.products.find(el => el.id === idProduct));
-    }
-  }
-
-  updateProduct(idRestaurant: number, product: ProductModel) {
-    this.putProduct(idRestaurant, product).subscribe(
+  updateProduct(restaurantId: number, productId: number, product: ProductModel) {
+    this.dataManagement.putResource<ProductModel>(
+      this.restaurantURI + restaurantId + this.productURI + productId,
+      product
+    ).subscribe(
       result => {
-        const productInArray = this.products.find(el => el.id === product.id);
+        const productInArray = this.products.find(el => el.id === productId);
         const index = this.products.indexOf(productInArray);
         this.products[index] = result;
         this.productsChange.next(this.products.slice());
@@ -50,54 +83,14 @@ export class ProductService {
     );
   }
 
-  putProduct(idRestaurant: number, product: ProductModel) {
-    return this.httpClient.put<ProductModel>(
-      environment.api_url + this.restaurantURI + idRestaurant + this.productURI + product.id,
-      product);
-  }
-
-  postProduct(idRestaurant: number, product: ProductModel) {
-    return this.httpClient.post<ProductModel>(
-      environment.api_url + this.restaurantURI + idRestaurant + this.productURI, product
-    );
-  }
-
-  getProduct(idRestaurant: number, idProduct: number) {
-    return this.httpClient.get<ProductModel>(
-      environment.api_url + this.restaurantURI + idRestaurant + this.productURI + idProduct
-    );
-  }
-
-  getProducts(idRestaurant: number) {
-    return this.httpClient.get<ProductModel[]>(
-      environment.api_url + this.restaurantURI + idRestaurant + this.productURI
-    ).pipe(
-        tap(products => {
-          this.setProducts(products);
-        })
-      );
-  }
-
-  getProductsByCategory(idRestaurant: number, category: string) {
-    const params = category ? {params: new HttpParams().set('category', category)} : {};
-    return this.httpClient.get<ProductModel[]>(
-      environment.api_url + this.restaurantURI + idRestaurant + this.productURI,
-      params
-    );
-  }
-
-  deleteProduct(idRestaurant: number, product: ProductModel) {
+  deleteProduct(restaurantId: number, product: ProductModel) {
     const index = this.products.indexOf(product);
-    return this.httpClient.delete(
-      environment.api_url + this.restaurantURI + idRestaurant + this.productURI + product.id)
-        .subscribe( () => {
+    return this.dataManagement.deleteResource<ProductModel>(
+      this.restaurantURI + restaurantId + this.productURI + product.id)
+      .subscribe( () => {
           this.products.splice(index, 1);
           this.productsChange.next(this.products.slice());
           return true;
         }, () => false);
-  }
-
-  getCategories(): Observable<any> {
-    return this.httpClient.get<CategoryModel[]>(environment.api_url + this.categoryURI);
   }
 }

@@ -1,7 +1,6 @@
-import {CategoryModel} from './CategoryModel';
 import {ProductModel} from './ProductModel';
 
-export class ProductInMenuModel {
+export class ProductInCourseModel {
   public product: ProductModel;
   public extraCost: number;
 
@@ -12,12 +11,12 @@ export class ProductInMenuModel {
 }
 
 export class CourseModel {
-  public category: CategoryModel;
-  public products: ProductInMenuModel[];
+  public category: string;
+  public productsInCourse: ProductInCourseModel[];
 
-  constructor(category: CategoryModel, products: ProductInMenuModel[]) {
+  constructor(category: string, products: ProductInCourseModel[]) {
     this.category = category;
-    this.products = products;
+    this.productsInCourse = products;
   }
 }
 
@@ -27,7 +26,7 @@ export class MenuModel {
   public description: string;
   public price: number;
   public restaurantId: number;
-  public courses: CourseModel[];
+  public menuCourses: CourseModel[];
 
   constructor(id: number, name: string, description: string, price: number, restaurantId: number, courses: CourseModel[]) {
     this.id = id;
@@ -35,6 +34,6 @@ export class MenuModel {
     this.description = description;
     this.price = price;
     this.restaurantId = restaurantId;
-    this.courses = courses;
+    this.menuCourses = courses;
   }
 }

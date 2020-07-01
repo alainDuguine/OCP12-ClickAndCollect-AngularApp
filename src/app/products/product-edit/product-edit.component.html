@@ -1,7 +1,7 @@
 <div class="row justify-content-center">
   <div class="col-sm-12 col-xl-10">
     <div class="row justify-content-between align-items-center m-1">
-      <h3 class="text-left">Ajouter un nouveau produit</h3>
+      <h3 class="text-left">{{titleProductForm}}</h3>
       <fa-icon style="cursor: pointer;" (click)="onClose()" [icon]="faClose" size="lg"></fa-icon>
     </div>
     <hr>
@@ -17,6 +17,7 @@
             placeholder="Nom du produit..."
             [(ngModel)]="nameInput"
             required
+            maxlength="100"
             #name="ngModel">
           <small id="nameHelp" class="form-text text-muted"><em>{{ 100 - nameInput?.length }} caractères restants</em></small>
           <span class="help-block text-danger" *ngIf="!name.valid && name.touched">Entrez un nom de produit</span>
@@ -28,8 +29,9 @@
             id="category"
             name="category"
             required
-            [(ngModel)]="defaultCategory"
+            ngModel
             #category="ngModel">
+            <option selected [ngValue]="null">Choisir...</option>
             <option *ngFor="let category of categories">{{category.name}}</option>
           </select>
           <span class="help-block text-danger" *ngIf="!category.valid && category.touched">Choisissez une catégorie</span>

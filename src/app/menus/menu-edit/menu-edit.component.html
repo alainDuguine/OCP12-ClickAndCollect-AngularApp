@@ -1,10 +1,11 @@
 <div class="justify-content-center">
   <div class="col-sm-12">
     <div class="row justify-content-between align-items-center m-1">
-      <h3 class="text-left">Ajouter un nouveau menu</h3>
+      <h3 class="text-left">{{titleMenuForm}}</h3>
       <fa-icon style="cursor: pointer;" (click)="onClose()" [icon]="faClose" size="lg"></fa-icon>
     </div>
     <hr>
+
     <form [formGroup]="menuForm" (ngSubmit)="onSubmit()">
       <div class="row">
         <div class="col-sm-7 form-group">
@@ -14,6 +15,7 @@
             class="form-control"
             formControlName="name"
             type="text"
+            maxlength="100"
             placeholder="Nom du menu...">
           <small id="nameHelp" class="form-text text-muted"><em>{{ 100 - menuForm.get('name').value.length }} caractères restants</em></small>
           <span class="help-block text-danger" *ngIf="!menuForm.get('name').valid && menuForm.get('name').touched">Entrez un nom de menu</span>
@@ -27,6 +29,7 @@
             formControlName="description"
             placeholder="Description du menu..."
             aria-describedby="descriptionHelp"
+            maxlength="255"
             rows="2"></textarea>
           <small id="descriptionHelp" class="form-text text-muted"><em>{{ 255 - menuForm.get('description').value.length }} caractères restants</em></small>
         </div>
@@ -51,7 +54,7 @@
         </button>
       </div>
 
-      <div formArrayName="courses">
+      <div formArrayName="menuCourses">
         <div class="courseMenu"
             *ngFor="let course of getCourses(menuForm); let i = index"
             [formGroupName]="i">
@@ -61,17 +64,17 @@
             <select
               class="col-md-5 form-control"
               id="course{{i}}"
-              formControlName="courseName"
+              formControlName="category"
               [value]="course"
               [ngClass]="{'ng-invalid' : !productSelectionValid[i] && course.touched}"
               (change)="onLoadProducts(course, i)">
               <option selected [ngValue]="null">Choisir...</option>
               <option *ngFor="let category of categories" [value]="category.name">{{category.name}}</option>
             </select>
-            <div formArrayName="products">
+            <div formArrayName="productsInCourse">
               <div class="mt-1 form-check"
                    *ngFor="let product of getProducts(course); let j = index" [formGroupName]="j">
-                <input class="form-check-input" type="checkbox" id="product{{i}}-{{j}}"
+                <input class="form-check-input" type="checkbox" [checked]="product.value.product.added" id="product{{i}}-{{j}}"
                   [value]="product.value.product.added" (change)="onSelectProduct(product, i)"/>
                 <label class="col-4 form-check-label" for="product{{i}}-{{j}}">{{product.value.product.name}}</label>
               </div>
@@ -83,12 +86,11 @@
 
       <br>
       <div class="row col-md-12">
-        <button class="btn btn-success mr-1" type="submit" [disabled]="!menuForm.valid">{{buttonSubmitLabel}}</button>
-        <button class="btn btn-danger" type="button" (click)="onClear()" [disabled]="!menuForm.dirty">{{buttonResetLabel}}</button>
+        <button class="btn btn-success mr-1" type="submit" [disabled]="!menuForm.valid || menuForm.pristine">{{buttonSubmitLabel}}</button>
+        <button class="btn btn-danger" type="button" (click)="onClear()" [disabled]="menuForm.pristine">{{buttonResetLabel}}</button>
       </div>
     </form>
   </div>
-  <pre class="col-12" style="word-wrap: break-word">{{menuForm.value | json}}</pre>
 </div>
 
 

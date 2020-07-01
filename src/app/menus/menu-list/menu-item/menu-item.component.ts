@@ -1,6 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MenuModel} from '../../../model/MenuModel';
 import {faChevronDown, faChevronRight, faEdit, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
+import {MenuService} from '../../../service/menu.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-menu-item',
@@ -10,19 +12,31 @@ import {faChevronDown, faChevronRight, faEdit, faTrashAlt} from '@fortawesome/fr
 export class MenuItemComponent implements OnInit {
 
   @Input() menu: MenuModel;
+  @Input() restaurantId = 1;
   @Input() firstChild: boolean;
   faDelete = faTrashAlt;
   faUpdate = faEdit;
   faCollapse = faChevronRight;
   dropped = false;
 
-  constructor() { }
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private menuService: MenuService) { }
 
   ngOnInit(): void {
   }
 
   onDelete() {
-    alert('delete');
+    if (confirm('Vous allez supprimer le menu "' + this.menu.name + '"\nde manière irréversible.\nVeuillez confirmer votre choix')) {
+      if (this.menuService.deleteMenu(this.restaurantId, this.menu)) {
+        alert('Suppression effectuée');
+        if (this.route.snapshot.paramMap) {
+          this.router.navigate(['./'], {relativeTo: this.route});
+        }
+      } else {
+        alert('La suppression a échouée');
+      }
+    }
   }
 
   onUpdate() {

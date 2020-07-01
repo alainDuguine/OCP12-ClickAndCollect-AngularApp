@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  api_url: 'http://localhost:8080/api/v1'
+  api_url: 'http://localhost:8080/api/v1',
+  map_url: 'http://api.positionstack.com/v1',
+  positionstack_apikey: 'e376ce38cf830489c3e90031503d77a2'
 };
 
 /*

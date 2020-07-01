@@ -1,0 +1,66 @@
+<div class="row justify-content-center">
+  <h2>Créer un nouveau compte</h2>
+</div>
+<hr>
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+  <div class="form-group">
+    <label for="restaurantName">Nom du restaurant*</label>
+    <input
+      id="restaurantName"
+      class="form-control"
+      formControlName="restaurantName"
+      maxlength="100"
+      type="text"/>
+    <small id="restaurantNameHelp" class="form-text text-muted"><em>{{ 100 - registerForm.get('restaurantName').value.length }} caractères restants</em></small>
+    <div class="help-block text-danger" *ngIf="!registerForm.get('restaurantName').valid && registerForm.get('restaurantName').touched">
+      Entrez un nom de restaurant d'au moins 3 caractères
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="email">Email*</label>
+    <input id="email"
+           type="email"
+           formControlName="email"
+           class="form-control"
+           [ngClass]="{ 'is-invalid': registerForm.get('email').touched && registerForm.get('email').errors }" />
+    <div *ngIf="registerForm.get('email').touched && registerForm.get('email').errors" class="help-block text-danger">
+      <div *ngIf="registerForm.get('email').errors.required">Entrez un nom d'utilisateur</div>
+      <div *ngIf="registerForm.get('email').errors.email">Entrez un email valide</div>
+      <div *ngIf="registerForm.get('email').errors.uniqueEmail">Cet email est déjà pris !</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="password">Mot de passe*</label>
+    <input id="password"
+           type="password"
+           formControlName="password"
+           class="form-control"
+           [ngClass]="{ 'ng-invalid': registerForm.get('password').touched && registerForm.get('password').errors }" />
+    <div *ngIf="registerForm.get('password').touched && registerForm.get('password').errors" class="help-block text-danger">
+      <div *ngIf="registerForm.get('password').errors.required">Entrez un mot de passe</div>
+      <div *ngIf="registerForm.get('password').errors.minlength">Le mot de passe doit être d'au moins 6 caractères</div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="confirmPassword">Confirmation mot de passe*</label>
+    <input id="confirmPassword"
+           type="password"
+           formControlName="confirmPassword"
+           class="form-control"
+           [ngClass]="{ 'ng-invalid': registerForm.get('confirmPassword').touched && registerForm.errors?.confirmedValidator }"
+    />
+    <div *ngIf="registerForm.errors?.confirmedValidator && registerForm.get('confirmPassword').touched && registerForm.get('password').touched" class="help-block text-danger">
+      Le mot de passe et la confirmation ne correspondent pas
+    </div>
+  </div>
+  <div class="row col-md-12">
+    <button class="btn btn-success mr-1" type="submit" [disabled]="!registerForm.valid || registerForm.pristine">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+      Enregistrer
+    </button>
+    <button class="btn btn-danger" type="button" (click)="onClear()" [disabled]="registerForm.pristine">Reset</button>
+  </div>
+</form>

@@ -1,0 +1,198 @@
+<div class="justify-content-center">
+  <div class="col-sm-12">
+    <form [formGroup]="restaurantForm" (ngSubmit)="onSubmit()" autocomplete="off">
+      <div class="row">
+
+        <div class="col-sm-7 form-group">
+          <label for="name" class="form-label">Nom :</label>
+          <input
+            id="name"
+            class="form-control"
+            formControlName="name"
+            type="text"
+            maxlength="100"
+            placeholder="Nom du restaurant...">
+          <small id="nameHelp" class="form-text text-muted"><em>{{ 100 - restaurantForm.get('name').value.length }} caractères restants</em></small>
+          <span class="help-block text-danger" *ngIf="!restaurantForm.get('name').valid && restaurantForm.get('name').touched">Entrez un nom de restaurant</span>
+        </div>
+
+        <div class="col-sm-7 form-group">
+          <label for="email" class="form-label">Email :</label>
+          <input
+            id="email"
+            class="form-control"
+            formControlName="email"
+            type="text">
+        </div>
+
+        <div class="col-sm-6 form-group">
+          <label class="form-label"><fa-icon [icon]="faSearch"></fa-icon> Votre adresse :</label>
+          <div class="ng-autocomplete">
+            <ng-autocomplete
+              formControlName="address"
+              [data]="addresses"
+              [searchKeyword]="keyword"
+              (selected)='selectEvent($event)'
+              (inputChanged)='getServerResponse($event)'
+              (inputCleared)="searchCleared()"
+              [debounceTime]="400"
+              [isLoading]="isLoadingResult"
+              [minQueryLength]="3"
+              [itemTemplate]="itemTemplate"
+              [notFoundTemplate]="notFoundTemplate"
+              placeHolder="Rechercher une adresse...">
+            </ng-autocomplete>
+
+            <ng-template #itemTemplate let-item>
+              <a [innerHTML]="item.label"></a>
+            </ng-template>
+
+            <ng-template #notFoundTemplate let-notFound>
+              Aucun résultat !
+            </ng-template>
+          </div>
+        </div>
+
+        <div class="col-md-12 form-group">
+          <label for="description" class="form-label">Description :</label>
+          <textarea
+            id="description"
+            class="form-control"
+            formControlName="description"
+            placeholder="Description du restaurant..."
+            aria-describedby="descriptionHelp"
+            maxlength="255"
+            rows="2"></textarea>
+          <small id="descriptionHelp" class="form-text text-muted"><em>{{ 255 - restaurantForm.get('description').value.length }} caractères restants</em></small>
+        </div>
+
+        <div class="col-sm-7 form-group">
+          <label for="typeCuisine" class="form-label">Type de cuisine :</label>
+          <input
+            id="typeCuisine"
+            class="form-control"
+            formControlName="typeCuisine"
+            type="text"
+            maxlength="100"
+            placeholder="Type de cuisine...">
+          <small id="typeHelp" class="form-text text-muted"><em>{{ 100 - restaurantForm.get('typeCuisine').value.length }} caractères restants</em></small>
+        </div>
+
+        <div class="col-12 form-group">
+          <label class="form-label">Horaires d'ouvertures :</label>
+          <br>
+          <button class="btn btn-outline-dark" type="button" (click)="onAddBusinessHour()">
+            <fa-icon [icon]="faAdd"></fa-icon> Ajouter un horaire
+          </button>
+
+          <div formArrayName="businessHours">
+            <div class="my-2" *ngFor="let businessHour of getBusinessHours(restaurantForm); let i = index"
+              [formGroupName]="i">
+
+              <div class="form-inline">
+
+                <label for="startDay{{i}}" class="form-label">Du : </label>
+                <select
+                  class="form-control mx-1"
+                  id="startDay{{i}}"
+                  formControlName="startDay"
+                  [value]="businessHour.value.startDay"
+                  [ngClass]="{ 'ng-invalid': businessHour.errors?.validDay && businessHour.touched }">
+                  <option selected [ngValue]="null">Choisir...</option>
+                  <option *ngFor="let day of daysOfWeek" [value]="day">{{day}}</option>
+                </select>
+
+                <label for="endDay{{i}}" class="form-label">Au : </label>
+                <select
+                  class="form-control mx-1"
+                  id="endDay{{i}}"
+                  formControlName="endDay"
+                  [value]="businessHour.value.endDay"
+                  [ngClass]="{ 'ng-invalid': businessHour.errors?.validDay && businessHour.touched }">
+                  <option selected [ngValue]="null">Choisir...</option>
+                  <option *ngFor="let day of daysOfWeek" [value]="day">{{day}}</option>
+                </select>
+
+                <label for="startTimeHour{{i}}" class="form-label">, De : </label>
+                <select
+                  class="form-control mx-1"
+                  id="startTimeHour{{i}}"
+                  formControlName="startTimeHour"
+                  [value]="businessHour.value.startTimeHour"
+                  [ngClass]="{ 'ng-invalid': businessHour.errors?.validHour && businessHour.touched }">
+                  <option selected [ngValue]="null">Choisir...</option>
+                  <option *ngFor="let hour of hours" [value]="hour">{{hour}}</option>
+                </select>
+
+                <label for="startTimeMinute{{i}}"> : </label>
+                <select
+                  id="startTimeMinute{{i}}"
+                  class="form-control mx-1"
+                  formControlName="startTimeMinute"
+                  [value]="businessHour.value.startTimeMinute"
+                  [ngClass]="{ 'ng-invalid': businessHour.errors?.validHour && businessHour.touched }">
+                <option selected [ngValue]="null">Choisir...</option>
+                <option *ngFor="let minute of minutes" [value]="minute">{{minute}}</option>
+                </select>
+
+                <label for="endTimeHour{{i}}" class="form-label">A : </label>
+                <select
+                  class="form-control mx-1"
+                  id="endTimeHour{{i}}"
+                  formControlName="endTimeHour"
+                  [value]="businessHour.value.endTimeHour"
+                  [ngClass]="{ 'ng-invalid': businessHour.errors?.validHour && businessHour.touched }">
+                  <option selected [ngValue]="null">Choisir...</option>
+                  <option *ngFor="let hour of hours" [value]="hour">{{hour}}</option>
+                </select>
+
+                <label for="endTimeMinute{{i}}"> : </label>
+                <select
+                  id="endTimeMinute{{i}}"
+                  class="form-control mx-1"
+                  formControlName="endTimeMinute"
+                  [value]="businessHour.value.endTimeMinute"
+                  [ngClass]="{ 'ng-invalid': businessHour.errors?.validHour && businessHour.touched }">
+                  <option selected [ngValue]="null">Choisir...</option>
+                  <option *ngFor="let minute of minutes" [value]="minute">{{minute}}</option>
+                </select>
+
+                <fa-icon style="cursor: pointer;" (click)="onDeleteHour(i)" [icon]="faClose" size="sm"></fa-icon>
+              </div>
+              <span class="help-block text-danger text-justify" *ngIf="businessHour.errors?.validDay && businessHour.touched">
+                Le jour de départ est postérieur au jour de fin
+              </span>
+              <span class="help-block text-danger text-justify" *ngIf="businessHour.errors?.validHour && businessHour.touched">
+                L'horaire de départ est postérieur à l'horaire de fin
+              </span>
+              <span class="help-block text-danger text-justify" *ngIf="businessHour.errors?.validBusinessHour && businessHour.touched">
+                Veuillez valoriser tous les champs de l'horaire
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <label for="photoUpload" class="form-label col-12">Importer une photo : <em style="font-weight: normal; font-size: smaller">format jpg ou png inférieur à 3Mo</em></label>
+        <input id="photoUpload" class="form-control-file col-12" type="file" (change)="onFileChanged($event)">
+        <fa-icon class="col-6 mt-1" *ngIf="faUpload" [ngClass]="upload ? 'greenIcon':'redIcon'" [icon]="faUpload" size="lg"></fa-icon>
+        <span class="help-block text-danger text-justify" *ngIf="this.imageError">
+        {{this.imageError}}</span>
+      </div>
+      <div class="col-12 form-group">
+        <img *ngIf="photoUrl && !this.imageError"
+             [src]="photoUrl"
+             alt="Image Restaurant"
+             class="img-thumbnail img-rounded"
+             style="max-height: 300px;">
+      </div>
+
+      <div class="row col-md-12">
+        <button class="btn btn-success mr-1" type="submit" [disabled]="!restaurantForm.valid || (restaurantForm.pristine && !this.newHour)">Enregistrer</button>
+        <button class="btn btn-danger" type="button" (click)="onClear()" [disabled]="restaurantForm.pristine">Réinitialiser</button>
+      </div>
+    </form>
+  </div>
+</div>
+

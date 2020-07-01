@@ -16,14 +16,14 @@ export class ProductEditComponent implements OnInit {
   @ViewChild('f') productForm: NgForm;
   product: ProductModel;
   categories: CategoryModel[];
-  defaultCategory = 'Entrée';
-  idRestaurant = 1;
-  idProduct: number;
+  restaurantId = 1;
+  productId: number;
   descriptionInput: string;
   nameInput: string;
   editMode = false;
   buttonSubmitLabel = 'Enregistrer';
   buttonResetLabel = 'Réinitialiser';
+  titleProductForm = 'Ajouter un nouveau produit';
   faClose = faTimesCircle;
 
   constructor(private router: Router,
@@ -31,36 +31,44 @@ export class ProductEditComponent implements OnInit {
               private productService: ProductService) { }
 
   ngOnInit(): void {
-    this.getCategories();
-    this.route.params.subscribe((params: Params) => {
-      this.idProduct = +params.idProduct;
-      this.editMode = params.idProduct != null;
-      if (this.editMode) {
-        this.initForm();
-      }
-    });
-  }
-
-  private getCategories() {
     this.productService.getCategories().subscribe(
       data => {
         this.categories = data;
-      },
-      error => {
-        console.log(error);
-        this.categories = [];
+        this.route.params.subscribe((params: Params) => {
+          this.productId = +params.productId;
+          this.editMode = params.productId != null;
+          if (this.editMode) {
+            this.initFormEdit();
+          }
+        });
       }
     );
+  }
+
+  private initFormEdit() {
+    this.titleProductForm = 'Modifier un produit';
+    this.buttonSubmitLabel = 'Modifier';
+    this.buttonResetLabel = 'Annuler';
+    this.product = this.productService.fetchProduct(this.restaurantId, this.productId);
+    setTimeout(
+      () => {
+        this.productForm.form.patchValue({
+          name: this.product.name,
+          category: this.product.category,
+          price: this.product.price,
+          description: this.product.description,
+          imageUrl: this.product.imageUrl});
+        this.productForm.form.markAsPristine();
+      });
   }
 
   onSubmit() {
     this.product = this.productForm.value;
     if (this.editMode) {
-      this.product.id = this.idProduct;
-      this.productService.updateProduct(this.idRestaurant, this.product);
+      this.productService.updateProduct(this.restaurantId, this.productId, this.product);
       this.onClose();
     } else {
-      this.productService.addProduct(this.idRestaurant, this.product);
+      this.productService.addProduct(this.restaurantId, this.product);
       this.onClose();
     }
 
@@ -68,10 +76,9 @@ export class ProductEditComponent implements OnInit {
 
   onClear() {
     if (this.editMode) {
-      this.initForm();
+      this.initFormEdit();
     } else {
       this.productForm.reset();
-      this.productForm.controls.category.patchValue('Entrée');
     }
   }
 
@@ -79,25 +86,4 @@ export class ProductEditComponent implements OnInit {
     this.router.navigate(['../'], {relativeTo: this.route});
   }
 
-  private initForm() {
-    if (this.editMode) {
-      this.buttonSubmitLabel = 'Modifier';
-      this.buttonResetLabel = 'Annuler';
-      this.productService.fetchProduct(this.idProduct)
-        .subscribe(result => {
-          this.product = result;
-          setTimeout(
-            () => {
-              this.productForm.setValue({
-                name: this.product.name,
-                category: this.product.category,
-                description: this.product?.description,
-                price: this.product.price,
-                imageUrl: this.product?.imageUrl
-              });
-              this.productForm.form.markAsPristine();
-            });
-        });
-    }
-  }
 }

@@ -12,14 +12,14 @@
           -
           <em>{{menu.description}}</em>
           </a>
-        <fa-icon class="p-1" (click)="onUpdate()" [icon]="faUpdate"></fa-icon>
-        <fa-icon class="p-1" (click)="onDelete()" [icon]="faDelete"></fa-icon>
+        <fa-icon class="p-1" [routerLink]="[menu.id]" [icon]="faUpdate"></fa-icon>
+        <fa-icon class="p-1 delete" (click)="onDelete()" [icon]="faDelete"></fa-icon>
       </div>
     </div>
     <div class="card-body collapse" id="collapseMenu{{menu.id}}">
       <div>
         <app-menu-course
-          *ngFor="let course of menu.courses"
+          *ngFor="let course of menu.menuCourses"
           [course]="course"
           [menuId]="menu.id">
         </app-menu-course>

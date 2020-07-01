@@ -9,9 +9,14 @@ fa-icon{
 
 fa-icon:hover{
   color: rgb(3, 102, 214);
+  cursor: pointer;
 }
 
 input.ng-invalid.ng-touched, select.ng-invalid.ng-touched{
   border: 1px solid red;
   box-shadow: 0 0 5px red;
+}
+
+.jumbotron {
+  padding: 2rem;
 }
