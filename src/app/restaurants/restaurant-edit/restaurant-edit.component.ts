@@ -50,8 +50,11 @@ export class RestaurantEditComponent implements OnInit {
           this.restaurant = data;
           console.log(this.restaurant);
           if (this.restaurant.photo) {
-            this.photoUrl = this.sanitizer.bypassSecurityTrustUrl(' http://127.0.0.1:8081' + this.restaurant.photo.split(':')[1]);
+            this.photoUrl = this.sanitizer.bypassSecurityTrustUrl(' http://127.0.0.1:8081'
+              + this.restaurant.photo.split(':')[1]
+              + '?' + Date.now());
           }
+          console.log(this.photoUrl);
           this.populateForm();
         }
       );

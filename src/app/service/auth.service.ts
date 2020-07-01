@@ -6,7 +6,6 @@ import {catchError, map} from 'rxjs/operators';
 import {LoginFormModel} from '../model/loginFormModel';
 import {CurrentUserModel} from '../model/CurrentUserModel';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -73,4 +72,9 @@ export class AuthService {
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
   }
+
+  public get currentUserValue(): CurrentUserModel {
+    return this.currentUserSubject.value;
+  }
+
 }

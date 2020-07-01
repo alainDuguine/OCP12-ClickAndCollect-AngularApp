@@ -15,31 +15,40 @@ export class LoginComponent implements OnInit {
   submitted: boolean;
   loading: boolean;
   error: any;
+  returnUrl: string;
 
   constructor(private authService: AuthService,
               private route: ActivatedRoute,
-              private router: Router) { }
+              private router: Router) {
+    if (this.authService.currentUserValue) {
+      console.log(this.authService.currentUserValue);
+      // this.router.navigate(['/restaurants/1/edit']);
+    }
+  }
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
-      email: new FormControl('', Validators.required),
+      email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', Validators.required)
     });
+    this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
   }
 
   onSubmit() {
     this.submitted = true;
     this.loading = true;
-    const loginForm = new LoginFormModel(this.loginForm.get('username').value, this.loginForm.get('password').value);
+    const loginForm = new LoginFormModel(this.loginForm.get('email').value, this.loginForm.get('password').value);
     this.authService.login(loginForm)
       .pipe(first())
       .subscribe(
         data => {
           console.log(data);
-          this.router.navigate(['/restaurants/']);
+          this.router.navigate(['/restaurants/1/edit']);
         },
         error => {
-          this.error = error;
+          if (error === 'Bad credentials') {
+            this.error = 'Email ou mot de passe incorrect';
+          }
           this.loading = false;
         });
   }

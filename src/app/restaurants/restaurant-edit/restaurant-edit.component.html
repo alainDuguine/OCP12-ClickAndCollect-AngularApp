@@ -173,10 +173,10 @@
         </div>
       </div>
 
-      <div class="row col-12 form-group">
-        <label for="photoUpload" class="form-label">Importer une photo : <em style="font-weight: normal; font-size: smaller">format jpg ou png inférieur à 3Mo</em></label>
-        <input id="photoUpload" class="form-control-file col-6" type="file" (change)="onFileChanged($event)">
-        <fa-icon class="col-6" [ngClass]="upload ? 'greenIcon':'redIcon'" [icon]="faUpload" size="lg"></fa-icon>
+      <div class="row form-group">
+        <label for="photoUpload" class="form-label col-12">Importer une photo : <em style="font-weight: normal; font-size: smaller">format jpg ou png inférieur à 3Mo</em></label>
+        <input id="photoUpload" class="form-control-file col-12" type="file" (change)="onFileChanged($event)">
+        <fa-icon class="col-6 mt-1" *ngIf="faUpload" [ngClass]="upload ? 'greenIcon':'redIcon'" [icon]="faUpload" size="lg"></fa-icon>
         <span class="help-block text-danger text-justify" *ngIf="this.imageError">
         {{this.imageError}}</span>
       </div>
