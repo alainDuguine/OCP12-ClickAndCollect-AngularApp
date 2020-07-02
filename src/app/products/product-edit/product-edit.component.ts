@@ -16,7 +16,7 @@ export class ProductEditComponent implements OnInit {
   @ViewChild('f') productForm: NgForm;
   product: ProductModel;
   categories: CategoryModel[];
-  restaurantId = 1;
+  restaurantId: number;
   productId: number;
   descriptionInput: string;
   nameInput: string;
@@ -35,6 +35,7 @@ export class ProductEditComponent implements OnInit {
       data => {
         this.categories = data;
         this.route.params.subscribe((params: Params) => {
+          this.restaurantId = +params.restaurantId;
           this.productId = +params.productId;
           this.editMode = params.productId != null;
           if (this.editMode) {

@@ -1,7 +1,7 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProductService} from '../../service/product.service';
 import {ProductModel} from '../../model/ProductModel';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {faPlusCircle} from '@fortawesome/free-solid-svg-icons';
 
@@ -11,7 +11,7 @@ import {faPlusCircle} from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit, OnDestroy {
-  @Input() idRestaurant = 1;
+  restaurantId: number;
   private productListSubscription: Subscription;
   products: ProductModel[];
   mapProducts = new Map<string, ProductModel[]>();
@@ -27,9 +27,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
         this.products = products;
         this.groupByCategory(this.products);
       });
-    this.productService.getProducts(this.idRestaurant)
-      .subscribe(products => this.groupByCategory(products)
-      );
+    this.route.params.subscribe((params: Params) => {
+      this.restaurantId = params.restaurantId;
+      this.productService.getProducts(this.restaurantId)
+        .subscribe(products => this.groupByCategory(products)
+        );
+    });
   }
 
   groupByCategory(products: ProductModel[]) {

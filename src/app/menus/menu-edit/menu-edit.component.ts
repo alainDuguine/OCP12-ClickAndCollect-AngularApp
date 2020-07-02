@@ -16,7 +16,7 @@ import {MenuService} from '../../service/menu.service';
 export class MenuEditComponent implements OnInit {
   menuForm: FormGroup;
   menu: MenuModel;
-  restaurantId = 1;
+  restaurantId;
   menuId: number;
   categories: CategoryModel[];
 
@@ -37,6 +37,7 @@ export class MenuEditComponent implements OnInit {
   ngOnInit(): void {
     this.getCategories();
     this.route.params.subscribe((params: Params) => {
+      this.restaurantId = +params.restaurantId;
       this.menuId = +params.menuId;
       this.editMode = params.menuId != null;
     });
