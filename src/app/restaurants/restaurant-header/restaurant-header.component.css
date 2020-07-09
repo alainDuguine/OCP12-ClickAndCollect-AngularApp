@@ -1,0 +1,19 @@
+.dropdown-menu {
+  right: 0 !important;
+  left: auto !important;
+}
+
+.hover-underline:hover:after{
+  width: 95%;
+}
+
+.hover-underline:after{
+  content: "";
+  display: block;
+  width: 0;
+  margin-left: 3px;
+  margin-right: 2px;
+  padding-top: 2px;
+  border-bottom: 1px solid #ced4da;
+  transition: 0.8s;
+}

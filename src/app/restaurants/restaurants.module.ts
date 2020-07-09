@@ -7,11 +7,13 @@ import {RestaurantEditComponent} from './restaurant-edit/restaurant-edit.compone
 import {RouterModule} from '@angular/router';
 import {RestaurantsRoutingModule} from './restaurants-routing.module';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {RestaurantHeaderComponent} from './restaurant-header/restaurant-header.component';
 
 @NgModule({
   declarations: [
     RestaurantsComponent,
-    RestaurantEditComponent
+    RestaurantEditComponent,
+    RestaurantHeaderComponent
   ],
   imports: [
     RouterModule,

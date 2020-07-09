@@ -7,6 +7,7 @@ import {MenuModel} from '../../model/MenuModel';
 import {CategoryModel} from '../../model/CategoryModel';
 import {ProductModel} from '../../model/ProductModel';
 import {MenuService} from '../../service/menu.service';
+import {AuthService} from '../../service/auth.service';
 
 @Component({
   selector: 'app-menu-edit',
@@ -32,15 +33,16 @@ export class MenuEditComponent implements OnInit {
   constructor(private router: Router,
               private route: ActivatedRoute,
               private productService: ProductService,
-              private menuService: MenuService) { }
+              private menuService: MenuService,
+              private authService: AuthService) { }
 
   ngOnInit(): void {
     this.getCategories();
     this.route.params.subscribe((params: Params) => {
-      this.restaurantId = +params.restaurantId;
       this.menuId = +params.menuId;
       this.editMode = params.menuId != null;
     });
+    this.restaurantId = this.authService.currentUserValue.id;
     if (this.editMode) {
       this.initFormEdit();
     } else {
@@ -65,6 +67,7 @@ export class MenuEditComponent implements OnInit {
     this.buttonSubmitLabel = 'Modifier';
     this.buttonResetLabel = 'Annuler';
     this.titleMenuForm = 'Modifier un menu';
+    console.log(this.restaurantId);
     this.menu = this.menuService.fetchMenu(this.restaurantId, this.menuId);
     name = this.menu.name;
     description = this.menu.description || '';

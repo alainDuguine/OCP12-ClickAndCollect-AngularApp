@@ -5,6 +5,7 @@ import {RegistrationFormModel} from '../model/RegistrationFormModel';
 import {catchError, map} from 'rxjs/operators';
 import {LoginFormModel} from '../model/loginFormModel';
 import {CurrentUserModel} from '../model/CurrentUserModel';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +14,11 @@ export class AuthService {
   authURI = '/auth';
   registerURI = '/register';
   loginURI = '/login';
-  private currentUserSubject: BehaviorSubject<CurrentUserModel>;
+  currentUserSubject: BehaviorSubject<CurrentUserModel>;
   currentUser: Observable<CurrentUserModel>;
 
-  constructor(private dataManagementService: DataManagementService) {
+  constructor(private dataManagementService: DataManagementService,
+              private router: Router) {
     this.currentUserSubject = new BehaviorSubject<CurrentUserModel>(
       JSON.parse(localStorage.getItem('currentUser'))
     );
@@ -69,6 +71,7 @@ export class AuthService {
   }
 
   public logout() {
+    this.router.navigate(['/auth/login']);
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
   }

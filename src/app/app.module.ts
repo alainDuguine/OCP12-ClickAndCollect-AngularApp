@@ -9,10 +9,12 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import {JwtInterceptor} from './authentication/jwt-interceptor';
 import {AuthInterceptor} from './authentication/auth-interceptor';
+import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
