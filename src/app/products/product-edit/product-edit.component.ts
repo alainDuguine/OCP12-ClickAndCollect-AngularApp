@@ -5,6 +5,7 @@ import {ProductService} from '../../service/product.service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {faTimesCircle} from '@fortawesome/free-regular-svg-icons';
 import {CategoryModel} from '../../model/CategoryModel';
+import {AuthService} from '../../service/auth.service';
 
 @Component({
   selector: 'app-product-edit',
@@ -16,7 +17,7 @@ export class ProductEditComponent implements OnInit {
   @ViewChild('f') productForm: NgForm;
   product: ProductModel;
   categories: CategoryModel[];
-  restaurantId = 1;
+  restaurantId: number;
   productId: number;
   descriptionInput: string;
   nameInput: string;
@@ -28,7 +29,8 @@ export class ProductEditComponent implements OnInit {
 
   constructor(private router: Router,
               private route: ActivatedRoute,
-              private productService: ProductService) { }
+              private productService: ProductService,
+              private authService: AuthService) { }
 
   ngOnInit(): void {
     this.productService.getCategories().subscribe(
@@ -43,6 +45,7 @@ export class ProductEditComponent implements OnInit {
         });
       }
     );
+    this.restaurantId = this.authService.currentUserValue.id;
   }
 
   private initFormEdit() {
@@ -68,6 +71,7 @@ export class ProductEditComponent implements OnInit {
       this.productService.updateProduct(this.restaurantId, this.productId, this.product);
       this.onClose();
     } else {
+      console.log(this.restaurantId);
       this.productService.addProduct(this.restaurantId, this.product);
       this.onClose();
     }

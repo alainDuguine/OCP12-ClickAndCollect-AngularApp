@@ -9,7 +9,9 @@ const routes: Routes = [
     component: RestaurantsComponent,
     canActivate: [AuthGuard],
     children: [
-      {path: ':restaurantId/edit', component: RestaurantEditComponent}
+      { path: ':restaurantId/edit', component: RestaurantEditComponent},
+      { path: ':restaurantId/products', loadChildren: () => import('./../products/products.module').then(m => m.ProductsModule)},
+      { path: ':restaurantId/menus', loadChildren: () => import('./../menus/menus.module').then(m => m.MenusModule)},
     ]
   }
 ];

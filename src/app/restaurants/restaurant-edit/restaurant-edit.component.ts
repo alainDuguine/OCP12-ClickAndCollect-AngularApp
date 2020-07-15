@@ -48,13 +48,11 @@ export class RestaurantEditComponent implements OnInit {
       this.restaurantService.getRestaurant(this.restaurantId).subscribe(
         data => {
           this.restaurant = data;
-          console.log(this.restaurant);
           if (this.restaurant.photo) {
             this.photoUrl = this.sanitizer.bypassSecurityTrustUrl(' http://127.0.0.1:8081'
               + this.restaurant.photo.split(':')[1]
               + '?' + Date.now());
           }
-          console.log(this.photoUrl);
           this.populateForm();
         }
       );
@@ -134,7 +132,7 @@ export class RestaurantEditComponent implements OnInit {
       (result: any) => {
         this.addresses = result.data;
         this.isLoadingResult = false;
-      }
+      }, error => console.log(error)
     );
   }
 
@@ -227,6 +225,7 @@ export class RestaurantEditComponent implements OnInit {
         console.log(error);
         this.faUpload = faTimesCircle;
         this.upload = false;
+        this.imageError = 'L\'image n\'a pas pu être sauvegardée. Réessayez ou sélectionnez une autre image.';
       }
     );
   }

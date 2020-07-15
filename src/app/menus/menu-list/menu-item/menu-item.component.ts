@@ -12,7 +12,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 export class MenuItemComponent implements OnInit {
 
   @Input() menu: MenuModel;
-  @Input() restaurantId = 1;
+  @Input() restaurantId;
   @Input() firstChild: boolean;
   faDelete = faTrashAlt;
   faUpdate = faEdit;

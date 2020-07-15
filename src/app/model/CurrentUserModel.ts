@@ -1,12 +1,12 @@
 export class CurrentUserModel {
   id: number;
-  mail: string;
+  email: string;
   jwt: string;
 
 
-  constructor(id: number, mail: string, jwt: string) {
+  constructor(id: number, email: string, jwt: string) {
     this.id = id;
-    this.mail = mail;
+    this.email = email;
     this.jwt = jwt;
   }
 }

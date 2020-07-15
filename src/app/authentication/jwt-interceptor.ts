@@ -10,7 +10,7 @@ export class JwtInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const currentUser = this.authService.currentUserValue;
-    if (currentUser && currentUser.jwt) {
+    if (currentUser && currentUser.jwt && !req.url.includes('api.positionstack.com')) {
       req = req.clone({
         setHeaders: {
           Authorization: `Bearer ${currentUser.jwt}`
