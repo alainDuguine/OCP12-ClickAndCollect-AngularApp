@@ -22,7 +22,6 @@ export class LoginComponent implements OnInit {
               private router: Router) {
     if (this.authService.currentUserValue) {
       console.log(this.authService.currentUserValue);
-      // this.router.navigate(['/restaurants/1/edit']);
     }
   }
 
@@ -43,7 +42,8 @@ export class LoginComponent implements OnInit {
       .subscribe(
         data => {
           console.log(data);
-          this.router.navigate(['/restaurants/1/edit']);
+          const id = this.authService.currentUserValue.id;
+          this.router.navigate(['/restaurants/' + id + '/edit']);
         },
         error => {
           if (error === 'Bad credentials') {

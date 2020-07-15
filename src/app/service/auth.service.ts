@@ -50,8 +50,9 @@ export class AuthService {
       registrationForm
     ).subscribe(
       result => {
-        alert('success');
         console.log(result);
+        this.router.navigate(['/restaurants']);
+        alert('Vous pouvez maintenant vous connecter à votre espace');
       }, error => {
         alert('error');
         console.log(error);
