@@ -8,6 +8,7 @@ import {Router} from '@angular/router';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
+
   constructor(private authService: AuthService,
               private router: Router) {
   }
@@ -16,15 +17,14 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(catchError(err => {
       if (!request.url.includes(environment.api_url + '/auth/') && err.status === 401) {
         // auto logout if 401 response returned from api
-        console.log(err);
         this.authService.logout();
         location.reload();
-      } else if (err.status === 403 || err.status === 404) {
-        console.log(err);
+      } else if (request.method.includes('HEAD') && err.status === 404) {
+        return next.handle(request);
+      } else if (err.status === 403 || err.status === 404 && !request.url.includes('auth/register')) {
         this.router.navigate(['/error']);
       }
       const error = err.error.message || err.statusText;
-      console.log(error);
       return throwError(error);
     }));
   }
