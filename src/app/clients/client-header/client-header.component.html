@@ -1,1 +1,38 @@
-<p>client-header works!</p>
+<div class="container">
+  <nav class="navbar navbar-expand-md navbar-light bg-light">
+
+    <div class="navbar-header">
+      <a class="navbar-brand" [routerLink]="['/']"><img [src]="'assets/favicon.ico'" alt="icon"> Click'n Collect</a>
+    </div>
+
+    <button class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarToggler"
+            aria-controls="navbarToggler"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarToggler">
+      <ul class="navbar-nav ml-auto">
+        <li routerLinkActive="active" class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle"
+             role="button"
+             data-toggle="dropdown"
+             aria-haspopup="true"
+             aria-expanded="false">
+            Espace Restaurants
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a [routerLink]="['/auth/login']" class="dropdown-item hover-underline">Se connecter <span class="sr-only">(current)</span></a>
+            <a [routerLink]="['/auth/register']" class="dropdown-item hover-underline">Créer un compte <span class="sr-only">(current)</span></a>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+  </nav>
+</div>
+

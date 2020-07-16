@@ -1,6 +1,6 @@
-<div class="col-sm-12">
-    <label class="form-label"><fa-icon [icon]="faSearch"></fa-icon> Entrez votre adresse pour trouver les restaurants à proximité :</label>
-    <div class="ng-autocomplete">
+<div class="col-sm-12 text-center">
+  <label class="form-label mt-4 mb-4"><fa-icon [icon]="faSearch"></fa-icon> Entrez votre adresse pour trouver les restaurants à proximité :</label>
+  <div class="ng-autocomplete mb-5">
       <ng-autocomplete
         [ngModel]="formattedAddress"
         [data]="addresses"
@@ -26,7 +26,7 @@
     </div>
 </div>
 <hr>
-<div class="card-group">
+<div class="card-deck justify-content-center">
   <app-restaurant-result *ngFor="let restaurant of restaurants"
                        [restaurant] = restaurant>
 </app-restaurant-result>

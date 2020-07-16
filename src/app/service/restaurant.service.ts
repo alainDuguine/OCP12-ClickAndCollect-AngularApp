@@ -17,7 +17,7 @@ export class RestaurantService {
 
   getRestaurant(restaurantId: number): Observable<RestaurantModel> {
     return this.dataManagement.getResource<RestaurantModel>(
-      this.restaurantURI + restaurantId
+      this.restaurantURI + '/' + restaurantId
     );
   }
 

@@ -16,6 +16,9 @@ import {RestaurantResultComponent} from './client-geosearch/restaurant-result/re
     ClientHeaderComponent,
     RestaurantResultComponent
   ],
+  exports: [
+    ClientHeaderComponent
+  ],
   imports: [
     ClientsRoutingModule,
     CommonModule,
