@@ -9,9 +9,9 @@ import {DataManagementService} from './data-management.service';
   providedIn: 'root'
 })
 export class ProductService {
-  restaurantURI = '/restaurants/';
-  productURI = '/products/';
-  categoryURI = '/categories/';
+  restaurantURI = '/restaurants';
+  productURI = '/products';
+  categoryURI = '/categories';
   productsChange = new Subject<ProductModel[]>();
   private products: ProductModel[] = [];
 
@@ -26,7 +26,7 @@ export class ProductService {
     if (this.products.length === 0) {
       let product: ProductModel;
       this.dataManagement.getResource<ProductModel>(
-        this.restaurantURI + restaurantId + this.productURI + productId
+        this.restaurantURI + '/' + restaurantId + this.productURI + '/' + productId
       ).subscribe(result => {
           product = result;
           return product;
@@ -38,7 +38,7 @@ export class ProductService {
 
   getProducts(restaurantId: number) {
     return this.dataManagement.getResource<ProductModel[]>(
-      this.restaurantURI + restaurantId + this.productURI
+      this.restaurantURI + '/' + restaurantId + this.productURI
     ).pipe(
       tap(products => {
         this.setProducts(products);
@@ -50,7 +50,7 @@ export class ProductService {
     const params = new Map();
     params.set('category', category);
     return this.dataManagement.getResource<ProductModel[]>(
-      this.restaurantURI + restaurantId + this.productURI,
+      this.restaurantURI + '/' + restaurantId + this.productURI,
       params
     );
   }
@@ -61,7 +61,7 @@ export class ProductService {
 
   addProduct(restaurantId: number, product: ProductModel) {
     this.dataManagement.postResource<ProductModel>(
-      this.restaurantURI + restaurantId + this.productURI, product
+      this.restaurantURI + '/' + restaurantId + this.productURI, product
     ).subscribe(
       result => {
         this.products.push(result);
@@ -71,7 +71,7 @@ export class ProductService {
 
   updateProduct(restaurantId: number, productId: number, product: ProductModel) {
     this.dataManagement.putResource<ProductModel>(
-      this.restaurantURI + restaurantId + this.productURI + productId,
+      this.restaurantURI + '/' + restaurantId + this.productURI + '/' + productId,
       product
     ).subscribe(
       result => {
@@ -86,7 +86,7 @@ export class ProductService {
   deleteProduct(restaurantId: number, product: ProductModel) {
     const index = this.products.indexOf(product);
     return this.dataManagement.deleteResource<ProductModel>(
-      this.restaurantURI + restaurantId + this.productURI + product.id)
+      this.restaurantURI + '/' + restaurantId + this.productURI + '/' + product.id)
       .subscribe( () => {
           this.products.splice(index, 1);
           this.productsChange.next(this.products.slice());

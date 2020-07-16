@@ -25,3 +25,7 @@
       </ng-template>
     </div>
 </div>
+
+<div *ngFor="let restaurant of restaurants">
+  <label>{{restaurant.name}} - {{restaurant.distance | number}} km</label>
+</div>

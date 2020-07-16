@@ -16,4 +16,5 @@ export class RestaurantModel {
   longitude: string;
   businessHours: BusinessHour[];
   photo: string;
+  distance: number;
 }

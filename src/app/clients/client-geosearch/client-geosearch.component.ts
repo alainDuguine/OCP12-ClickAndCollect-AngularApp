@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {faSearchLocation} from '@fortawesome/free-solid-svg-icons';
 import {ClientModel} from '../../model/ClientModel';
 import {MapService} from '../../service/map.service';
+import {RestaurantService} from '../../service/restaurant.service';
+import {RestaurantModel} from '../../model/RestaurantModel';
 
 @Component({
   selector: 'app-client-geosearch',
@@ -15,10 +17,17 @@ export class ClientGeosearchComponent implements OnInit {
   isLoadingResult: any;
   client = new ClientModel();
   formattedAddress: string;
+  restaurants: RestaurantModel[];
 
-  constructor(private mapService: MapService) { }
+  constructor(private mapService: MapService,
+              private restaurantService: RestaurantService) { }
 
   ngOnInit(): void {
+    this.restaurantService.restaurantsResults.subscribe(
+      (result: any) => {
+        this.restaurants = result;
+      }
+    );
   }
 
   selectEvent(event: any) {
@@ -29,6 +38,8 @@ export class ClientGeosearchComponent implements OnInit {
     this.client.latitude = event.latitude;
     this.client.longitude = event.longitude;
     this.formattedAddress = formattedAddress;
+
+    this.restaurantService.getRestaurantsAroundPosition(this.client);
   }
 
   getServerResponse(event: any) {
