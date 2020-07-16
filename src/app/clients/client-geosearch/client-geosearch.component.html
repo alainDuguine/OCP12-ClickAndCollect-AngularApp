@@ -1,0 +1,27 @@
+<div class="col-sm-12">
+    <label class="form-label"><fa-icon [icon]="faSearch"></fa-icon> Entrez votre adresse pour trouver les restaurants à proximité :</label>
+    <div class="ng-autocomplete">
+      <ng-autocomplete
+        [ngModel]="formattedAddress"
+        [data]="addresses"
+        [searchKeyword]="keyword"
+        (selected)='selectEvent($event)'
+        (inputChanged)='getServerResponse($event)'
+        (inputCleared)="searchCleared()"
+        [debounceTime]="400"
+        [isLoading]="isLoadingResult"
+        [minQueryLength]="3"
+        [itemTemplate]="itemTemplate"
+        [notFoundTemplate]="notFoundTemplate"
+        placeHolder="Saisissez votre adresse...">
+      </ng-autocomplete>
+
+      <ng-template #itemTemplate let-item>
+        <a [innerHTML]="item.label"></a>
+      </ng-template>
+
+      <ng-template #notFoundTemplate let-notFound>
+        Aucun résultat !
+      </ng-template>
+    </div>
+</div>
