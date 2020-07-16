@@ -25,7 +25,10 @@
       </ng-template>
     </div>
 </div>
-
-<div *ngFor="let restaurant of restaurants">
-  <label>{{restaurant.name}} - {{restaurant.distance | number}} km</label>
+<hr>
+<div class="card-group">
+  <app-restaurant-result *ngFor="let restaurant of restaurants"
+                       [restaurant] = restaurant>
+</app-restaurant-result>
 </div>
+

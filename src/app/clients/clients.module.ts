@@ -7,12 +7,14 @@ import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {ClientHeaderComponent} from './client-header/client-header.component';
 import {FormsModule} from '@angular/forms';
+import {RestaurantResultComponent} from './client-geosearch/restaurant-result/restaurant-result.component';
 
 @NgModule({
   declarations: [
     ClientsComponent,
     ClientGeosearchComponent,
-    ClientHeaderComponent
+    ClientHeaderComponent,
+    RestaurantResultComponent
   ],
   imports: [
     ClientsRoutingModule,
