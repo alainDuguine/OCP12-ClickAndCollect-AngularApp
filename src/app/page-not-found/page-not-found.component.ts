@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {AuthService} from '../service/auth.service';
 
 @Component({
   selector: 'app-page-not-found',
@@ -7,9 +8,12 @@ import {Component, OnInit} from '@angular/core';
 })
 export class PageNotFoundComponent implements OnInit {
 
-  constructor() { }
+  isAuthenticated: boolean;
+
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
+    this.isAuthenticated = !!this.authService.currentUserValue;
   }
 
 }

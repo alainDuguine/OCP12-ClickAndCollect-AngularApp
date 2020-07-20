@@ -10,6 +10,8 @@ import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import {JwtInterceptor} from './authentication/jwt-interceptor';
 import {AuthInterceptor} from './authentication/auth-interceptor';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
+import {ClientsModule} from './clients/clients.module';
+import {RestaurantsModule} from './restaurants/restaurants.module';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
     FormsModule,
     FontAwesomeModule,
     ReactiveFormsModule,
-    AutocompleteLibModule
+    AutocompleteLibModule,
+    ClientsModule,
+    RestaurantsModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},

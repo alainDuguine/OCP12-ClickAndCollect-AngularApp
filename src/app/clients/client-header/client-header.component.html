@@ -23,10 +23,13 @@
              data-toggle="dropdown"
              aria-haspopup="true"
              aria-expanded="false">
-            Espace Restaurants
+            <span *ngIf="!currentUser">Espace Restaurants</span>
+            <span *ngIf="currentUser">{{currentUser.email}}</span>
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a [routerLink]="['/auth/login']" class="dropdown-item hover-underline">Se connecter <span class="sr-only">(current)</span></a>
+            <a *ngIf="currentUser" [routerLink]="['/restaurants', currentUser.id, 'edit']" class="dropdown-item hover-underline">Mon restaurant <span class="sr-only">(current)</span></a>
+            <a *ngIf="currentUser" class="dropdown-item hover-underline" (click)="onLogout()">Logout <span class="sr-only">(current)</span></a>
+            <a *ngIf="!currentUser" [routerLink]="['/auth/login']" class="dropdown-item hover-underline">Se connecter <span class="sr-only">(current)</span></a>
             <a [routerLink]="['/auth/register']" class="dropdown-item hover-underline">Créer un compte <span class="sr-only">(current)</span></a>
           </div>
         </li>

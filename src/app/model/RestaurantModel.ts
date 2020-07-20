@@ -18,3 +18,4 @@ export class RestaurantModel {
   photo: string;
   distance: number;
 }
+

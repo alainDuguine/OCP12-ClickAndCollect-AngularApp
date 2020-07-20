@@ -10,8 +10,7 @@ import {CurrentUserModel} from '../../model/CurrentUserModel';
 export class RestaurantHeaderComponent implements OnInit {
   restaurant: CurrentUserModel;
 
-  constructor(private authService: AuthService,
-              ) { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
     this.restaurant = this.authService.currentUserValue;

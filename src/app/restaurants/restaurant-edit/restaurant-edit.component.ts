@@ -172,6 +172,7 @@ export class RestaurantEditComponent implements OnInit {
       .subscribe((result: RestaurantModel) => {
           this.restaurant = result;
           alert('Les informations ont été enregistrées');
+          this.restaurantForm.markAsPristine();
         }
       );
   }
