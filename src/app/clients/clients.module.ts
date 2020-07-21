@@ -8,13 +8,15 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {ClientHeaderComponent} from './client-header/client-header.component';
 import {FormsModule} from '@angular/forms';
 import {RestaurantResultComponent} from './client-geosearch/restaurant-result/restaurant-result.component';
+import {ClientOrderComponent} from './client-order/client-order.component';
 
 @NgModule({
   declarations: [
     ClientsComponent,
     ClientGeosearchComponent,
     ClientHeaderComponent,
-    RestaurantResultComponent
+    RestaurantResultComponent,
+    ClientOrderComponent
   ],
   exports: [
     ClientHeaderComponent

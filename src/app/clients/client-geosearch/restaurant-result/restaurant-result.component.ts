@@ -1,6 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {RestaurantModel} from '../../../model/RestaurantModel';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {OrderService} from '../../../service/order.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-restaurant-result',
@@ -13,7 +15,10 @@ export class RestaurantResultComponent implements OnInit {
   isOpen = false;
   photoUrl: SafeUrl;
 
-  constructor(private sanitizer: DomSanitizer) { }
+  constructor(private sanitizer: DomSanitizer,
+              private orderService: OrderService,
+              private router: Router,
+              private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     if (this.restaurant.photo) {
@@ -38,4 +43,8 @@ export class RestaurantResultComponent implements OnInit {
     }
   }
 
+  onSelect() {
+    this.orderService.setDistance(this.restaurant.distance);
+    this.router.navigate(['restaurant', this.restaurant.id], {relativeTo: this.route});
+  }
 }

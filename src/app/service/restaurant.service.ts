@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {DataManagementService} from './data-management.service';
 import {RestaurantModel} from '../model/RestaurantModel';
-import {Observable, Subject} from 'rxjs';
+import {Observable, of, Subject} from 'rxjs';
 import {ClientModel} from '../model/ClientModel';
 
 @Injectable({
@@ -16,6 +16,9 @@ export class RestaurantService {
   constructor(private dataManagement: DataManagementService) {}
 
   getRestaurant(restaurantId: number): Observable<RestaurantModel> {
+    if (this.restaurants.find(el => el.id === restaurantId)) {
+      return of(this.restaurants.find(el => el.id === restaurantId));
+    }
     return this.dataManagement.getResource<RestaurantModel>(
       this.restaurantURI + '/' + restaurantId
     );
