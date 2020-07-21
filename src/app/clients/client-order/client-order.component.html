@@ -26,13 +26,38 @@
           style="max-height: 15rem">
   </div>
 </div>
-  <hr class="mt-0 p-0">
-  <p>Produits</p>
-  <p *ngFor="let product of products">
-    <label>{{product.name}}</label>
-  </p>
+<hr class="m-0 p-0">
+<div class="container">
+  <nav class="navbar navbar-expand-md mt-0">
+    <ul class="navbar-nav ml-0 mt-0">
+      <li routerLinkActive="active" class="nav-item dropdown hover-underline">
+        <a class="nav-link dropdown-toggle"
+           id="navbarDropdown"
+           role="button"
+           data-toggle="dropdown"
+           aria-haspopup="true"
+           aria-expanded="false">
+          Produits
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a *ngFor="let groupOfProduct of productGrouped | keyvalue"
+             href="#{{groupOfProduct.key}}"
+             class="dropdown-item"
+             style="cursor: pointer" >
+            {{groupOfProduct.key}}
+          </a>
+        </div>
+      </li>
+      <li routerLinkActive="active" class="nav-item hover-underline">
+        <a *ngIf="menus"
+           class="nav-link"
+           style="cursor: pointer">
+          Menus
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+<hr class="m-0 p-0">
 
-  <p *ngFor="let menu of menus">
-    <label>{{menu.name}}</label>
-  </p>
 

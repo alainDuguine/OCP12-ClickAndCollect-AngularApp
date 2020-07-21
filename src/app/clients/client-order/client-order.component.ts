@@ -5,6 +5,7 @@ import {ActivatedRoute, Params, Router} from '@angular/router';
 import {OrderService} from '../../service/order.service';
 import {RestaurantModel} from '../../model/RestaurantModel';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {CategoryModel} from '../../model/CategoryModel';
 
 @Component({
   selector: 'app-client-order',
@@ -15,7 +16,9 @@ export class ClientOrderComponent implements OnInit {
 
   restaurant: RestaurantModel;
   products: ProductModel[];
+  mapProducts = new Map<string, ProductModel[]>();
   menus: MenuModel[];
+  categories: CategoryModel[];
   photoUrl: SafeUrl;
   isLoading = true;
 
@@ -44,7 +47,22 @@ export class ClientOrderComponent implements OnInit {
         + this.restaurant.photo.split(':')[1]);
     }
     this.products = data.products;
+    this.groupProductsByCategory(this.products);
     this.menus = data.menus;
+    this.categories = data.categories;
     this.isLoading = false;
+  }
+
+  groupProductsByCategory(products: ProductModel[]) {
+    this.mapProducts = new Map<string, ProductModel[]>();
+    products.forEach(product => {
+      if (!this.mapProducts.has(product.category)) {
+        this.mapProducts.set(product.category, products.filter(data => data.category === product.category));
+      }
+    });
+  }
+
+  get productGrouped(): {[key: string]: ProductModel[]} {
+    return this.mapProducts as unknown as {[key: string]: ProductModel[]} || {};
   }
 }
