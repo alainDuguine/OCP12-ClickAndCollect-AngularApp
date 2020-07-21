@@ -14,8 +14,13 @@
     <div>{{restaurant.typeCuisine}}</div>
     <div>{{restaurant.description}}</div>
     <div class="mt-2" style="color: rgb(130,130,133);">
-      {{restaurant.formattedAddress}}
-      <span *ngIf="restaurant.distance">- à {{restaurant.distance | number}} km de votre position</span>
+      {{restaurant.formattedAddress}}.
+      <span *ngIf="restaurant.distance">- à {{restaurant.distance | number}} km de votre position.</span>
+      <br>
+      <span>Horaires d'ouverture :</span>
+      <br>
+      <span *ngFor="let businessHour of restaurant.businessHours" >Du {{days[businessHour.startDay -1 ]}} au {{days[businessHour.endDay - 1]}},
+        de {{businessHour.startTime}} à {{businessHour.endTime}}.<br></span>
     </div>
   </div>
   <div style="height: 18rem">
@@ -41,8 +46,9 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a *ngFor="let groupOfProduct of productGrouped | keyvalue"
-             href="#{{groupOfProduct.key}}"
              class="dropdown-item"
+             [routerLink]='"."'
+             [fragment]="groupOfProduct.key"
              style="cursor: pointer" >
             {{groupOfProduct.key}}
           </a>
@@ -51,7 +57,9 @@
       <li routerLinkActive="active" class="nav-item hover-underline">
         <a *ngIf="menus"
            class="nav-link"
-           style="cursor: pointer">
+           [routerLink]='"."'
+           [fragment]="'menus'"
+           style="cursor: pointer; color: black">
           Menus
         </a>
       </li>
@@ -59,5 +67,50 @@
   </nav>
 </div>
 <hr class="m-0 p-0">
+<div style="background-color: #f4f5f5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-sm-12">
+        <div class="row justify-content-between" *ngFor="let groupOfProduct of productGrouped | keyvalue">
+          <div class="col-12" id="{{groupOfProduct.key}}">
+            <h2 class="mt-5 mb-3">{{groupOfProduct.key}}</h2>
+          </div>
+          <div *ngFor="let product of groupOfProduct.value" class="row product-container m-1 p-1" style="cursor: pointer">
+            <div class="col pl-1">
+              <h5 class="m-1">{{product.name | titlecase}} - {{product.price | currency:"EUR"}}</h5>
+              <hr class="p-0 m-0">
+              <span>
+                {{product.description}}
+              </span>
+            </div>
+            <div class="align-self-center">
+              <img [src]="product.imageUrl"
+                   style="max-width: 7rem; max-height: 9rem;"
+                   alt="{{product.imageUrl}}">
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-between">
+          <div class="col-12" id="menus">
+            <h2 class="mt-5 mb-3">Menus</h2>
+          </div>
+          <div *ngFor="let menu of menus" class="row product-container m-1 p-1">
+            <div class="col pl-1" style="cursor: pointer">
+              <h5 class="m-1">{{menu.name | titlecase}} - {{menu.price | currency:"EUR"}}</h5>
+              <hr class="p-0 m-0">
+              <span class="flex-grow-1 align-self-center">
+                {{menu.description}}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-12">
+        <app-shopping-cart></app-shopping-cart>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 

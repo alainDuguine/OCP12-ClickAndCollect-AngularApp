@@ -21,6 +21,7 @@ export class ClientOrderComponent implements OnInit {
   categories: CategoryModel[];
   photoUrl: SafeUrl;
   isLoading = true;
+  days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
 
   constructor(private orderService: OrderService,
               private route: ActivatedRoute,
@@ -64,5 +65,9 @@ export class ClientOrderComponent implements OnInit {
 
   get productGrouped(): {[key: string]: ProductModel[]} {
     return this.mapProducts as unknown as {[key: string]: ProductModel[]} || {};
+  }
+
+  onSelectProduct(product: ProductModel) {
+
   }
 }

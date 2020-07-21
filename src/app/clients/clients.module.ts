@@ -9,6 +9,7 @@ import {ClientHeaderComponent} from './client-header/client-header.component';
 import {FormsModule} from '@angular/forms';
 import {RestaurantResultComponent} from './client-geosearch/restaurant-result/restaurant-result.component';
 import {ClientOrderComponent} from './client-order/client-order.component';
+import {ShoppingCartComponent} from './client-order/shopping-cart/shopping-cart.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import {ClientOrderComponent} from './client-order/client-order.component';
     ClientGeosearchComponent,
     ClientHeaderComponent,
     RestaurantResultComponent,
-    ClientOrderComponent
+    ClientOrderComponent,
+    ShoppingCartComponent
   ],
   exports: [
     ClientHeaderComponent

@@ -1,0 +1,23 @@
+.card-text {
+  color: rgb(130,130,133);
+  font-size: smaller;
+}
+
+.product-container {
+  width: 23rem;
+  height: 10rem;
+  background-color: white;
+  overflow: hidden;
+}
+
+.product-container h5 {
+  color: black;
+}
+
+.product-container:hover {
+  text-decoration: none;
+}
+
+.product-container:hover {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}

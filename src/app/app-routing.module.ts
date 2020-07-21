@@ -1,6 +1,13 @@
 import {NgModule} from '@angular/core';
-import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
+import {ExtraOptions, PreloadAllModules, RouterModule, Routes} from '@angular/router';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
+
+const routerOptions: ExtraOptions = {
+  scrollPositionRestoration: 'enabled',
+  anchorScrolling: 'enabled',
+  scrollOffset: [0, 64],
+  preloadingStrategy: PreloadAllModules
+};
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/search', pathMatch: 'full' },
@@ -12,7 +19,7 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(appRoutes, { preloadingStrategy: PreloadAllModules})],
+  imports: [RouterModule.forRoot(appRoutes, routerOptions)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
