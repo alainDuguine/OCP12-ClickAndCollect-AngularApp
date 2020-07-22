@@ -124,31 +124,25 @@
     </button>
   </div>
   <div class="modal-body">
-    <div class="d-flex justify-content-between">
-      <p *ngIf="modalProduct.description" class="text-justify">{{modalProduct.description}}</p>
-      <span class="m-1">
-        <img *ngIf="modalProduct.imageUrl" [src]="modalProduct.imageUrl"
+    <div class="d-flex flex-column justify-content-between">
+      <div *ngIf="modalProduct.description" class="text-justify mb-1">{{modalProduct.description}}</div>
+      <div class="m-auto">
+        <img [src]="modalProduct.imageUrl"
              alt="{{modalProduct.name}}"
-             class="img-responsive"
-             style="max-height: 75px;"/>
-      </span>
+             class="img-thumbnail"
+        style="max-height: 15rem"/>
+      </div>
     </div>
-    <div>
-      <label>Quantité : </label>
-      <input
-        class="m-1"
-        type="number"
-        step="1"
-        min="1"
-        id="quantity"
-        name="quatity"
-        placeholder="1"
-        #quantity
-        (change)="getAmount(quantity)">
+    <div class="mt-1">
+      <div class="text-center">
+        <fa-icon [icon]="faMinus" size="2x" (click)="onRemove()"></fa-icon>
+        <span class="font-weight-bold mt-0 mr-4 ml-4" style="font-size: 2.5rem">{{quantity}}</span>
+        <fa-icon [icon]="faPlus" size="2x" (click)="onAdd()" class="mb-0"></fa-icon>
+      </div>
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="addToCart(modalProduct, quantity.value)">Total {{amount | currency: "EUR"}}</button>
+    <button type="button" class="btn btn-success" ngbAutofocus (click)="addToCart(modalProduct)">Total {{total | currency: "EUR"}}</button>
     <button type="button" class="btn btn-danger" (click)="modal.close('Close click')">Fermer</button>
   </div>
 </ng-template>

@@ -7,7 +7,7 @@ import {RestaurantModel} from '../../model/RestaurantModel';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {CategoryModel} from '../../model/CategoryModel';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {faCartPlus} from '@fortawesome/free-solid-svg-icons';
+import {faMinusCircle, faPlusCircle} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-client-order',
@@ -25,8 +25,10 @@ export class ClientOrderComponent implements OnInit {
   isLoading = true;
   days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
   modalProduct: ProductModel;
-  faCartPlus = faCartPlus;
-  amount: number;
+  total: number;
+  quantity = 1;
+  faPlus = faPlusCircle;
+  faMinus = faMinusCircle;
 
   constructor(private orderService: OrderService,
               private route: ActivatedRoute,
@@ -76,16 +78,27 @@ export class ClientOrderComponent implements OnInit {
   onOpenProduct(content: TemplateRef<any>, product: ProductModel) {
     this.modalService.open(content);
     this.modalProduct = product;
-    this.amount = this.modalProduct.price;
+    this.total = this.modalProduct.price;
   }
 
-  getAmount(quantity: HTMLInputElement) {
-    console.log(quantity);
-    this.amount = this.modalProduct.price * +quantity.value;
+  getAmount() {
+    this.total = this.modalProduct.price * this.quantity;
   }
 
-  addToCart(modalProduct: ProductModel, value: string) {
-    console.log(modalProduct, value);
+  addToCart(modalProduct: ProductModel) {
+    console.log(modalProduct);
     this.modalService.dismissAll('Add');
+  }
+
+  onAdd() {
+    this.quantity++;
+    this.getAmount();
+  }
+
+  onRemove() {
+    if (this.quantity > 1) {
+      this.quantity--;
+      this.getAmount();
+    }
   }
 }
