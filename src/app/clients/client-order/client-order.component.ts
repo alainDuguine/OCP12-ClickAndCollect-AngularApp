@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, TemplateRef} from '@angular/core';
 import {ProductModel} from '../../model/ProductModel';
 import {MenuModel} from '../../model/MenuModel';
 import {ActivatedRoute, Params, Router} from '@angular/router';
@@ -6,6 +6,8 @@ import {OrderService} from '../../service/order.service';
 import {RestaurantModel} from '../../model/RestaurantModel';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {CategoryModel} from '../../model/CategoryModel';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {faCartPlus} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-client-order',
@@ -22,11 +24,15 @@ export class ClientOrderComponent implements OnInit {
   photoUrl: SafeUrl;
   isLoading = true;
   days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+  modalProduct: ProductModel;
+  faCartPlus = faCartPlus;
+  amount: number;
 
   constructor(private orderService: OrderService,
               private route: ActivatedRoute,
               private router: Router,
-              private sanitizer: DomSanitizer) {}
+              private sanitizer: DomSanitizer,
+              private modalService: NgbModal) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
@@ -67,7 +73,19 @@ export class ClientOrderComponent implements OnInit {
     return this.mapProducts as unknown as {[key: string]: ProductModel[]} || {};
   }
 
-  onSelectProduct(product: ProductModel) {
+  onOpenProduct(content: TemplateRef<any>, product: ProductModel) {
+    this.modalService.open(content);
+    this.modalProduct = product;
+    this.amount = this.modalProduct.price;
+  }
 
+  getAmount(quantity: HTMLInputElement) {
+    console.log(quantity);
+    this.amount = this.modalProduct.price * +quantity.value;
+  }
+
+  addToCart(modalProduct: ProductModel, value: string) {
+    console.log(modalProduct, value);
+    this.modalService.dismissAll('Add');
   }
 }
