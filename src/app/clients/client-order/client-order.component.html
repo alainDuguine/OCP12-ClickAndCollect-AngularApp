@@ -76,7 +76,7 @@
             <h2 class="mt-5 mb-3">{{groupOfProduct.key}}</h2>
           </div>
           <div *ngFor="let product of groupOfProduct.value" class="row product-container m-1 p-1" style="cursor: pointer">
-            <div class="col pl-1" style="padding-right: 0.5rem" (click)="onOpenProduct(content, product)">
+            <div class="col pl-1" style="padding-right: 0.5rem" (click)="onOpenProduct(productModal, product)">
               <h5 class="m-1">{{product.name | titlecase}} - {{product.price | currency:"EUR"}}</h5>
               <hr class="p-0 m-0">
               <div class="row mx-1 my-1 row h-100">
@@ -97,7 +97,7 @@
             <h2 class="mt-5 mb-3">Menus</h2>
           </div>
           <div *ngFor="let menu of menus" class="row product-container m-1 p-1 mb-2">
-            <div class="col pl-1" style="cursor: pointer">
+            <div class="col pl-1" style="cursor: pointer" (click)="onOpenMenu(menuModal, menu)">
               <h5 class="m-1">{{menu.name | titlecase}} - {{menu.price | currency:"EUR"}}</h5>
               <hr class="p-0 m-0">
               <div class="mx-1 my-1 row h-100">
@@ -109,17 +109,19 @@
           </div>
         </div>
       </div>
-      <div class="col-md-3 col-sm-12">
+      <div class="col-md-4 col-sm-12 justify-content-center">
         <app-shopping-cart></app-shopping-cart>
       </div>
     </div>
   </div>
 </div>
 
-<ng-template #content let-modal>
+
+<!--  MODAL PRODUCT  -->
+<ng-template #productModal let-productModal>
   <div class="modal-header">
     <h4 class="modal-title">{{modalProduct.name}} - {{modalProduct.price | currency:"EUR"}}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <button type="button" class="close" aria-label="Close" (click)="productModal.dismiss()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -135,16 +137,88 @@
     </div>
     <div class="mt-1">
       <div class="text-center">
-        <fa-icon [icon]="faMinus" size="2x" (click)="onRemove()"></fa-icon>
+        <fa-icon [icon]="faMinus" size="2x" (click)="onRemove(modalProduct.price)" class="icon-quantity"></fa-icon>
         <span class="font-weight-bold mt-0 mr-4 ml-4" style="font-size: 2.5rem">{{quantity}}</span>
-        <fa-icon [icon]="faPlus" size="2x" (click)="onAdd()" class="mb-0"></fa-icon>
+        <fa-icon [icon]="faPlus" size="2x" (click)="onAdd(modalProduct.price)" class="mb-0 icon-quantity"></fa-icon>
       </div>
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" ngbAutofocus (click)="addToCart(modalProduct)">Total {{total | currency: "EUR"}}</button>
-    <button type="button" class="btn btn-danger" (click)="modal.close('Close click')">Fermer</button>
+    <button type="button" class="btn btn-success" ngbAutofocus (click)="addProductToCart(modalProduct)">Total {{total | currency: "EUR"}}</button>
+    <button type="button" class="btn btn-danger" (click)="productModal.close()">Fermer</button>
   </div>
 </ng-template>
 
 
+<!--  MODAL MENU  -->
+<ng-template #menuModal let-menuModal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{modalMenu.name}} - {{modalMenu.price | currency:"EUR"}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="menuModal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form  #f="ngForm" (ngSubmit)="onSubmit(f)">
+    <div class="modal-body">
+      <div class="d-flex flex-column justify-content-between">
+        <div *ngIf="modalMenu.description" class="text-center font-weight-bold">{{modalMenu.description}}</div>
+        <hr style="height: 1px; width: 100%;">
+        <div class="m-auto">
+          <div *ngFor="let menuCourse of modalMenu.menuCourses; let i = index"
+               class="form-group">
+            <h4>{{menuCourse.category}}</h4>
+            <div *ngFor="let productCourse of menuCourse.productsInCourse; let j = index" class="is-invalid" [ngClass]="invalidModalForm ? 'is-invalid':''">
+              <div class="form-check custom-control custom-radio">
+                <input
+                  class="custom-control-input"
+                  type="radio"
+                  name="{{i}}"
+                  id="{{i}}-{{j}}"
+                  [value]="j"
+                  required
+                  ngModel>
+                <label class="custom-control-label popover-label"
+                       for="{{i}}-{{j}}"
+                       [ngbPopover]="popBody"
+                       triggers="mouseenter:mouseleave"
+                       [popoverTitle]="popTitle"
+                       (mouseenter)="initPopover(productCourse.product)">
+                  {{productCourse.product.name}}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-1">
+        <div class="text-center">
+          <fa-icon [icon]="faMinus" size="2x" (click)="onRemove(modalMenu.price)" class="icon-quantity"></fa-icon>
+          <span class="font-weight-bold mt-0 mr-4 ml-4" style="font-size: 2.5rem">{{quantity}}</span>
+          <fa-icon [icon]="faPlus" size="2x" (click)="onAdd(modalMenu.price)" class="mb-0 icon-quantity"></fa-icon>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="invalidModalForm" class="mb-3 text-center">
+      <hr style="height: 1px; width: 100%;">
+      <span  class="help-block text-danger">Vous devez sélectionner un produit dans chaque catégorie !</span>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success" ngbAutofocus>Total {{total | currency: "EUR"}}</button>
+      <button type="button" class="btn btn-danger" (click)="onCloseModal()">Fermer</button>
+    </div>
+  </form>
+</ng-template>
+
+<!--  POPOVER PRODUCT IN MENUCOURSE  -->
+<ng-template #popTitle>{{popoverProduct.name}}</ng-template>
+<ng-template #popBody>
+  <div class="d-flex flex-column justify-content-between">
+    <div *ngIf="popoverProduct.description" class="text-justify mb-1">{{popoverProduct.description}}</div>
+    <div class="m-auto">
+      <img [src]="popoverProduct.imageUrl"
+           alt="{{popoverProduct.name}}"
+           class="img-thumbnail"
+           style="max-height: 15rem"/>
+    </div>
+  </div>
+</ng-template>

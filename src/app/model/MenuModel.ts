@@ -1,6 +1,7 @@
 import {ProductModel} from './ProductModel';
 
 export class ProductInCourseModel {
+  public id: number;
   public product: ProductModel;
   public extraCost: number;
 
@@ -11,6 +12,7 @@ export class ProductInCourseModel {
 }
 
 export class CourseModel {
+  public id: number;
   public category: string;
   public productsInCourse: ProductInCourseModel[];
 

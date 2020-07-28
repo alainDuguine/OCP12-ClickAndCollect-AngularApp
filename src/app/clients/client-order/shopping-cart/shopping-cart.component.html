@@ -1,3 +1,62 @@
-<div style="max-width: 200px; height: 500px">
-  <h2 class="text-nowrap">Mon panier</h2>
+<div class="shopping-cart mr-0 pr-0 border bg-white order-0">
+  <div class="row justify-content-center">
+    <h2 class="text-center mt-3 col-12">Mon panier</h2>
+    <hr style="height: 1px; width: 90%; color: black" class="px-1">
+    <div class="w-100">
+      <div class="pt-2 pb-3" *ngIf="isEmpty()">
+        <p class="text-center" style="color: #abadad">Votre panier est vide</p>
+      </div>
+      <div *ngIf="shoppingCart && !isEmpty()">
+        <div class="mx-1" *ngIf="shoppingCart.menus.size > 0">
+          <div *ngFor="let mapMenu of getShoppingCartMenus()">
+            <ul class="p-0 mx-2" style="list-style: none">
+              <li class="d-flex p-1 justify-content-between mx-3">
+                <div class="my-1">
+                  <fa-icon [icon]="faMinus" (click)="onRemoveMenu(mapMenu)" class="icon-quantity"></fa-icon>
+                  <span class="align-self-start font-weight-bold mx-2 mb-0">{{mapMenu[1]}}</span>
+                  <fa-icon [icon]="faPlus" (click)="onAddMenu(mapMenu)" class="mb-0 icon-quantity"></fa-icon>
+                </div>
+                <div class="m-1">
+                  <span class="font-weight-bold">{{mapMenu[0].menu.name}}</span>
+                  <div *ngFor="let product of mapMenu[0].selectedProducts.entries()">
+                    <span style="font-size: smaller">{{product[1].product.name}}</span>
+                  </div>
+                </div>
+                <div class="m-1">
+                  <span class="font-weight-bold" >{{mapMenu[0].menu.price * mapMenu[1] | currency: "EUR"}}</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="mx-1" *ngIf="shoppingCart.products.size > 0">
+          <div *ngFor="let mapProduct of getShoppingCartProducts()">
+            <ul class="p-0 mx-2" style="list-style: none">
+              <li class="d-flex p-1 justify-content-between mx-3">
+                <div class="my-1">
+                  <fa-icon [icon]="faMinus" (click)="onRemoveProduct(mapProduct)" class="icon-quantity"></fa-icon>
+                  <span class="font-weight-bold mx-2">{{mapProduct[1]}}</span>
+                  <fa-icon [icon]="faPlus" (click)="onAddProduct(mapProduct)" class="mb-0 icon-quantity"></fa-icon>
+                </div>
+                <div class="m-1">
+                  <span class="font-weight-bold">{{mapProduct[0].name}}</span>
+                </div>
+                <div class="m-1">
+                  <span class="font-weight-bold" >{{mapProduct[0].price * mapProduct[1] | currency: "EUR"}}</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <hr style="height: 1px; width: 90%; color: black" class="px-1">
+        <div class="d-flex p-1 mx-2 mb-1 justify-content-between">
+          <span class="font-weight-bold mx-3">Total :</span>
+          <span class="font-weight-bold mx-3">{{getTotal() | currency: "EUR"}}</span>
+        </div>
+        <div *ngIf="getTotal() > 0" class="row justify-content-center mb-3">
+          <button type="button" class="btn btn-success" (click)="onValidateOrder()">Valider la commande</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

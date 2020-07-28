@@ -6,10 +6,11 @@ import {ClientGeosearchComponent} from './client-geosearch/client-geosearch.comp
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {ClientHeaderComponent} from './client-header/client-header.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RestaurantResultComponent} from './client-geosearch/restaurant-result/restaurant-result.component';
 import {ClientOrderComponent} from './client-order/client-order.component';
 import {ShoppingCartComponent} from './client-order/shopping-cart/shopping-cart.component';
+import {NgbPopoverModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,9 @@ import {ShoppingCartComponent} from './client-order/shopping-cart/shopping-cart.
     CommonModule,
     AutocompleteLibModule,
     FontAwesomeModule,
-    FormsModule
+    FormsModule,
+    NgbPopoverModule,
+    ReactiveFormsModule
   ]
 })
 export class ClientsModule { }

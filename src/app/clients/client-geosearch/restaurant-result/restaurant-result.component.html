@@ -1,4 +1,4 @@
-<a class="clickable-card" (click)="onSelect()">
+<a class="clickable-card" style="cursor: pointer;" (click)="onSelect()">
   <div [ngClass]="isOpen ? '': 'card-disabled'" class="card m-1 text-wrap" style="width: 18rem; height: 21rem;">
     <img [src]="this.photoUrl" class="card-img-top" style="max-height: 10rem; width: auto" alt="{{restaurant.name}}">
     <span *ngIf="!isOpen" class="badge badge-secondary">Fermé pour le moment !</span>
