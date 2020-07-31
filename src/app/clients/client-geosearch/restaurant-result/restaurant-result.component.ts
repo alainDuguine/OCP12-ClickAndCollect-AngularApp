@@ -31,10 +31,6 @@ export class RestaurantResultComponent implements OnInit {
     for (const businessHour of this.restaurant.businessHours) {
       const startHour = +businessHour.startTime.split(':')[0];
       const endHour = +businessHour.endTime.split(':')[0];
-      console.log('jour :');
-      console.log(day >= businessHour.startDay && day <= businessHour.endDay);
-      console.log('heure :');
-      console.log(hour >= startHour && hour <= endHour);
       if (day >= businessHour.startDay && day <= businessHour.endDay
           && hour >= startHour && hour <= endHour) {
         this.isOpen = true;

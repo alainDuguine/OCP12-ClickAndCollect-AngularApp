@@ -2,7 +2,7 @@
   <div class="row justify-content-center">
     <h2 class="text-center mt-3 col-12">Mon panier</h2>
     <hr style="height: 1px; width: 90%; color: black" class="px-1">
-    <div class="w-100">
+    <div>
       <div class="pt-2 pb-3" *ngIf="isEmpty()">
         <p class="text-center" style="color: #abadad">Votre panier est vide</p>
       </div>
@@ -54,9 +54,129 @@
           <span class="font-weight-bold mx-3">{{getTotal() | currency: "EUR"}}</span>
         </div>
         <div *ngIf="getTotal() > 0" class="row justify-content-center mb-3">
-          <button type="button" class="btn btn-success" (click)="onValidateOrder()">Valider la commande</button>
+          <button *ngIf="isOpen" type="button" class="btn btn-success" (click)="onValidateOrder(orderModal)">Valider la commande</button>
+          <div class="pt-2" *ngIf="!isOpen" style="margin-left: 2rem; margin-right: 2rem">
+            <hr>
+            <div class="text-center m-3" style="color: #abadad">Le restaurant est fermé actuellement et n'accepte pas les précommandes</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<!--  MODAL MENU  -->
+<ng-template #orderModal let-orderModal>
+  <div class="modal-header">
+    <h4 class="modal-title m-auto">Validation de la commande</h4>
+  </div>
+  <div class="modal-body">
+    <div class="justify-content-center">
+      <h4 class="align-self-center text-center">Votre commande : </h4>
+      <div class="text-center ml-2 font-weight-bold" *ngFor="let menu of getShoppingCartMenus()">
+        {{menu[1]}} x {{menu[0].menu.name}} - {{menu[0].menu.price * menu[1] | currency: "EUR"}}
+      </div>
+      <div class="text-center ml-2 font-weight-bold" *ngFor="let product of getShoppingCartProducts()">
+        <span>{{product[1]}} x {{product[0].name}} - {{product[0].price * product[1] | currency: "EUR"}}</span>
+      </div>
+      <hr>
+      <div class="text-center ml-2 font-weight-bold">
+        Total: {{getTotal() | currency: "EUR"}}
+      </div>
+      <hr style="height: 1px; width: 100%;">
+    </div>
+    <div class="justify-content-center">
+      <h4 class="align-self-center text-center">Vos informations : </h4>
+      <form #f="ngForm" (ngSubmit)="onSubmitValidation(f)">
+        <div class="row m-2">
+          <div class="form-group col-12">
+            <label for="firstName" class="form-label">Votre prénom</label>
+            <input
+              type="text"
+              class="form-control"
+              id="firstName"
+              name="firstName"
+              placeholder="Votre prénom"
+              required
+              ngModel
+              #firstName="ngModel">
+            <span class="help-block text-danger" *ngIf="!firstName.valid && firstName.touched">Entrez votre prénom</span>
+          </div>
+          <div class="form-group col-12">
+            <label for="lastName" class="form-label">Votre nom</label>
+            <input
+              type="text"
+              class="form-control"
+              id="lastName"
+              name="lastName"
+              placeholder="Votre nom"
+              required
+              ngModel
+              #lastName="ngModel">
+            <span class="help-block text-danger" *ngIf="!lastName.valid && lastName.touched">Entrez votre nom</span>
+          </div>
+          <div class="form-group col-12">
+            <label for="email" class="form-label">Votre email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+              placeholder="Votre email"
+              required
+              ngModel
+              #email="ngModel">
+            <span class="help-block text-danger" *ngIf="!email.valid && email.touched">Entrez une adresse email valide</span>
+          </div>
+          <div class="form-group col-12">
+            <label for="tel" class="form-label">Votre téléphone</label>
+            <input
+              type="tel"
+              class="form-control"
+              id="tel"
+              name="tel"
+              placeholder="0102030405"
+              pattern="[0-9]{10}"
+              required
+              ngModel
+              #tel="ngModel">
+            <span class="help-block text-danger" *ngIf="!tel.valid && tel.touched">Entrez un numéro de téléphone valide</span>
+          </div>
+          <div class="form-group">
+            <label for="pickupHour" class="form-label">Heure de collecte :</label>
+            <br>
+            <div class="form-inline">
+              <select
+                class="form-control"
+                id="pickupHour"
+                name="pickupHour"
+                required
+                [(ngModel)]="hourForm"
+                #pickupHour="ngModel">
+                <option selected [ngValue]="null">Choisir...</option>
+                <option *ngFor="let hour of getHours()">{{hour}}</option>
+              </select>
+              <label for="pickupMinute" class="form-label mx-1">:</label>
+              <select
+                class="form-control"
+                id="pickupMinute"
+                name="pickupMinute"
+                required
+                ngModel
+                #pickupMinute="ngModel">
+                <option selected [ngValue]="null">Choisir...</option>
+                <option *ngFor="let minute of getMinutes()">{{minute}}</option>
+              </select>
+            </div>
+            <span class="help-block text-danger" *ngIf="(pickupHour.touched && pickupMinute.touched) && (!pickupHour.valid || !pickupMinute.valid) ">Sélectionnez un horaire valide</span>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-center">
+            <button type="submit" class="btn btn-success" ngbAutofocus>Envoyer ma commande</button>
+            <button type="button" class="btn btn-danger" (click)="onCloseModal()">Fermer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
