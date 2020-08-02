@@ -6,6 +6,7 @@ import {CartModel} from '../model/CartModel';
 import {ProductModel} from '../model/ProductModel';
 import {MenuOrderModel} from '../model/MenuOrderModel';
 import {CourseModel, ProductInCourseModel} from '../model/MenuModel';
+import {MenuOrder, OrderModel, ProductOrder, SelectedProduct} from '../model/OrderModel';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ import {CourseModel, ProductInCourseModel} from '../model/MenuModel';
 export class OrderService {
 
   orderURI = '/orders';
+  restaurantURI = '/restaurant';
   private restaurant: RestaurantFullModel;
   private distance: number;
   cartSubject = new Subject<CartModel>();
@@ -98,5 +100,42 @@ export class OrderService {
 
   getDistance() {
     return this.distance;
+  }
+
+  addOrder(restaurantId, shoppingCart: CartModel) {
+    const order = new OrderModel();
+    order.firstName = shoppingCart.customerFirstName;
+    order.lastName = shoppingCart.customerLastName;
+    order.email = shoppingCart.customerEmail;
+    order.phoneNumber = shoppingCart.customerPhoneNumber;
+    order.pickupDateTime = shoppingCart.pickUpHour;
+
+    for (const product of this.shoppingCart.products.entries()) {
+      order.productOrders.push(
+        new ProductOrder(
+          product[0].id,
+          product[1])
+      );
+    }
+
+    for (const menu of this.shoppingCart.menus.entries()) {
+      const menuOrder = new MenuOrder(
+          menu[0].menu.id,
+          menu[1]
+      );
+      for (const productInMenu of menu[0].selectedProducts.entries()) {
+        menuOrder.selectedProducts.push(
+          new SelectedProduct(productInMenu[1].id)
+        );
+      }
+      order.menuOrders.push(menuOrder);
+    }
+
+    console.log(order);
+
+    return this.dataManagement.postResource<OrderModel>(
+      this.orderURI + this.restaurantURI + '/' + restaurantId,
+      order
+    );
   }
 }

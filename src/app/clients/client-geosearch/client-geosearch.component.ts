@@ -32,7 +32,6 @@ export class ClientGeosearchComponent implements OnInit {
 
   selectEvent(event: any) {
     const formattedAddress = [event.name, event.postal_code, event.locality, event.region].filter(Boolean).join(', ');
-    console.log(formattedAddress);
 
     this.client.formattedAddress = formattedAddress;
     this.client.latitude = event.latitude;
@@ -50,7 +49,6 @@ export class ClientGeosearchComponent implements OnInit {
 
     this.mapService.getCoordinates(event).subscribe(
       (result: any) => {
-        console.log(result);
         this.addresses = result.data;
         this.isLoadingResult = false;
       }, error => console.log(error)

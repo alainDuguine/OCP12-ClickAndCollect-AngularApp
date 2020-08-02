@@ -26,8 +26,9 @@ export class RestaurantResultComponent implements OnInit {
         + this.restaurant.photo.split(':')[1]);
     }
     const date = new Date();
-    const day = date.getDay();
+    const day = date.getDay() === 0 ? 7 : date.getDay();
     const hour = date.getHours();
+    console.log(this.restaurant.businessHours);
     for (const businessHour of this.restaurant.businessHours) {
       const startHour = +businessHour.startTime.split(':')[0];
       const endHour = +businessHour.endTime.split(':')[0];

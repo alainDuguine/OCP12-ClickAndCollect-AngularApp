@@ -11,7 +11,7 @@
           <div *ngFor="let mapMenu of getShoppingCartMenus()">
             <ul class="p-0 mx-2" style="list-style: none">
               <li class="d-flex p-1 justify-content-between mx-3">
-                <div class="my-1">
+                <div class="my-1" style="min-width:58px">
                   <fa-icon [icon]="faMinus" (click)="onRemoveMenu(mapMenu)" class="icon-quantity"></fa-icon>
                   <span class="align-self-start font-weight-bold mx-2 mb-0">{{mapMenu[1]}}</span>
                   <fa-icon [icon]="faPlus" (click)="onAddMenu(mapMenu)" class="mb-0 icon-quantity"></fa-icon>
@@ -33,7 +33,7 @@
           <div *ngFor="let mapProduct of getShoppingCartProducts()">
             <ul class="p-0 mx-2" style="list-style: none">
               <li class="d-flex p-1 justify-content-between mx-3">
-                <div class="my-1">
+                <div class="my-1" style="min-width:58px">
                   <fa-icon [icon]="faMinus" (click)="onRemoveProduct(mapProduct)" class="icon-quantity"></fa-icon>
                   <span class="font-weight-bold mx-2">{{mapProduct[1]}}</span>
                   <fa-icon [icon]="faPlus" (click)="onAddProduct(mapProduct)" class="mb-0 icon-quantity"></fa-icon>
@@ -87,7 +87,7 @@
     </div>
     <div class="justify-content-center">
       <h4 class="align-self-center text-center">Vos informations : </h4>
-      <form #f="ngForm" (ngSubmit)="onSubmitValidation(f)">
+      <form #f="ngForm" (ngSubmit)="onSubmitValidation(f, validationModal)">
         <div class="row m-2">
           <div class="form-group col-12">
             <label for="firstName" class="form-label">Votre prénom</label>
@@ -173,10 +173,29 @@
           </div>
         </div>
         <div class="modal-footer justify-content-center">
-            <button type="submit" class="btn btn-success" ngbAutofocus>Envoyer ma commande</button>
+            <button type="submit" class="btn btn-success" ngbAutofocus [disabled]="!f.valid">Envoyer ma commande</button>
             <button type="button" class="btn btn-danger" (click)="onCloseModal()">Fermer</button>
         </div>
       </form>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #validationModal let-validationModal>
+  <div class="modal-header">
+    <h4 class="modal-title m-auto">Commande effectuée !</h4>
+  </div>
+  <div class="modal-body">
+    <div class="justify-content-center">
+      <div class="text-center m-2">
+        Votre commande a été transmise,
+        <br>vous allez bientôt recevoir une confirmation par email.
+        <br>Merci de votre visite !
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-success" (click)="onReturnHome()">Retourner à l'accueil</button>
+      </div>
     </div>
   </div>
 </ng-template>

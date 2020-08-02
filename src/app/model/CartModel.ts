@@ -6,7 +6,7 @@ export class CartModel {
   customerPhoneNumber: string;
   customerFirstName: string;
   customerLastName: string;
-  pickUpHour: Date;
+  pickUpHour: string;
   products: Map<ProductModel, number>;
   menus: Map<MenuOrderModel, number>;
 

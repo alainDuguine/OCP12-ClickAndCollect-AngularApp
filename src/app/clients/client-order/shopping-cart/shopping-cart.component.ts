@@ -8,6 +8,7 @@ import {ProductModel} from '../../../model/ProductModel';
 import {NgForm} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {BusinessHour, RestaurantModel} from '../../../model/RestaurantModel';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -26,7 +27,8 @@ export class ShoppingCartComponent implements OnInit, OnDestroy, OnChanges {
   isOpen = false;
 
   constructor(private orderService: OrderService,
-              private modalService: NgbModal) { }
+              private modalService: NgbModal,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.shoppingCart = this.orderService.shoppingCart;
@@ -93,9 +95,37 @@ export class ShoppingCartComponent implements OnInit, OnDestroy, OnChanges {
     this.modalService.open(orderModal);
   }
 
-  onSubmitValidation(f: NgForm) {
+  onSubmitValidation(f: NgForm, validationModal: TemplateRef<any>) {
+    this.shoppingCart.customerFirstName = f.value.firstName;
+    this.shoppingCart.customerLastName = f.value.lastName;
+    this.shoppingCart.customerEmail = f.value.email;
+    this.shoppingCart.customerPhoneNumber = f.value.tel;
+    const now = new Date();
+    const hour: string = this.leadingZero(f.value.pickupHour);
+    const minutes: string = f.value.pickupMinute;
+    const year: number = now.getFullYear();
+    const month: string = this.leadingZero(now.getMonth() + 1);
+    const date: string = this.leadingZero(now.getDate());
+    this.shoppingCart.pickUpHour = '' +
+      year + '-' +
+      month + '-' +
+      date +
+      ' ' + hour + ':' + minutes;
     console.log(this.shoppingCart);
-    console.log(f.value);
+    console.log(this.restaurant.id);
+    this.orderService.addOrder(this.restaurant.id, this.shoppingCart).subscribe(
+      result => {
+        console.log(result);
+        this.modalService.dismissAll('Ok');
+        this.modalService.open(validationModal);
+        this.shoppingCart = new CartModel();
+        localStorage.clear();
+      }
+    );
+  }
+
+  private leadingZero(num: number): string {
+    return (num < 10 ? '0' : '') + num;
   }
 
   getHours() {
@@ -119,15 +149,6 @@ export class ShoppingCartComponent implements OnInit, OnDestroy, OnChanges {
     const endTimeHour = +this.matchingDay.endTime.slice(0, 2);
     const endTimeMinutes = +this.matchingDay.endTime.slice(lengthEndTime - 2, lengthEndTime - 1);
 
-    // console.log('startTimeLength', lengthStartTime);
-    // console.log('endTimeLength', lengthEndTime);
-    // console.log('startTimeHour', startTimeHour);
-    // console.log('startTimeMinute', startTimeMinutes);
-    // console.log('endTimeHour', endTimeHour);
-    // console.log('endTimeMinute', endTimeMinutes);
-    // console.log('dateNowHour', date.getHours());
-    // console.log('hourForm', +this.hourForm);
-
     let lowestMinuteIndex;
     let highestMinuteIndex;
     if (date.getHours() === startTimeHour || +this.hourForm === startTimeHour) {
@@ -138,7 +159,6 @@ export class ShoppingCartComponent implements OnInit, OnDestroy, OnChanges {
       lowestMinuteIndex = 0;
       highestMinuteIndex = minuteTable.findIndex(
         minute => +minute === endTimeMinutes);
-      // console.log('lastHourMinute', highestMinuteIndex);
     } else if (date.getHours() == this.hourForm) {
       lowestMinuteIndex = minuteTable.findIndex(
         minute => +minute > date.getMinutes());
@@ -146,14 +166,10 @@ export class ShoppingCartComponent implements OnInit, OnDestroy, OnChanges {
         this.hourForm++;
       }
       highestMinuteIndex = minuteTable.length - 1;
-      // console.log('dateNow : lowestMinute', lowestMinuteIndex);
-      // console.log('dateNow : highestMinute', highestMinuteIndex);
     } else {
         lowestMinuteIndex = 0;
         highestMinuteIndex = minuteTable.length;
     }
-    // console.log('lowIndex', lowestMinuteIndex);
-    // console.log('highIndex', highestMinuteIndex);
     return minuteTable.slice(lowestMinuteIndex, highestMinuteIndex + 1);
   }
 
@@ -177,7 +193,7 @@ export class ShoppingCartComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     const date = new Date();
-    const day = date.getDay();
+    const day = date.getDay() === 0 ? 7 : date.getDay();
     const hour = date.getHours();
     for (const businessHour of this.restaurant.businessHours) {
       const startHour = +businessHour.startTime.split(':')[0];
@@ -188,5 +204,10 @@ export class ShoppingCartComponent implements OnInit, OnDestroy, OnChanges {
         break;
       }
     }
+  }
+
+  onReturnHome() {
+    this.modalService.dismissAll('return Home');
+    this.router.navigateByUrl('/');
   }
 }
