@@ -9,8 +9,8 @@ import {DataManagementService} from './data-management.service';
   providedIn: 'root'
 })
 export class MenuService {
-  restaurantURI = '/restaurants/';
-  menuURI = '/menus/';
+  restaurantURI = '/restaurants';
+  menuURI = '/menus';
 
   menusChange = new Subject<MenuModel[]>();
   private menus: MenuModel[] = [];
@@ -26,7 +26,7 @@ export class MenuService {
     if (this.menus.length === 0) {
       let menu: MenuModel;
       this.dataManagement.getResource<MenuModel>(
-        this.restaurantURI + restaurantId + this.menuURI + menuId
+        this.restaurantURI + '/' + restaurantId + this.menuURI + '/' + menuId
       ).subscribe(result => {
           menu = result;
           return menu;
@@ -38,7 +38,7 @@ export class MenuService {
 
   getMenus(restaurantId: number) {
     return this.dataManagement.getResource<MenuModel[]>(
-      this.restaurantURI + restaurantId + this.menuURI
+      this.restaurantURI + '/' + restaurantId + this.menuURI
     ).pipe(
       tap(menus => {
         this.setMenus(menus);
@@ -49,7 +49,7 @@ export class MenuService {
   addMenu(restaurantId: number, menu: MenuModel) {
     const menuForm = this.formatMenu(menu);
     this.dataManagement.postResource<MenuForm>(
-      this.restaurantURI + restaurantId + this.menuURI,
+      this.restaurantURI + '/' + restaurantId + this.menuURI,
       menuForm
     ).subscribe(
       result => {
@@ -62,7 +62,7 @@ export class MenuService {
   updateMenu(restaurantId: number, menuId: number, menu: MenuModel) {
     const menuForm = this.formatMenu(menu);
     this.dataManagement.putResource<MenuForm>(
-      this.restaurantURI + restaurantId + this.menuURI + menuId,
+      this.restaurantURI + '/' + restaurantId + this.menuURI + '/' + menuId,
       menuForm
     ).subscribe(
       result => {
@@ -77,7 +77,7 @@ export class MenuService {
   deleteMenu(restaurantId: number, menu: MenuModel) {
     const index = this.menus.indexOf(menu);
     return this.dataManagement.deleteResource<MenuModel>(
-      this.restaurantURI + restaurantId + this.menuURI + menu.id)
+      this.restaurantURI + '/' + restaurantId + this.menuURI + '/' + menu.id)
       .subscribe(() => {
         this.menus.splice(index, 1);
         this.menusChange.next(this.menus.slice());

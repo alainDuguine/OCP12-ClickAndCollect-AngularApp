@@ -9,12 +9,17 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import {JwtInterceptor} from './authentication/jwt-interceptor';
 import {AuthInterceptor} from './authentication/auth-interceptor';
-import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
+import {PageNotFoundComponent} from './shared/page-not-found/page-not-found.component';
+import {ClientsModule} from './clients/clients.module';
+import {RestaurantsModule} from './restaurants/restaurants.module';
+import {ModalComponent} from './shared/modal/modal.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,
@@ -23,12 +28,16 @@ import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
     FormsModule,
     FontAwesomeModule,
     ReactiveFormsModule,
-    AutocompleteLibModule
+    AutocompleteLibModule,
+    ClientsModule,
+    RestaurantsModule,
+    NgbModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ModalComponent]
 })
 export class AppModule { }

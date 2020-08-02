@@ -1,0 +1,10 @@
+  <div *ngIf="!isAuthenticated" class="w-100 m-0 p-0" style="background-color: #F8F9FA;">
+    <app-client-header></app-client-header>
+  </div>
+  <div *ngIf="isAuthenticated" class="w-100 m-0 p-0" style="background-color: #F8F9FA;">
+    <app-restaurant-header></app-restaurant-header>
+  </div>
+  <div class="text-center">
+    <h1>404</h1>
+    <h1>Cette page n'existe pas !</h1>
+  </div>

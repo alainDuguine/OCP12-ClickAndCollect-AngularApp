@@ -1,0 +1,201 @@
+<div class="shopping-cart mr-0 pr-0 border bg-white order-0">
+  <div class="row justify-content-center">
+    <h2 class="text-center mt-3 col-12">Mon panier</h2>
+    <hr style="height: 1px; width: 90%; color: black" class="px-1">
+    <div>
+      <div class="pt-2 pb-3" *ngIf="isEmpty()">
+        <p class="text-center" style="color: #abadad">Votre panier est vide</p>
+      </div>
+      <div *ngIf="shoppingCart && !isEmpty()">
+        <div class="mx-1" *ngIf="shoppingCart.menus.size > 0">
+          <div *ngFor="let mapMenu of getShoppingCartMenus()">
+            <ul class="p-0 mx-2" style="list-style: none">
+              <li class="d-flex p-1 justify-content-between mx-3">
+                <div class="my-1" style="min-width:58px">
+                  <fa-icon [icon]="faMinus" (click)="onRemoveMenu(mapMenu)" class="icon-quantity"></fa-icon>
+                  <span class="align-self-start font-weight-bold mx-2 mb-0">{{mapMenu[1]}}</span>
+                  <fa-icon [icon]="faPlus" (click)="onAddMenu(mapMenu)" class="mb-0 icon-quantity"></fa-icon>
+                </div>
+                <div class="m-1">
+                  <span class="font-weight-bold">{{mapMenu[0].menu.name}}</span>
+                  <div *ngFor="let product of mapMenu[0].selectedProducts.entries()">
+                    <span style="font-size: smaller">{{product[1].product.name}}</span>
+                  </div>
+                </div>
+                <div class="m-1">
+                  <span class="font-weight-bold" >{{mapMenu[0].menu.price * mapMenu[1] | currency: "EUR"}}</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="mx-1" *ngIf="shoppingCart.products.size > 0">
+          <div *ngFor="let mapProduct of getShoppingCartProducts()">
+            <ul class="p-0 mx-2" style="list-style: none">
+              <li class="d-flex p-1 justify-content-between mx-3">
+                <div class="my-1" style="min-width:58px">
+                  <fa-icon [icon]="faMinus" (click)="onRemoveProduct(mapProduct)" class="icon-quantity"></fa-icon>
+                  <span class="font-weight-bold mx-2">{{mapProduct[1]}}</span>
+                  <fa-icon [icon]="faPlus" (click)="onAddProduct(mapProduct)" class="mb-0 icon-quantity"></fa-icon>
+                </div>
+                <div class="m-1">
+                  <span class="font-weight-bold">{{mapProduct[0].name}}</span>
+                </div>
+                <div class="m-1">
+                  <span class="font-weight-bold" >{{mapProduct[0].price * mapProduct[1] | currency: "EUR"}}</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <hr style="height: 1px; width: 90%; color: black" class="px-1">
+        <div class="d-flex p-1 mx-2 mb-1 justify-content-between">
+          <span class="font-weight-bold mx-3">Total :</span>
+          <span class="font-weight-bold mx-3">{{getTotal() | currency: "EUR"}}</span>
+        </div>
+        <div *ngIf="getTotal() > 0" class="row justify-content-center mb-3">
+          <button *ngIf="isOpen" type="button" class="btn btn-success" (click)="onValidateOrder(orderModal)">Valider la commande</button>
+          <div class="pt-2" *ngIf="!isOpen" style="margin-left: 2rem; margin-right: 2rem">
+            <hr>
+            <div class="text-center m-3" style="color: #abadad">Le restaurant est fermé actuellement et n'accepte pas les précommandes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--  MODAL MENU  -->
+<ng-template #orderModal let-orderModal>
+  <div class="modal-header">
+    <h4 class="modal-title m-auto">Validation de la commande</h4>
+  </div>
+  <div class="modal-body">
+    <div class="justify-content-center">
+      <h4 class="align-self-center text-center">Votre commande : </h4>
+      <div class="text-center ml-2 font-weight-bold" *ngFor="let menu of getShoppingCartMenus()">
+        {{menu[1]}} x {{menu[0].menu.name}} - {{menu[0].menu.price * menu[1] | currency: "EUR"}}
+      </div>
+      <div class="text-center ml-2 font-weight-bold" *ngFor="let product of getShoppingCartProducts()">
+        <span>{{product[1]}} x {{product[0].name}} - {{product[0].price * product[1] | currency: "EUR"}}</span>
+      </div>
+      <hr>
+      <div class="text-center ml-2 font-weight-bold">
+        Total: {{getTotal() | currency: "EUR"}}
+      </div>
+      <hr style="height: 1px; width: 100%;">
+    </div>
+    <div class="justify-content-center">
+      <h4 class="align-self-center text-center">Vos informations : </h4>
+      <form #f="ngForm" (ngSubmit)="onSubmitValidation(f, validationModal)">
+        <div class="row m-2">
+          <div class="form-group col-12">
+            <label for="firstName" class="form-label">Votre prénom</label>
+            <input
+              type="text"
+              class="form-control"
+              id="firstName"
+              name="firstName"
+              placeholder="Votre prénom"
+              required
+              ngModel
+              #firstName="ngModel">
+            <span class="help-block text-danger" *ngIf="!firstName.valid && firstName.touched">Entrez votre prénom</span>
+          </div>
+          <div class="form-group col-12">
+            <label for="lastName" class="form-label">Votre nom</label>
+            <input
+              type="text"
+              class="form-control"
+              id="lastName"
+              name="lastName"
+              placeholder="Votre nom"
+              required
+              ngModel
+              #lastName="ngModel">
+            <span class="help-block text-danger" *ngIf="!lastName.valid && lastName.touched">Entrez votre nom</span>
+          </div>
+          <div class="form-group col-12">
+            <label for="email" class="form-label">Votre email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+              placeholder="Votre email"
+              required
+              ngModel
+              #email="ngModel">
+            <span class="help-block text-danger" *ngIf="!email.valid && email.touched">Entrez une adresse email valide</span>
+          </div>
+          <div class="form-group col-12">
+            <label for="tel" class="form-label">Votre téléphone</label>
+            <input
+              type="tel"
+              class="form-control"
+              id="tel"
+              name="tel"
+              placeholder="0102030405"
+              pattern="[0-9]{10}"
+              required
+              ngModel
+              #tel="ngModel">
+            <span class="help-block text-danger" *ngIf="!tel.valid && tel.touched">Entrez un numéro de téléphone valide</span>
+          </div>
+          <div class="form-group">
+            <label for="pickupHour" class="form-label">Heure de collecte :</label>
+            <br>
+            <div class="form-inline">
+              <select
+                class="form-control"
+                id="pickupHour"
+                name="pickupHour"
+                required
+                [(ngModel)]="hourForm"
+                #pickupHour="ngModel">
+                <option selected [ngValue]="null">Choisir...</option>
+                <option *ngFor="let hour of getHours()">{{hour}}</option>
+              </select>
+              <label for="pickupMinute" class="form-label mx-1">:</label>
+              <select
+                class="form-control"
+                id="pickupMinute"
+                name="pickupMinute"
+                required
+                ngModel
+                #pickupMinute="ngModel">
+                <option selected [ngValue]="null">Choisir...</option>
+                <option *ngFor="let minute of getMinutes()">{{minute}}</option>
+              </select>
+            </div>
+            <span class="help-block text-danger" *ngIf="(pickupHour.touched && pickupMinute.touched) && (!pickupHour.valid || !pickupMinute.valid) ">Sélectionnez un horaire valide</span>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-center">
+            <button type="submit" class="btn btn-success" ngbAutofocus [disabled]="!f.valid">Envoyer ma commande</button>
+            <button type="button" class="btn btn-danger" (click)="onCloseModal()">Fermer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #validationModal let-validationModal>
+  <div class="modal-header">
+    <h4 class="modal-title m-auto">Commande effectuée !</h4>
+  </div>
+  <div class="modal-body">
+    <div class="justify-content-center">
+      <div class="text-center m-2">
+        Votre commande a été transmise,
+        <br>vous allez bientôt recevoir une confirmation par email.
+        <br>Merci de votre visite !
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-success" (click)="onReturnHome()">Retourner à l'accueil</button>
+      </div>
+    </div>
+  </div>
+</ng-template>

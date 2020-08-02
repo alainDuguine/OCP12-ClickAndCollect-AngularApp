@@ -10,18 +10,21 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {RestaurantHeaderComponent} from './restaurant-header/restaurant-header.component';
 
 @NgModule({
-  declarations: [
-    RestaurantsComponent,
-    RestaurantEditComponent,
-    RestaurantHeaderComponent
-  ],
-  imports: [
-    RouterModule,
-    RestaurantsRoutingModule,
-    CommonModule,
-    ReactiveFormsModule,
-    AutocompleteLibModule,
-    FontAwesomeModule
-  ]
+    declarations: [
+        RestaurantsComponent,
+        RestaurantEditComponent,
+        RestaurantHeaderComponent
+    ],
+    exports: [
+        RestaurantHeaderComponent
+    ],
+    imports: [
+        RouterModule,
+        RestaurantsRoutingModule,
+        CommonModule,
+        ReactiveFormsModule,
+        AutocompleteLibModule,
+        FontAwesomeModule
+    ]
 })
 export class RestaurantsModule { }

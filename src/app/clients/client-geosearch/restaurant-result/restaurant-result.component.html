@@ -1,0 +1,13 @@
+<a class="clickable-card" style="cursor: pointer;" (click)="onSelect()">
+  <div [ngClass]="isOpen ? '': 'card-disabled'" class="card m-1 text-wrap" style="width: 18rem; height: 21rem;">
+    <img [src]="this.photoUrl" class="card-img-top" style="max-height: 10rem; width: auto" alt="{{restaurant.name}}">
+    <span *ngIf="!isOpen" class="badge badge-secondary">Fermé pour le moment !</span>
+    <div class="card-body">
+      <h5 class="card-title text-center">{{restaurant.name | titlecase}}</h5>
+      <hr class="p-0 m-0">
+      <br>
+      <p class="card-text" style="margin-bottom: 8px"><span style="font-weight: bold">{{restaurant.typeCuisine}}</span>
+        <br>{{restaurant.formattedAddress}} - à {{restaurant.distance | number}} km</p>
+    </div>
+  </div>
+</a>

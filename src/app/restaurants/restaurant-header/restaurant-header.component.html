@@ -1,34 +1,37 @@
-<nav class="navbar navbar-expand-md navbar-light bg-light">
+<div class="container">
+  <nav class="navbar navbar-expand-md navbar-light bg-light">
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="navbar-header">
-      <a class="navbar-brand" [routerLink]="['/restaurants']">Click'n Collect</a>
-    </div>
+      <div class="navbar-header">
+        <a class="navbar-brand" [routerLink]="['/search']"><img [src]="'assets/favicon.ico'" alt="icon"> Click'n Collect</a>
+      </div>
 
-    <div class="collapse navbar-collapse" id="navbarToggler">
-      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-        <li routerLinkActive="active" class="nav-item hover-underline">
-          <a [routerLink]="['/restaurants', restaurant.id, 'edit']" class="nav-link">Mon restaurant <span class="sr-only">(current)</span></a>
-        </li>
-        <li routerLinkActive="active" class="nav-item hover-underline">
-          <a [routerLink]="['/restaurants', restaurant.id, 'products']" class="nav-link">Mes produits <span class="sr-only">(current)</span></a>
-        </li>
-        <li routerLinkActive="active" class="nav-item hover-underline">
-          <a [routerLink]="['/restaurants', restaurant.id, 'menus']" class="nav-link">Mes menus</a>
-        </li>
-      </ul>
-      <ul class="navbar-nav ml-0">
-        <li routerLinkActive="active" class="nav-item dropdown hover-underline">
-          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{restaurant.email}}
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" style="cursor: pointer" (click)="onLogout()">Logout</a>
-          </div>
-        </li>
-      </ul>
-    </div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-</nav>
+      <div class="collapse navbar-collapse" id="navbarToggler">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+          <li routerLinkActive="active" class="nav-item hover-underline">
+            <a [routerLink]="['/restaurants', restaurant.id, 'edit']" class="nav-link">Mon restaurant <span class="sr-only">(current)</span></a>
+          </li>
+          <li routerLinkActive="active" class="nav-item hover-underline">
+            <a [routerLink]="['/restaurants', restaurant.id, 'products']" class="nav-link">Mes produits <span class="sr-only">(current)</span></a>
+          </li>
+          <li routerLinkActive="active" class="nav-item hover-underline">
+            <a [routerLink]="['/restaurants', restaurant.id, 'menus']" class="nav-link">Mes menus</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ml-0">
+          <li routerLinkActive="active" class="nav-item dropdown hover-underline">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {{restaurant.email}}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" style="cursor: pointer" (click)="onLogout()">Logout</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+  </nav>
+</div>

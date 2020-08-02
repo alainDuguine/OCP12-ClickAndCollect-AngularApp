@@ -58,11 +58,11 @@ export class DataManagementService {
     );
   }
 
-  public getHttpParams(paramMap: Map<string, string>): any{
-    let params;
+  public getHttpParams(paramMap: Map<string, string>): any {
+    let params = new HttpParams();
     if (paramMap) {
       for (const [key, value] of paramMap.entries()) {
-        params = new HttpParams().set(key, value);
+        params = params.append(key, value);
       }
     }
     return params;

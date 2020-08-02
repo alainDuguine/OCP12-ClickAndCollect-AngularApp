@@ -3,21 +3,21 @@ import {AuthService} from '../../service/auth.service';
 import {CurrentUserModel} from '../../model/CurrentUserModel';
 
 @Component({
-  selector: 'app-restaurant-header',
-  templateUrl: './restaurant-header.component.html',
-  styleUrls: ['./restaurant-header.component.css']
+  selector: 'app-client-header',
+  templateUrl: './client-header.component.html',
+  styleUrls: ['./client-header.component.css']
 })
-export class RestaurantHeaderComponent implements OnInit {
-  restaurant: CurrentUserModel;
+export class ClientHeaderComponent implements OnInit {
+
+  currentUser: CurrentUserModel;
 
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.restaurant = this.authService.currentUserValue;
+    this.currentUser = this.authService.currentUserValue;
   }
 
   onLogout() {
     this.authService.logout();
-
   }
 }
