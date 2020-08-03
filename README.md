@@ -1,27 +1,27 @@
-# ClickandcollectWebapp
+# ClickAndCollect-WEBAPP
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.6.
-
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+  Ce repository est l'application Web Angular du projet n° 12 du parcours Java d'OpenClassrooms.
+  L'application permet la mise en place de vente à emporter simple pour les commerces de bouche durant l'épidémie de Covid-19.
+  
+  ## Spécifications
+  
+  BackEnd Projet Java/Spring-boot/Maven multi module exposant une Api Rest disponible sur le repository [ClickAndCollect-RestApi](https://github.com/alainDuguine/ClickAndCollect-RestApi)
+  FrontEnd projet Angular 9.
+    
+  ## Installation
+  
+* Prérequis :
+   * Téléchargez et installez [Node.JS](https://nodejs.org/en/about/releases/)
+   * Node Package Manager (inclus dans nodeJs)
+   * Installez AngularCLI : Pour cela, exécutez la commande ```npm install -g @angular/cli```
+  
+  ## Initialisation et démarrage de l'application
+  
+   Téléchargez ou clonez les sources depuis le repository, puis une fois à la racine du projet, 
+   exécutez la commande ```npm install``` pour installer les dépendances de l'application.
+   
+   *Pour afficher les photos sauvegardés depuis le back en local sur votre machine, il faudra installer le module 
+   http-server en exécutant ```npm install --global http-server```, puis pour le démarrer, à la racine de votre disque (Par exemple: C:\\) entrez la commande ```http-server ./```*
+  
+  Pour démarrer l'application, exécutez la commande ```ng serve```.
+  Si l'application Rest est démarrée, vous pourrez accéder au jeu de donnée de test de Click'n Collect et naviguer dans l'application !
