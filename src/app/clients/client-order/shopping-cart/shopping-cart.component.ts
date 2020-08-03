@@ -116,9 +116,10 @@ export class ShoppingCartComponent implements OnInit, OnDestroy, OnChanges {
     this.orderService.addOrder(this.restaurant.id, this.shoppingCart).subscribe(
       result => {
         console.log(result);
+        this.hourForm = null;
         this.modalService.dismissAll('Ok');
         this.modalService.open(validationModal);
-        this.shoppingCart = new CartModel();
+        this.orderService.clearShoppingCart();
         localStorage.clear();
       }
     );
@@ -188,6 +189,7 @@ export class ShoppingCartComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   onCloseModal() {
+    this.hourForm = null;
     this.modalService.dismissAll();
   }
 

@@ -138,4 +138,9 @@ export class OrderService {
       order
     );
   }
+
+  clearShoppingCart() {
+    this.cart = new CartModel();
+    this.cartSubject.next(this.cart);
+  }
 }
