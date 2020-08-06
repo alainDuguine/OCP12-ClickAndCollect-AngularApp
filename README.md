@@ -25,3 +25,11 @@
   
   Pour démarrer l'application, exécutez la commande ```ng serve```.
   Si l'application Rest est démarrée, vous pourrez accéder au jeu de donnée de test de Click'n Collect et naviguer dans l'application !
+
+## Author
+
+Alain Duguine, alain.duguine@gmail.com
+
+## License
+
+ClickAndCollect-RestApi is available under the MIT license. See the LICENSE file for more info.
