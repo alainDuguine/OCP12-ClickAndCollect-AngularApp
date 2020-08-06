@@ -32,4 +32,4 @@ Alain Duguine, alain.duguine@gmail.com
 
 ## License
 
-ClickAndCollect-RestApi is available under the MIT license. See the LICENSE file for more info.
+ClickAndCollect-WebApp is available under the MIT license. See the LICENSE file for more info.
